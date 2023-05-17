@@ -42,6 +42,12 @@ module.exports = (env, argv) => {
                 return assetPath.replace("dist/", "");
             },
         }));
+    } else {
+        plugins.push(new CopyPlugin({
+            patterns: [
+                {from: "src/i18n/", to: "./i18n/"},
+            ],
+        }));
     }
     return {
         mode: argv.mode || "development",
