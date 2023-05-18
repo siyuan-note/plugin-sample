@@ -198,6 +198,30 @@ export default class PluginSample extends Plugin {
                 click: () => {
                     this.eventBus.off("click-blockicon", this.blockIconEvent);
                 }
+            }, {
+                icon: "iconSelect",
+                label: "On click-pdf",
+                click: () => {
+                    this.eventBus.on("click-pdf", this.wsEvent);
+                }
+            }, {
+                icon: "iconClose",
+                label: "Off click-pdf",
+                click: () => {
+                    this.eventBus.off("click-pdf", this.wsEvent);
+                }
+            }, {
+                icon: "iconSelect",
+                label: "On click-editorcontent",
+                click: () => {
+                    this.eventBus.on("click-editorcontent", this.wsEvent);
+                }
+            }, {
+                icon: "iconClose",
+                label: "Off click-editorcontent",
+                click: () => {
+                    this.eventBus.off("click-editorcontent", this.wsEvent);
+                }
             }]
         });
         menu.addSeparator();
