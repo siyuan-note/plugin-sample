@@ -1,4 +1,4 @@
-type TEventBus = "ws-main"
+type TEventBus = "ws-main" | "click-blockicon"
 
 interface IObject {
     [key: string]: string;

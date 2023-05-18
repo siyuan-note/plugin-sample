@@ -99,6 +99,19 @@ export default class PluginSample extends Plugin {
         console.log(detail);
     }
 
+    private blockIconEvent({detail}: any) {
+        detail.menu.addSeparator();
+        const ids: string[] = [];
+        detail.blockElements.forEach((item: HTMLElement) => {
+            ids.push(item.getAttribute("data-node-id"))
+        });
+        detail.menu.addItem({
+            iconHTML: "",
+            type: "readonly",
+            label: "IDs: " + ids.join(","),
+        });
+    }
+
     private async addMenu(rect: DOMRect) {
         const menu = new Menu("topBarSample", () => {
             console.log(this.i18n.byeMenu);
@@ -158,18 +171,34 @@ export default class PluginSample extends Plugin {
             }
         });
         menu.addItem({
-            icon: "iconSelect",
-            label: "On ws-main",
-            click: () => {
-                this.eventBus.on("ws-main", this.wsEvent);
-            }
-        });
-        menu.addItem({
-            icon: "iconClose",
-            label: "Off ws-main",
-            click: () => {
-                this.eventBus.off("ws-main", this.wsEvent);
-            }
+            icon: "iconScrollHoriz",
+            label: "Event Bus",
+            type: "submenu",
+            submenu: [{
+                icon: "iconSelect",
+                label: "On ws-main",
+                click: () => {
+                    this.eventBus.on("ws-main", this.wsEvent);
+                }
+            }, {
+                icon: "iconClose",
+                label: "Off ws-main",
+                click: () => {
+                    this.eventBus.off("ws-main", this.wsEvent);
+                }
+            }, {
+                icon: "iconSelect",
+                label: "On click-blockicon",
+                click: () => {
+                    this.eventBus.on("click-blockicon", this.blockIconEvent);
+                }
+            }, {
+                icon: "iconClose",
+                label: "Off click-blockicon",
+                click: () => {
+                    this.eventBus.off("click-blockicon", this.blockIconEvent);
+                }
+            }]
         });
         menu.addSeparator();
         menu.addItem({
