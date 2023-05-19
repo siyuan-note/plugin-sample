@@ -34,6 +34,7 @@ interface IMenuItemOption {
     iconHTML?: string
     current?: boolean
     bind?: (element: HTMLElement) => void
+    index?: number
 }
 
 export function fetchPost(url: string, data?: any, cb?: (response: IWebSocketData) => void, headers?: IObject): void;
@@ -168,7 +169,7 @@ export class Menu {
 
     addItem(options: IMenuItemOption): HTMLElement;
 
-    addSeparator(): void;
+    addSeparator(index?: number): void;
 
     open(options: { x: number, y: number, h?: number, w?: number, isLeft?: boolean }): void;
 

@@ -100,15 +100,16 @@ export default class PluginSample extends Plugin {
     }
 
     private blockIconEvent({detail}: any) {
-        detail.menu.addSeparator();
+        detail.menu.addSeparator(0);
         const ids: string[] = [];
         detail.blockElements.forEach((item: HTMLElement) => {
             ids.push(item.getAttribute("data-node-id"))
         });
         detail.menu.addItem({
+            index: 1,
             iconHTML: "",
             type: "readonly",
-            label: "IDs: " + ids.join(","),
+            label: "IDs<br>" + ids.join("<br>"),
         });
     }
 
