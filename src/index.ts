@@ -167,6 +167,18 @@ export default class PluginSample extends Plugin {
             }
         });
         menu.addItem({
+            icon: "iconLayout",
+            label: "Open Float Layer(open help)",
+            click: () => {
+                this.addFloatLayer({
+                    ids: ["20210428212840-8rqwn5o", "20201225220955-l154bn4"],
+                    defIds: ["20230415111858-vgohvf3", "20200813131152-0wk5akh"],
+                    x: (window.innerWidth - 768) / 2,
+                    y: window.innerHeight / 10
+                });
+            }
+        });
+        menu.addItem({
             icon: "iconTrashcan",
             label: "Remove Data",
             click: () => {

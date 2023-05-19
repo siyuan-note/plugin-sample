@@ -146,6 +146,14 @@ export abstract class Plugin {
         update?: () => void,
         init: () => void
     }): any
+
+    addFloatLayer(options: {
+        ids: string[],
+        defIds?: string[],
+        x?: number,
+        y?: number,
+        targetElement?: HTMLElement
+    }): void
 }
 
 export class EventBus {
