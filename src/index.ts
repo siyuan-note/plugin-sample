@@ -173,8 +173,8 @@ export default class PluginSample extends Plugin {
                 this.addFloatLayer({
                     ids: ["20210428212840-8rqwn5o", "20201225220955-l154bn4"],
                     defIds: ["20230415111858-vgohvf3", "20200813131152-0wk5akh"],
-                    x: (window.innerWidth - 768) / 2,
-                    y: window.innerHeight / 10
+                    x: window.innerWidth - 768 - 120,
+                    y: 32
                 });
             }
         });
