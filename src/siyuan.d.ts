@@ -1,5 +1,11 @@
 type TEventBus = "ws-main" | "click-blockicon" | "click-editorcontent" | "click-pdf"
 
+declare global {
+    interface Window {
+        Lute: Lute
+    }
+}
+
 interface IObject {
     [key: string]: string;
 }

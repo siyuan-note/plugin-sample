@@ -65,6 +65,10 @@ export default class PluginSample extends Plugin {
         console.log(this.i18n.helloPlugin);
     }
 
+    onLayoutReady() {
+        console.log("onLayoutReady: ", window.Lute);
+    }
+
     onunload() {
         console.log(this.i18n.byePlugin);
     }
