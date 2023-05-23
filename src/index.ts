@@ -107,7 +107,7 @@ export default class PluginSample extends Plugin {
         detail.menu.addSeparator(0);
         const ids: string[] = [];
         detail.blockElements.forEach((item: HTMLElement) => {
-            ids.push(item.getAttribute("data-node-id"))
+            ids.push(item.getAttribute("data-node-id"));
         });
         detail.menu.addItem({
             index: 1,
