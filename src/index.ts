@@ -66,7 +66,7 @@ export default class PluginSample extends Plugin {
     }
 
     onLayoutReady() {
-        console.log("onLayoutReady: ", window.Lute);
+        this.loadData(STORAGE_NAME);
     }
 
     onunload() {
