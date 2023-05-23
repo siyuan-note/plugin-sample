@@ -46,6 +46,7 @@ conveniently.
   "author": "Vanessa",
   "url": "https://github.com/siyuan-note/plugin-sample",
   "version": "0.0.1",
+  "minAppVersion": "2.9.0",
   "displayName": {
     "default": "Plugin Sample",
     "zh_CN": "插件示例"
@@ -78,6 +79,7 @@ conveniently.
 * `author`: Plugin author name
 * `url`: Plugin repo URL
 * `version`: Plugin version number, it is recommended to follow the [semver](https://semver.org/) specification
+* `minAppVersion`: Minimum version number of SiYuan required to use this plugin
 * `displayName`: Template display name, mainly used for display in the marketplace list, supports multiple languages
     * `default`: Default language, must exist
     * `zh_CN`, `en_US` and other languages: optional, it is recommended to provide at least Chinese and English
