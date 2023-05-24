@@ -54,10 +54,6 @@
     "default": "README.md",
     "zh_CN": "README_zh_CN.md"
   },
-  "i18n": [
-    "en_US",
-    "zh_CN"
-  ],
   "funding": {
     "openCollective": "b3log",
     "patreon": "",
@@ -83,7 +79,6 @@
 * `readme`：自述文件名，主要用于插件集市详情页中显示，支持多语言
     * `default`：默认语言，必须存在
     * `zh_CN`、`en_US` 等其他语言：可选，建议至少提供中文和英文
-* `i18n`：插件支持的语言列表
 * `funding`：插件赞助信息
     * `openCollective`：Open Collective 名称
     * `patreon`：Patreon 名称
