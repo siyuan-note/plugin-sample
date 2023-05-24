@@ -239,6 +239,18 @@ export default class PluginSample extends Plugin {
                 click: () => {
                     this.eventBus.off("click-editorcontent", this.wsEvent);
                 }
+            }, {
+                icon: "iconSelect",
+                label: "On click-editortitleicon",
+                click: () => {
+                    this.eventBus.on("click-editortitleicon", this.wsEvent);
+                }
+            }, {
+                icon: "iconClose",
+                label: "Off click-editortitleicon",
+                click: () => {
+                    this.eventBus.off("click-editortitleicon", this.wsEvent);
+                }
             }]
         });
         menu.addSeparator();
