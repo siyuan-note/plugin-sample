@@ -35,7 +35,8 @@ declare interface IPluginDockTab {
     icon: string,
     hotkey?: string,
     title: string,
-    index?: number
+    index?: number,
+    show?: boolean
 }
 
 interface IMenuItemOption {
