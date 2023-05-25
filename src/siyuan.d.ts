@@ -53,6 +53,7 @@ interface IMenuItemOption {
     current?: boolean
     bind?: (element: HTMLElement) => void
     index?: number
+    element?: HTMLElement
 }
 
 export function fetchPost(url: string, data?: any, cb?: (response: IWebSocketData) => void, headers?: IObject): void;
