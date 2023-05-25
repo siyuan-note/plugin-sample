@@ -132,6 +132,8 @@ export abstract class Plugin {
 
     removeData(storageName: string): Promise<any>;
 
+    addIcons(svg: string): void;
+
     addTab(options: {
         type: string,
         destroy?: () => void,
