@@ -158,34 +158,36 @@ export default class PluginSample extends Plugin {
                 });
             }
         });
-        menu.addItem({
-            icon: "iconLayoutBottom",
-            label: "Open Tab",
-            click: () => {
-                openTab({
-                    custom: {
-                        icon: "iconFace",
-                        title: "Custom Tab",
-                        data: {
-                            text: "This is my custom tab",
+        if (!isMobile()) {
+            menu.addItem({
+                icon: "iconLayoutBottom",
+                label: "Open Tab",
+                click: () => {
+                    openTab({
+                        custom: {
+                            icon: "iconFace",
+                            title: "Custom Tab",
+                            data: {
+                                text: "This is my custom tab",
+                            },
+                            fn: this.customTab
                         },
-                        fn: this.customTab
-                    },
-                });
-            }
-        });
-        menu.addItem({
-            icon: "iconLayout",
-            label: "Open Float Layer(open help)",
-            click: () => {
-                this.addFloatLayer({
-                    ids: ["20210428212840-8rqwn5o", "20201225220955-l154bn4"],
-                    defIds: ["20230415111858-vgohvf3", "20200813131152-0wk5akh"],
-                    x: window.innerWidth - 768 - 120,
-                    y: 32
-                });
-            }
-        });
+                    });
+                }
+            });
+            menu.addItem({
+                icon: "iconLayout",
+                label: "Open Float Layer(open help)",
+                click: () => {
+                    this.addFloatLayer({
+                        ids: ["20210428212840-8rqwn5o", "20201225220955-l154bn4"],
+                        defIds: ["20230415111858-vgohvf3", "20200813131152-0wk5akh"],
+                        x: window.innerWidth - 768 - 120,
+                        y: 32
+                    });
+                }
+            });
+        }
         menu.addItem({
             icon: "iconTrashcan",
             label: "Remove Data",
