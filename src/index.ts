@@ -164,7 +164,7 @@ export default class PluginSample extends Plugin {
             click: () => {
                 openTab({
                     custom: {
-                        icon: "iconEmoji",
+                        icon: "iconFace",
                         title: "Custom Tab",
                         data: {
                             text: "This is my custom tab",
