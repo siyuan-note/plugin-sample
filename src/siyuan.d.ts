@@ -110,7 +110,8 @@ export abstract class Plugin {
 
     onLayoutReady(): void;
 
-    /*
+    /**
+     * Must be executed before the synchronous function.
      * @param {string} [options.position=right]
      */
     addTopBar(options: {
@@ -134,6 +135,9 @@ export abstract class Plugin {
 
     addIcons(svg: string): void;
 
+    /**
+     * Must be executed before the synchronous function.
+     */
     addTab(options: {
         type: string,
         destroy?: () => void,
@@ -142,6 +146,9 @@ export abstract class Plugin {
         init: () => void
     }): () => any
 
+    /**
+     * Must be executed before the synchronous function.
+     */
     addDock(options: {
         config: IPluginDockTab,
         data: any,
@@ -202,7 +209,7 @@ export class Menu {
 
     open(options: { x: number, y: number, h?: number, w?: number, isLeft?: boolean }): void;
 
-    /*
+    /**
      * @param {string} [position=all]
      */
     fullscreen(position?: "bottom" | "all"): void;
