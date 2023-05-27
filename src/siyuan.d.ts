@@ -1,4 +1,5 @@
-type TEventBus = "ws-main" | "click-blockicon" | "click-editorcontent" | "click-pdf" | "click-editortitleicon"
+type TEventBus = "ws-main" | "click-blockicon" | "click-editorcontent" | "click-pdf" |
+    "click-editortitleicon" | "open-noneditableblock"
 
 declare global {
     interface Window {

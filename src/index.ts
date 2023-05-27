@@ -261,6 +261,18 @@ export default class PluginSample extends Plugin {
                 click: () => {
                     this.eventBus.off("click-editortitleicon", this.wsEvent);
                 }
+            }, {
+                icon: "iconSelect",
+                label: "On open-noneditableblock",
+                click: () => {
+                    this.eventBus.on("open-noneditableblock", this.wsEvent);
+                }
+            }, {
+                icon: "iconClose",
+                label: "Off open-noneditableblock",
+                click: () => {
+                    this.eventBus.off("open-noneditableblock", this.wsEvent);
+                }
             }]
         });
         menu.addSeparator();
