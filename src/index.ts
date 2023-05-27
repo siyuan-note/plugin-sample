@@ -25,7 +25,12 @@ export default class PluginSample extends Plugin {
             title: this.i18n.addTopBarIcon,
             position: "right",
             callback: () => {
-                this.addMenu(topBarElement.getBoundingClientRect());
+                let rect = topBarElement.getBoundingClientRect();
+                // 如果获取不到宽度，则使用更多按钮的宽度
+                if (rect.width === 0) {
+                    rect = document.querySelector("#barMore").getBoundingClientRect();
+                }
+                this.addMenu(rect);
             }
         });
 
@@ -125,7 +130,7 @@ export default class PluginSample extends Plugin {
         });
     }
 
-    private async addMenu(rect: DOMRect) {
+    private addMenu(rect: DOMRect) {
         const menu = new Menu("topBarSample", () => {
             console.log(this.i18n.byeMenu);
         });
