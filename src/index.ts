@@ -166,7 +166,7 @@ export default class PluginSample extends Plugin {
         if (!isMobile()) {
             menu.addItem({
                 icon: "iconLayoutBottom",
-                label: "Open Tab",
+                label: "Open Custom Tab",
                 click: () => {
                     openTab({
                         app: this.app,
@@ -178,6 +178,54 @@ export default class PluginSample extends Plugin {
                             },
                             fn: this.customTab
                         },
+                    });
+                }
+            });
+            menu.addItem({
+                icon: "iconLayoutBottom",
+                label: "Open Asset Tab",
+                click: () => {
+                    openTab({
+                        app: this.app,
+                        asset: {
+                            path: "assets/paragraph-20210512165953-ag1nib4.svg"
+                        }
+                    });
+                }
+            });
+            menu.addItem({
+                icon: "iconLayoutBottom",
+                label: "Open Doc Tab",
+                click: () => {
+                    openTab({
+                        app: this.app,
+                        doc: {
+                            id: "20200812220555-lj3enxa",
+                        }
+                    });
+                }
+            });
+            menu.addItem({
+                icon: "iconLayoutBottom",
+                label: "Open Search Tab",
+                click: () => {
+                    openTab({
+                        app: this.app,
+                        search: {
+                            k: "SiYuan"
+                        }
+                    });
+                }
+            });
+            menu.addItem({
+                icon: "iconLayoutBottom",
+                label: "Open Card Tab",
+                click: () => {
+                    openTab({
+                        app: this.app,
+                        card: {
+                            type: "all"
+                        }
                     });
                 }
             });

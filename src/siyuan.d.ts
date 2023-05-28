@@ -24,18 +24,15 @@ interface ILuteNode {
 }
 
 interface ISearchOption {
-    page: number
-    removed?: boolean  // 移除后需记录搜索内容 https://github.com/siyuan-note/siyuan/issues/7745
-    name?: string
-    sort: number,  //  0：按块类型（默认），1：按创建时间升序，2：按创建时间降序，3：按更新时间升序，4：按更新时间降序，5：按内容顺序（仅在按文档分组时），6：按相关度升序，7：按相关度降序
-    group: number,  // 0：不分组，1：按文档分组
-    hasReplace: boolean,
-    method: number //  0：文本，1：查询语法，2：SQL，3：正则表达式
-    hPath: string
-    idPath: string[]
+    page?: number
+    group?: number,  // 0：不分组，1：按文档分组
+    hasReplace?: boolean,
+    method?: number //  0：文本，1：查询语法，2：SQL，3：正则表达式
+    hPath?: string
+    idPath?: string[]
     k: string
-    r: string
-    types: {
+    r?: string
+    types?: {
         mathBlock: boolean
         table: boolean
         blockquote: boolean
@@ -96,11 +93,8 @@ export function fetchGet(url: string, cb: (response: IWebSocketData) => void): v
 export function openTab(options: {
     app: App,
     doc?: {
-        fileName: string,
-        rootIcon?: string, // 文档图标
         id: string,     // 块 id
-        rootID: string, // 文档 id
-        action: string [] // cb-get-all：获取所有内容；cb-get-focus：打开后光标定位在 id 所在的块；cb-get-hl: 打开后 id 块高亮
+        action?: string [] // cb-get-all：获取所有内容；cb-get-focus：打开后光标定位在 id 所在的块；cb-get-hl: 打开后 id 块高亮
         zoomIn?: boolean // 是否缩放
     },
     pdf?: {
@@ -113,7 +107,7 @@ export function openTab(options: {
     },
     search?: ISearchOption
     card?: {
-        cardType: TCardType,
+        type: TCardType,
         id?: string, //  cardType 为 all 时不传，否则传文档或笔记本 id
         title?: string //  cardType 为 all 时不传，否则传文档或笔记本名称
     },
