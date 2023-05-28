@@ -169,6 +169,7 @@ export default class PluginSample extends Plugin {
                 label: "Open Tab",
                 click: () => {
                     openTab({
+                        app: this.app,
                         custom: {
                             icon: "iconFace",
                             title: "Custom Tab",
