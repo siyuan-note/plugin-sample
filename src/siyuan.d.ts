@@ -144,7 +144,7 @@ export abstract class Plugin {
     i18n: IObject;
     data: any;
     name: string;
-    app: App
+    app: App;
 
     constructor(options: {
         app: App,
