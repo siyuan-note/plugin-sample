@@ -183,7 +183,7 @@ export default class PluginSample extends Plugin {
             });
             menu.addItem({
                 icon: "iconLayoutBottom",
-                label: "Open Asset Tab",
+                label: "Open Asset Tab(open help first)",
                 click: () => {
                     openTab({
                         app: this.app,
@@ -195,7 +195,7 @@ export default class PluginSample extends Plugin {
             });
             menu.addItem({
                 icon: "iconLayoutBottom",
-                label: "Open Doc Tab",
+                label: "Open Doc Tab(open help first)",
                 click: () => {
                     openTab({
                         app: this.app,
@@ -231,7 +231,7 @@ export default class PluginSample extends Plugin {
             });
             menu.addItem({
                 icon: "iconLayout",
-                label: "Open Float Layer(open help)",
+                label: "Open Float Layer(open help first)",
                 click: () => {
                     this.addFloatLayer({
                         ids: ["20210428212840-8rqwn5o", "20201225220955-l154bn4"],

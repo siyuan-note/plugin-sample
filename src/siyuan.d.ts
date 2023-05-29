@@ -174,8 +174,6 @@ export abstract class Plugin {
 
     // registerCommand(command: IPluginCommand): void;
 
-    // registerSettingRender(settingRender: SettingRender): void;
-
     loadData(storageName: string): Promise<any>;
 
     saveData(storageName: string, content: any): Promise<void>;
