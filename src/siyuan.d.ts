@@ -123,7 +123,7 @@ export function openTab(options: {
     afterOpen?: () => void // 打开后回调
 }): void
 
-export function isMobile(): boolean;
+export function getFrontend(): "desktop" | "desktop-window" | "mobile" | "browser-desktop" | "browser-mobile";
 
 export function adaptHotkey(hotkey: string): string;
 
