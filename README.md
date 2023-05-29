@@ -47,8 +47,8 @@ conveniently.
   "url": "https://github.com/siyuan-note/plugin-sample",
   "version": "0.0.1",
   "minAppVersion": "2.9.0",
-  "backends": ["all"],
-  "frontends": ["all"],
+  "backends": ["windows", "linux", "darwin"],
+  "frontends": ["desktop", "browser-desktop"],
   "displayName": {
     "default": "Plugin Sample",
     "zh_CN": "插件示例"
