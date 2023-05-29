@@ -44,6 +44,14 @@ export default class PluginSample extends Plugin {
             }
         });
 
+        this.addCommand({
+            langKey: "showMessage",
+            hotkey: "⇧⌘M",
+            callback: () => {
+                showMessage(this.i18n.helloPlugin);
+            }
+        })
+
         this.addDock({
             config: {
                 position: "LeftBottom",

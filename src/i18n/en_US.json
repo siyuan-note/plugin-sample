@@ -4,5 +4,6 @@
   "save": "Save",
   "byeMenu": "Bye, Menu!",
   "helloPlugin": "Hello, Plugin!",
-  "byePlugin": "Bye, Plugin!"
+  "byePlugin": "Bye, Plugin!",
+  "showMessage": "Show message"
 }

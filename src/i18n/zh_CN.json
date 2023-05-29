@@ -4,5 +4,6 @@
   "save": "保存",
   "byeMenu": "再见，菜单！",
   "helloPlugin": "你好，插件！",
-  "byePlugin": "再见，插件！"
+  "byePlugin": "再见，插件！",
+  "showMessage": "弹出一个消息"
 }
