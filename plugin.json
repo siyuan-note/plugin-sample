@@ -2,8 +2,10 @@
   "name": "plugin-sample",
   "author": "Vanessa",
   "url": "https://github.com/siyuan-note/plugin-sample",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "minAppVersion": "2.9.0",
+  "backends": ["all"],
+  "frontends": ["all"],
   "displayName": {
     "default": "Plugin Sample",
     "zh_CN": "插件示例"

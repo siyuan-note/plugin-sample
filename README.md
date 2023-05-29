@@ -47,6 +47,8 @@ conveniently.
   "url": "https://github.com/siyuan-note/plugin-sample",
   "version": "0.0.1",
   "minAppVersion": "2.9.0",
+  "backends": ["all"],
+  "frontends": ["all"],
   "displayName": {
     "default": "Plugin Sample",
     "zh_CN": "插件示例"
@@ -76,6 +78,8 @@ conveniently.
 * `url`: Plugin repo URL
 * `version`: Plugin version number, it is recommended to follow the [semver](https://semver.org/) specification
 * `minAppVersion`: Minimum version number of SiYuan required to use this plugin
+* `backends`: Backend environment required by the plugin, optional values are `all`, `windows`, `linux`, `darwin`, `android` and `ios`
+* `frontends`: Frontend environment required by the plugin, optional values are `all`, `desktop`, `desktop-window`, `mobile`, `browser-desktop`, `browser-mobile`
 * `displayName`: Template display name, mainly used for display in the marketplace list, supports multiple languages
     * `default`: Default language, must exist
     * `zh_CN`, `en_US` and other languages: optional, it is recommended to provide at least Chinese and English
