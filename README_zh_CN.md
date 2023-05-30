@@ -40,8 +40,8 @@
   "name": "plugin-sample",
   "author": "Vanessa",
   "url": "https://github.com/siyuan-note/plugin-sample",
-  "version": "0.0.1",
-  "minAppVersion": "2.9.0",
+  "version": "0.1.1",
+  "minAppVersion": "2.8.8",
   "backends": ["windows", "linux", "darwin"],
   "frontends": ["desktop"],
   "displayName": {
