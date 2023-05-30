@@ -57,7 +57,7 @@
     "zh_CN": "README_zh_CN.md"
   },
   "funding": {
-    "openCollective": "b3log",
+    "openCollective": "",
     "patreon": "",
     "github": "",
     "custom": [
