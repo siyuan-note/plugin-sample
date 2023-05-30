@@ -53,7 +53,7 @@ export default class PluginSample extends Plugin {
             callback: () => {
                 showMessage(this.i18n.helloPlugin);
             }
-        })
+        });
 
         this.addDock({
             config: {
