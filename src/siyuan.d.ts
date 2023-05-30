@@ -125,6 +125,8 @@ export function openTab(options: {
 
 export function getFrontend(): "desktop" | "desktop-window" | "mobile" | "browser-desktop" | "browser-mobile";
 
+export function getBackend(): "desktop" | "desktop-window" | "mobile" | "browser-desktop" | "browser-mobile";
+
 export function adaptHotkey(hotkey: string): string;
 
 export function confirm(title: string, text: string, confirmCallback?: () => void, cancelCallback?: () => void): void;

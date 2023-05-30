@@ -1,4 +1,4 @@
-import {Plugin, showMessage, confirm, Dialog, Menu, openTab, adaptHotkey, getFrontend} from "siyuan";
+import {Plugin, showMessage, confirm, Dialog, Menu, openTab, adaptHotkey, getFrontend, getBackend} from "siyuan";
 import "./index.scss";
 
 const STORAGE_NAME = "menu-config";
@@ -91,6 +91,7 @@ export default class PluginSample extends Plugin {
 
     onLayoutReady() {
         this.loadData(STORAGE_NAME);
+        console.log(`frontend: ${getFrontend()}; backend: ${getBackend()}`);
     }
 
     onunload() {
