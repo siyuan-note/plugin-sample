@@ -9,6 +9,28 @@ declare global {
     }
 }
 
+interface ITab {
+    id: string;
+    headElement: HTMLElement;
+    panelElement: HTMLElement;
+    model: IModel;
+    title: string;
+    icon: string;
+    docIcon: string;
+    updateTitle: (title: string) => void;
+    pin: () => void;
+    unpin: () => void;
+    setDocIcon: (icon: string) => void;
+    close: () => void;
+}
+
+interface IModel {
+    element: Element;
+    tab: ITab;
+    data: any;
+    type: string;
+}
+
 interface IObject {
     [key: string]: string;
 }
@@ -115,13 +137,13 @@ export function openTab(options: {
         title: string,
         icon: string,
         data?: any
-        fn?: () => any,
+        fn?: () => IModel,
     }
     position?: "right" | "bottom",
     keepCursor?: boolean // 是否跳转到新 tab 上
     removeCurrentTab?: boolean // 在当前页签打开时需移除原有页签
     afterOpen?: () => void // 打开后回调
-}): void
+}): ITab
 
 export function getFrontend(): "desktop" | "desktop-window" | "mobile" | "browser-desktop" | "browser-mobile";
 
@@ -190,7 +212,7 @@ export abstract class Plugin {
         resize?: () => void,
         update?: () => void,
         init: () => void
-    }): () => any
+    }): () => IModel
 
     /**
      * Must be executed before the synchronous function.
@@ -203,7 +225,7 @@ export abstract class Plugin {
         resize?: () => void,
         update?: () => void,
         init: () => void
-    }): any
+    }): { config: IPluginDockTab, model: IModel }
 
     addCommand(options: {
         langKey: string, // 多语言 key

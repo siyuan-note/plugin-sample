@@ -1,4 +1,15 @@
-import {Plugin, showMessage, confirm, Dialog, Menu, openTab, adaptHotkey, getFrontend, getBackend} from "siyuan";
+import {
+    Plugin,
+    showMessage,
+    confirm,
+    Dialog,
+    Menu,
+    openTab,
+    adaptHotkey,
+    getFrontend,
+    getBackend,
+    IModel
+} from "siyuan";
 import "./index.scss";
 
 const STORAGE_NAME = "menu-config";
@@ -7,7 +18,7 @@ const DOCK_TYPE = "dock_tab";
 
 export default class PluginSample extends Plugin {
 
-    private customTab: () => any;
+    private customTab: () => IModel;
     private isMobile: boolean;
 
     onload() {
@@ -180,7 +191,7 @@ export default class PluginSample extends Plugin {
                 icon: "iconLayoutBottom",
                 label: "Open Custom Tab",
                 click: () => {
-                    openTab({
+                    const tab = openTab({
                         app: this.app,
                         custom: {
                             icon: "iconFace",
@@ -191,54 +202,59 @@ export default class PluginSample extends Plugin {
                             fn: this.customTab
                         },
                     });
+                    console.log(tab)
                 }
             });
             menu.addItem({
                 icon: "iconLayoutBottom",
                 label: "Open Asset Tab(open help first)",
                 click: () => {
-                    openTab({
+                    const tab = openTab({
                         app: this.app,
                         asset: {
                             path: "assets/paragraph-20210512165953-ag1nib4.svg"
                         }
                     });
+                    console.log(tab)
                 }
             });
             menu.addItem({
                 icon: "iconLayoutBottom",
                 label: "Open Doc Tab(open help first)",
-                click: () => {
-                    openTab({
+                click: async () => {
+                    const tab = await openTab({
                         app: this.app,
                         doc: {
                             id: "20200812220555-lj3enxa",
                         }
                     });
+                    console.log(tab)
                 }
             });
             menu.addItem({
                 icon: "iconLayoutBottom",
                 label: "Open Search Tab",
                 click: () => {
-                    openTab({
+                    const tab = openTab({
                         app: this.app,
                         search: {
                             k: "SiYuan"
                         }
                     });
+                    console.log(tab)
                 }
             });
             menu.addItem({
                 icon: "iconLayoutBottom",
                 label: "Open Card Tab",
                 click: () => {
-                    openTab({
+                    const tab = openTab({
                         app: this.app,
                         card: {
                             type: "all"
                         }
                     });
+                    console.log(tab)
                 }
             });
             menu.addItem({
