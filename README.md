@@ -45,8 +45,8 @@ conveniently.
   "name": "plugin-sample",
   "author": "Vanessa",
   "url": "https://github.com/siyuan-note/plugin-sample",
-  "version": "0.0.1",
-  "minAppVersion": "2.9.0",
+  "version": "0.1.1",
+  "minAppVersion": "2.8.8",
   "backends": ["windows", "linux", "darwin"],
   "frontends": ["desktop"],
   "displayName": {
@@ -62,7 +62,7 @@ conveniently.
     "zh_CN": "README_zh_CN.md"
   },
   "funding": {
-    "openCollective": "b3log",
+    "openCollective": "",
     "patreon": "",
     "github": "",
     "custom": [
@@ -79,7 +79,20 @@ conveniently.
 * `version`: Plugin version number, it is recommended to follow the [semver](https://semver.org/) specification
 * `minAppVersion`: Minimum version number of SiYuan required to use this plugin
 * `backends`: Backend environment required by the plugin, optional values are `windows`, `linux`, `darwin`, `docker`, `android`, `ios` and `all`
+  * `windows`: Windows desktop
+  * `linux`: Linux desktop
+  * `darwin`: macOS desktop
+  * `docker`: Docker
+  * `android`: Android APP
+  * `ios`: iOS APP
+  * `all`: All environments
 * `frontends`: Frontend environment required by the plugin, optional values are `desktop`, `desktop-window`, `mobile`, `browser-desktop`, `browser-mobile` and `all`
+  * `desktop`: Desktop
+  * `desktop-window`: Desktop window converted from tab
+  * `mobile`: Mobile APP
+  * `browser-desktop`: Desktop browser
+  * `browser-mobile`: Mobile browser
+  * `all`: All environments
 * `displayName`: Template display name, mainly used for display in the marketplace list, supports multiple languages
     * `default`: Default language, must exist
     * `zh_CN`, `en_US` and other languages: optional, it is recommended to provide at least Chinese and English

@@ -2,7 +2,7 @@
   "name": "plugin-sample",
   "author": "Vanessa",
   "url": "https://github.com/siyuan-note/plugin-sample",
-  "version": "0.0.9",
+  "version": "0.1.1",
   "minAppVersion": "2.8.8",
   "backends": ["windows", "linux", "darwin"],
   "frontends": ["desktop"],
@@ -19,7 +19,7 @@
     "zh_CN": "README_zh_CN.md"
   },
   "funding": {
-    "openCollective": "b3log",
+    "openCollective": "",
     "patreon": "",
     "github": "",
     "custom": [

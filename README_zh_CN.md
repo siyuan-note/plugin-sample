@@ -40,8 +40,8 @@
   "name": "plugin-sample",
   "author": "Vanessa",
   "url": "https://github.com/siyuan-note/plugin-sample",
-  "version": "0.0.1",
-  "minAppVersion": "2.9.0",
+  "version": "0.1.1",
+  "minAppVersion": "2.8.8",
   "backends": ["windows", "linux", "darwin"],
   "frontends": ["desktop"],
   "displayName": {
@@ -57,7 +57,7 @@
     "zh_CN": "README_zh_CN.md"
   },
   "funding": {
-    "openCollective": "b3log",
+    "openCollective": "",
     "patreon": "",
     "github": "",
     "custom": [
@@ -73,7 +73,20 @@
 * `version`：插件版本号，建议遵循 [semver](https://semver.org/lang/zh-CN/) 规范
 * `minAppVersion`：插件支持的最低思源笔记版本号
 * `backends`：插件需要的后端环境，可选值为 `windows`, `linux`, `darwin`, `docker`, `android`, `ios` and `all`
+  * `windows`：Windows 桌面端
+  * `linux`：Linux 桌面端
+  * `darwin`：macOS 桌面端
+  * `docker`：Docker 端
+  * `android`：Android 端
+  * `ios`：iOS 端
+  * `all`：所有环境
 * `frontends`：插件需要的前端环境，可选值为 `desktop`, `desktop-window`, `mobile`, `browser-desktop`, `browser-mobile` and `all`
+  * `desktop`：桌面端
+  * `desktop-window`：桌面端页签转换的独立窗口
+  * `mobile`：移动端
+  * `browser-desktop`：桌面端浏览器
+  * `browser-mobile`：移动端浏览器
+  * `all`：所有环境
 * `displayName`：模板显示名称，主要用于模板集市列表中显示，支持多语言
     * `default`：默认语言，必须存在
     * `zh_CN`、`en_US` 等其他语言：可选，建议至少提供中文和英文
