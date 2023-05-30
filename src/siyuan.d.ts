@@ -84,11 +84,11 @@ interface IMenuItemOption {
     element?: HTMLElement
 }
 
-export function fetchPost(url: string, data?: any, cb?: (response: IWebSocketData) => void, headers?: IObject): void;
+export function fetchPost(url: string, data?: any, callback?: (response: IWebSocketData) => void, headers?: IObject): void;
 
 export function fetchSyncPost(url: string, data?: any): Promise<IWebSocketData>;
 
-export function fetchGet(url: string, cb: (response: IWebSocketData) => void): void;
+export function fetchGet(url: string, callback: (response: IWebSocketData) => void): void;
 
 export function openTab(options: {
     app: App,
@@ -123,11 +123,13 @@ export function openTab(options: {
     afterOpen?: () => void // 打开后回调
 }): void
 
-export function isMobile(): boolean;
+export function getFrontend(): "desktop" | "desktop-window" | "mobile" | "browser-desktop" | "browser-mobile";
+
+export function getBackend(): "windows" | "linux" | "darwin" | "docker" | "android" | "ios"
 
 export function adaptHotkey(hotkey: string): string;
 
-export function confirm(title: string, text: string, confirmCB?: () => void, cancelCB?: () => void): void;
+export function confirm(title: string, text: string, confirmCallback?: () => void, cancelCallback?: () => void): void;
 
 /**
  * @param timeout - ms. 0: manual close；-1: always show; 6000: default
@@ -148,7 +150,6 @@ export abstract class Plugin {
 
     constructor(options: {
         app: App,
-        id: string,
         name: string,
         i18n: IObject
     })
@@ -171,8 +172,6 @@ export abstract class Plugin {
     }): HTMLDivElement;
 
     openSetting(): void
-
-    // registerCommand(command: IPluginCommand): void;
 
     loadData(storageName: string): Promise<any>;
 
@@ -205,6 +204,25 @@ export abstract class Plugin {
         update?: () => void,
         init: () => void
     }): any
+
+    addCommand(options: {
+        langKey: string, // 多语言 key
+        /**
+         * 目前需使用 MacOS 符号标识，顺序按照 ⌥⇧⌘，入 ⌥⇧⌘A
+         * "Ctrl": "⌘",
+         * "Shift": "⇧",
+         * "Alt": "⌥",
+         * "Tab": "⇥",
+         * "Backspace": "⌫",
+         * "Delete": "⌦",
+         * "Enter": "↩",
+         */
+        hotkey: string,
+        callback?: () => void
+        fileTreeCallback?: (file: any) => void
+        editorCallback?: (protyle: any) => void
+        dockCallback?: (element: HTMLElement) => void
+    }): void
 
     addFloatLayer(options: {
         ids: string[],
@@ -246,7 +264,7 @@ export class Dialog {
 }
 
 export class Menu {
-    constructor(id?: string, closeCB?: () => void);
+    constructor(id?: string, closeCallback?: () => void);
 
     showSubMenu(subMenuElement: HTMLElement): void;
 
