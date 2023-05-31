@@ -40,12 +40,30 @@ export default class PluginSample extends Plugin {
             position: "right",
             callback: () => {
                 let rect = topBarElement.getBoundingClientRect();
-                // 如果获取不到宽度，则使用更多按钮的宽度
+                // 如果被隐藏，则使用更多按钮
                 if (rect.width === 0) {
                     rect = document.querySelector("#barMore").getBoundingClientRect();
                 }
                 this.addMenu(rect);
             }
+        });
+
+        const statusIconTemp = document.createElement("template");
+        statusIconTemp.innerHTML = `<div class="toolbar__item b3-tooltips b3-tooltips__w" aria-label="Remove plugin-sample Data">
+    <svg>
+        <use xlink:href="#iconTrashcan"></use>
+    </svg>
+</div>`;
+        statusIconTemp.content.firstElementChild.addEventListener("click", () => {
+            confirm("⚠️", this.i18n.confirmRemove.replace("${name}", this.name), () => {
+                this.removeData(STORAGE_NAME).then(() => {
+                    this.data[STORAGE_NAME] = {readonlyText: "Readonly"};
+                    showMessage(`[${this.name}]: ${this.i18n.removedData}`);
+                });
+            });
+        });
+        this.addStatusBar({
+            element: statusIconTemp.content.firstElementChild as HTMLElement,
         });
 
         this.customTab = this.addTab({
@@ -59,10 +77,10 @@ export default class PluginSample extends Plugin {
         });
 
         this.addCommand({
-            langKey: "showMessage",
+            langKey: "showDialog",
             hotkey: "⇧⌘M",
             callback: () => {
-                showMessage(this.i18n.helloPlugin);
+                this.showDialog();
             }
         });
 
@@ -135,7 +153,7 @@ export default class PluginSample extends Plugin {
         });
     }
 
-    private wsEvent({detail}: any) {
+    private eventBusLog({detail}: any) {
         console.log(detail);
     }
 
@@ -153,38 +171,23 @@ export default class PluginSample extends Plugin {
         });
     }
 
+    private showDialog() {
+        new Dialog({
+            title: "Info",
+            content: '<div class="b3-dialog__content">This is a dialog</div>',
+            width: this.isMobile ? "92vw" : "520px",
+        });
+    }
+
     private addMenu(rect: DOMRect) {
         const menu = new Menu("topBarSample", () => {
             console.log(this.i18n.byeMenu);
         });
         menu.addItem({
-            icon: "iconHelp",
-            label: "Confirm",
-            click() {
-                confirm("Confirm", "Is this a confirm?", () => {
-                    showMessage("confirm");
-                }, () => {
-                    showMessage("cancel");
-                });
-            }
-        });
-        menu.addItem({
-            icon: "iconFeedback",
-            label: "Message",
-            click: () => {
-                showMessage(this.i18n.helloPlugin);
-            }
-        });
-        menu.addItem({
             icon: "iconInfo",
             label: "Dialog",
-            click: () => {
-                new Dialog({
-                    title: "Info",
-                    content: '<div class="b3-dialog__content">This is a dialog</div>',
-                    width: this.isMobile ? "92vw" : "520px",
-                });
-            }
+            accelerator: this.commands[0].customHotkey,
+            click: this.showDialog
         });
         if (!this.isMobile) {
             menu.addItem({
@@ -271,15 +274,6 @@ export default class PluginSample extends Plugin {
             });
         }
         menu.addItem({
-            icon: "iconTrashcan",
-            label: "Remove Data",
-            click: () => {
-                this.removeData(STORAGE_NAME).then(() => {
-                    this.data[STORAGE_NAME] = {readonlyText: "Readonly"};
-                });
-            }
-        });
-        menu.addItem({
             icon: "iconScrollHoriz",
             label: "Event Bus",
             type: "submenu",
@@ -287,13 +281,13 @@ export default class PluginSample extends Plugin {
                 icon: "iconSelect",
                 label: "On ws-main",
                 click: () => {
-                    this.eventBus.on("ws-main", this.wsEvent);
+                    this.eventBus.on("ws-main", this.eventBusLog);
                 }
             }, {
                 icon: "iconClose",
                 label: "Off ws-main",
                 click: () => {
-                    this.eventBus.off("ws-main", this.wsEvent);
+                    this.eventBus.off("ws-main", this.eventBusLog);
                 }
             }, {
                 icon: "iconSelect",
@@ -311,49 +305,49 @@ export default class PluginSample extends Plugin {
                 icon: "iconSelect",
                 label: "On click-pdf",
                 click: () => {
-                    this.eventBus.on("click-pdf", this.wsEvent);
+                    this.eventBus.on("click-pdf", this.eventBusLog);
                 }
             }, {
                 icon: "iconClose",
                 label: "Off click-pdf",
                 click: () => {
-                    this.eventBus.off("click-pdf", this.wsEvent);
+                    this.eventBus.off("click-pdf", this.eventBusLog);
                 }
             }, {
                 icon: "iconSelect",
                 label: "On click-editorcontent",
                 click: () => {
-                    this.eventBus.on("click-editorcontent", this.wsEvent);
+                    this.eventBus.on("click-editorcontent", this.eventBusLog);
                 }
             }, {
                 icon: "iconClose",
                 label: "Off click-editorcontent",
                 click: () => {
-                    this.eventBus.off("click-editorcontent", this.wsEvent);
+                    this.eventBus.off("click-editorcontent", this.eventBusLog);
                 }
             }, {
                 icon: "iconSelect",
                 label: "On click-editortitleicon",
                 click: () => {
-                    this.eventBus.on("click-editortitleicon", this.wsEvent);
+                    this.eventBus.on("click-editortitleicon", this.eventBusLog);
                 }
             }, {
                 icon: "iconClose",
                 label: "Off click-editortitleicon",
                 click: () => {
-                    this.eventBus.off("click-editortitleicon", this.wsEvent);
+                    this.eventBus.off("click-editortitleicon", this.eventBusLog);
                 }
             }, {
                 icon: "iconSelect",
                 label: "On open-noneditableblock",
                 click: () => {
-                    this.eventBus.on("open-noneditableblock", this.wsEvent);
+                    this.eventBus.on("open-noneditableblock", this.eventBusLog);
                 }
             }, {
                 icon: "iconClose",
                 label: "Off open-noneditableblock",
                 click: () => {
-                    this.eventBus.off("open-noneditableblock", this.wsEvent);
+                    this.eventBus.off("open-noneditableblock", this.eventBusLog);
                 }
             }]
         });

@@ -5,5 +5,7 @@
   "byeMenu": "再见，菜单！",
   "helloPlugin": "你好，插件！",
   "byePlugin": "再见，插件！",
-  "showMessage": "弹出一个消息"
+  "showDialog": "弹出一个对话框",
+  "removedData": "数据已删除",
+  "confirmRemove": "确认删除 ${name} 中的数据？"
 }

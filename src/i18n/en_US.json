@@ -5,5 +5,7 @@
   "byeMenu": "Bye, Menu!",
   "helloPlugin": "Hello, Plugin!",
   "byePlugin": "Bye, Plugin!",
-  "showMessage": "Show message"
+  "showDialog": "Show dialog",
+  "removedData": "Data deleted",
+  "confirmRemove": "Confirm to delete the data in ${name}?"
 }

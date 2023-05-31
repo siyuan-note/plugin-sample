@@ -106,6 +106,26 @@ interface IMenuItemOption {
     element?: HTMLElement
 }
 
+interface ICommandOption {
+    langKey: string, // 多语言 key
+    /**
+     * 目前需使用 MacOS 符号标识，顺序按照 ⌥⇧⌘，入 ⌥⇧⌘A
+     * "Ctrl": "⌘",
+     * "Shift": "⇧",
+     * "Alt": "⌥",
+     * "Tab": "⇥",
+     * "Backspace": "⌫",
+     * "Delete": "⌦",
+     * "Enter": "↩",
+     */
+    hotkey: string,
+    customHotkey?: string,
+    callback?: () => void
+    fileTreeCallback?: (file: any) => void
+    editorCallback?: (protyle: any) => void
+    dockCallback?: (element: HTMLElement) => void
+}
+
 export function fetchPost(url: string, data?: any, callback?: (response: IWebSocketData) => void, headers?: IObject): void;
 
 export function fetchSyncPost(url: string, data?: any): Promise<IWebSocketData>;
@@ -169,6 +189,7 @@ export abstract class Plugin {
     data: any;
     name: string;
     app: App;
+    commands: ICommandOption[];
 
     constructor(options: {
         app: App,
@@ -189,9 +210,18 @@ export abstract class Plugin {
     addTopBar(options: {
         icon: string,
         title: string,
-        callback: (evt: MouseEvent) => void
+        callback: (event: MouseEvent) => void
         position?: "right" | "left"
-    }): HTMLDivElement;
+    }): HTMLElement;
+
+    /**
+     * Must be executed before the synchronous function.
+     * @param {string} [options.position=right]
+     */
+    addStatusBar(options: {
+        element: HTMLElement,
+        position?: "right" | "left"
+    }): HTMLElement
 
     openSetting(): void
 
@@ -227,24 +257,7 @@ export abstract class Plugin {
         init: () => void
     }): { config: IPluginDockTab, model: IModel }
 
-    addCommand(options: {
-        langKey: string, // 多语言 key
-        /**
-         * 目前需使用 MacOS 符号标识，顺序按照 ⌥⇧⌘，入 ⌥⇧⌘A
-         * "Ctrl": "⌘",
-         * "Shift": "⇧",
-         * "Alt": "⌥",
-         * "Tab": "⇥",
-         * "Backspace": "⌫",
-         * "Delete": "⌦",
-         * "Enter": "↩",
-         */
-        hotkey: string,
-        callback?: () => void
-        fileTreeCallback?: (file: any) => void
-        editorCallback?: (protyle: any) => void
-        dockCallback?: (element: HTMLElement) => void
-    }): void
+    addCommand(options: ICommandOption): void
 
     addFloatLayer(options: {
         ids: string[],
