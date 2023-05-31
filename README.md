@@ -45,7 +45,7 @@ conveniently.
   "name": "plugin-sample",
   "author": "Vanessa",
   "url": "https://github.com/siyuan-note/plugin-sample",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "minAppVersion": "2.8.8",
   "backends": ["windows", "linux", "darwin"],
   "frontends": ["desktop"],
