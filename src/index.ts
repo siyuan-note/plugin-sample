@@ -347,6 +347,18 @@ export default class PluginSample extends Plugin {
                 click: () => {
                     this.eventBus.off("open-noneditableblock", this.eventBusLog);
                 }
+            }, {
+                icon: "iconSelect",
+                label: "On loaded-protyle",
+                click: () => {
+                    this.eventBus.on("loaded-protyle", this.eventBusLog);
+                }
+            }, {
+                icon: "iconClose",
+                label: "Off loaded-protyle",
+                click: () => {
+                    this.eventBus.off("loaded-protyle", this.eventBusLog);
+                }
             }]
         });
         menu.addSeparator();
