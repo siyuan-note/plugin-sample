@@ -12,10 +12,12 @@
 
 ## 开发
 
-* plugin.json
+* i18n/*
 * icon.png (160*160)
+* index.css
+* index.js
+* plugin.json
 * preview.png (1024*768)
-* src/*
 * README*.md
 * [前端 API](https://github.com/siyuan-note/petal)
 * [后端 API](https://github.com/siyuan-note/siyuan/blob/master/API_zh_CN.md)
@@ -25,10 +27,10 @@
 国际化方面我们主要考虑的是支持多语言，具体需要完成以下工作：
 
 * 插件自身的元信息，比如插件描述和自述文件
-    * plugin.json 中的 `description` 和 `readme` 字段，以及对应的 README*.md 文件
+  * plugin.json 中的 `description` 和 `readme` 字段，以及对应的 README*.md 文件
 * 插件中使用的文本，比如按钮文字和提示信息
-    * src/i18n/*.json 语言配置文件
-    * 代码中使用 `this.i18.key` 获取文本
+  * src/i18n/*.json 语言配置文件
+  * 代码中使用 `this.i18.key` 获取文本
 * 最后在 plugin.json 中的 `i18n` 字段中声明该插件支持的语言
 
 建议插件至少支持英文和简体中文，这样可以方便更多人使用。
@@ -88,37 +90,36 @@
   * `browser-mobile`：移动端浏览器
   * `all`：所有环境
 * `displayName`：模板显示名称，主要用于模板集市列表中显示，支持多语言
-    * `default`：默认语言，必须存在
-    * `zh_CN`、`en_US` 等其他语言：可选，建议至少提供中文和英文
+  * `default`：默认语言，必须存在
+  * `zh_CN`、`en_US` 等其他语言：可选，建议至少提供中文和英文
 * `description`：插件描述，主要用于插件集市列表中显示，支持多语言
-    * `default`：默认语言，必须存在
-    * `zh_CN`、`en_US` 等其他语言：可选，建议至少提供中文和英文
+  * `default`：默认语言，必须存在
+  * `zh_CN`、`en_US` 等其他语言：可选，建议至少提供中文和英文
 * `readme`：自述文件名，主要用于插件集市详情页中显示，支持多语言
-    * `default`：默认语言，必须存在
-    * `zh_CN`、`en_US` 等其他语言：可选，建议至少提供中文和英文
+  * `default`：默认语言，必须存在
+  * `zh_CN`、`en_US` 等其他语言：可选，建议至少提供中文和英文
 * `funding`：插件赞助信息
-    * `openCollective`：Open Collective 名称
-    * `patreon`：Patreon 名称
-    * `github`：GitHub 登录名
-    * `custom`：自定义赞助链接列表
+  * `openCollective`：Open Collective 名称
+  * `patreon`：Patreon 名称
+  * `github`：GitHub 登录名
+  * `custom`：自定义赞助链接列表
 
 ## 打包
 
 无论使用何种方式编译打包，我们最终需要生成一个 package.zip，它至少包含如下文件：
 
-* icon.png
+* i18n/*
+* icon.png (160*160)
+* index.css
 * index.js
 * plugin.json
-* preview.png
+* preview.png (1024*768)
 * README*.md
-* index.css (optional)
-* i18n/* (optional)
 
 ## 上架集市
 
 * 执行 `pnpm run build` 生成 package.zip
-* 在 GitHub 上创建一个新的发布，使用插件版本号作为 “Tag
-  version”，示例 https://github.com/siyuan-note/plugin-sample/releases
+* 在 GitHub 上创建一个新的发布，使用插件版本号作为 “Tag version”，示例 https://github.com/siyuan-note/plugin-sample/releases
 * 上传 package.zip 作为二进制附件
 * 提交发布
 

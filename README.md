@@ -15,10 +15,12 @@
 
 ## Development
 
-* plugin.json
+* i18n/*
 * icon.png (160*160)
+* index.css
+* index.js
+* plugin.json
 * preview.png (1024*768)
-* src/*
 * README*.md
 * [Fontend API](https://github.com/siyuan-note/petal)
 * [Backend API](https://github.com/siyuan-note/siyuan/blob/master/API.md)
@@ -113,13 +115,13 @@ conveniently.
 No matter which method is used to compile and package, we finally need to generate a package.zip, which contains at
 least the following files:
 
-* icon.png
+* i18n/*
+* icon.png (160*160)
+* index.css
 * index.js
 * plugin.json
-* preview.png
+* preview.png (1024*768)
 * README*.md
-* index.css (optional)
-* i18n/* (optional)
 
 ## List on the marketplace
 
