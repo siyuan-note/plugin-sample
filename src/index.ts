@@ -8,7 +8,8 @@ import {
     adaptHotkey,
     getFrontend,
     getBackend,
-    IModel
+    IModel,
+    Setting
 } from "siyuan";
 import "./index.scss";
 
@@ -62,6 +63,7 @@ export default class PluginSample extends Plugin {
                 });
             });
         });
+
         this.addStatusBar({
             element: statusIconTemp.content.firstElementChild as HTMLElement,
         });
@@ -115,6 +117,33 @@ export default class PluginSample extends Plugin {
             }
         });
 
+        const textareaElement = document.createElement("textarea");
+        this.setting = new Setting({
+            confirmCallback: () => {
+                this.saveData(STORAGE_NAME, {readonlyText: textareaElement.value});
+            }
+        })
+        this.setting.addItem({
+            title: "Readonly text",
+            createActionElement: () => {
+                textareaElement.className = "b3-text-field fn__block";
+                textareaElement.placeholder = "Readonly text in the menu";
+                textareaElement.value = this.data[STORAGE_NAME].readonlyText;
+                return textareaElement;
+            },
+        })
+        const btnaElement = document.createElement("button");
+        btnaElement.className = "b3-button b3-button--outline fn__flex-center";
+        btnaElement.textContent = "Open";
+        btnaElement.addEventListener("click", () => {
+            window.open("https://github.com/siyuan-note/plugin-sample")
+        });
+        this.setting.addItem({
+            title: "Open plugin url",
+            description: "Open plugin url in browser",
+            actionElement: btnaElement,
+        })
+
         console.log(this.i18n.helloPlugin);
     }
 
@@ -127,6 +156,7 @@ export default class PluginSample extends Plugin {
         console.log(this.i18n.byePlugin);
     }
 
+    /* 自定义设置
     openSetting() {
         const dialog = new Dialog({
             title: this.name,
@@ -152,6 +182,7 @@ export default class PluginSample extends Plugin {
             dialog.destroy();
         });
     }
+    */
 
     private eventBusLog({detail}: any) {
         console.log(detail);
