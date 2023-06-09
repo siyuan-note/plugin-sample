@@ -133,7 +133,7 @@ export default class PluginSample extends Plugin {
             },
         });
         const btnaElement = document.createElement("button");
-        btnaElement.className = "b3-button b3-button--outline fn__flex-center";
+        btnaElement.className = "b3-button b3-button--outline fn__flex-center fn__size200";
         btnaElement.textContent = "Open";
         btnaElement.addEventListener("click", () => {
             window.open("https://github.com/siyuan-note/plugin-sample");
