@@ -45,6 +45,9 @@ export default class PluginSample extends Plugin {
                 if (rect.width === 0) {
                     rect = document.querySelector("#barMore").getBoundingClientRect();
                 }
+                if (rect.width === 0) {
+                    rect = document.querySelector("#barPlugins").getBoundingClientRect();
+                }
                 this.addMenu(rect);
             }
         });
