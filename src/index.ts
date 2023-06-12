@@ -40,15 +40,19 @@ export default class PluginSample extends Plugin {
             title: this.i18n.addTopBarIcon,
             position: "right",
             callback: () => {
-                let rect = topBarElement.getBoundingClientRect();
-                // 如果被隐藏，则使用更多按钮
-                if (rect.width === 0) {
-                    rect = document.querySelector("#barMore").getBoundingClientRect();
+                if (this.isMobile) {
+                    this.addMenu();
+                } else {
+                    let rect = topBarElement.getBoundingClientRect();
+                    // 如果被隐藏，则使用更多按钮
+                    if (rect.width === 0) {
+                        rect = document.querySelector("#barMore").getBoundingClientRect();
+                    }
+                    if (rect.width === 0) {
+                        rect = document.querySelector("#barPlugins").getBoundingClientRect();
+                    }
+                    this.addMenu(rect);
                 }
-                if (rect.width === 0) {
-                    rect = document.querySelector("#barPlugins").getBoundingClientRect();
-                }
-                this.addMenu(rect);
             }
         });
 
@@ -211,7 +215,7 @@ export default class PluginSample extends Plugin {
         });
     }
 
-    private addMenu(rect: DOMRect) {
+    private addMenu(rect?: DOMRect) {
         const menu = new Menu("topBarSample", () => {
             console.log(this.i18n.byeMenu);
         });
@@ -219,7 +223,9 @@ export default class PluginSample extends Plugin {
             icon: "iconInfo",
             label: "Dialog",
             accelerator: this.commands[0].customHotkey,
-            click: this.showDialog
+            click: () => {
+                this.showDialog()
+            }
         });
         if (!this.isMobile) {
             menu.addItem({
