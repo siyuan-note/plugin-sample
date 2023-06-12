@@ -80,6 +80,9 @@ export default class PluginSample extends Plugin {
             init() {
                 this.element.innerHTML = `<div class="plugin-sample__custom-tab">${this.data.text}</div>`;
             },
+            beforeDestroy() {
+                console.log("before destroy tab:", TAB_TYPE);
+            },
             destroy() {
                 console.log("destroy tab:", TAB_TYPE);
             }
