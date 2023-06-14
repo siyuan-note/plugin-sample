@@ -9,7 +9,7 @@ import {
     getFrontend,
     getBackend,
     IModel,
-    Setting
+    Setting, fetchPost
 } from "siyuan";
 import "./index.scss";
 
@@ -211,11 +211,15 @@ export default class PluginSample extends Plugin {
     }
 
     private showDialog() {
-        new Dialog({
+        const dialog = new Dialog({
             title: "Info",
-            content: '<div class="b3-dialog__content">This is a dialog</div>',
+            content: '<div class="b3-dialog__content">System current time: <span id="time"></span></div>',
             width: this.isMobile ? "92vw" : "520px",
         });
+        fetchPost("/api/system/currentTime", {}, (response) => {
+            dialog.element.querySelector("#time").innerHTML = new Date(response.data).toString()
+
+        })
     }
 
     private addMenu(rect?: DOMRect) {

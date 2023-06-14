@@ -29,8 +29,8 @@ devDependencies:
     specifier: ^12.6.0
     version: 12.6.0(sass@1.62.1)(webpack@5.76.0)
   siyuan:
-    specifier: 0.7.3
-    version: 0.7.3
+    specifier: 0.7.4
+    version: 0.7.4
   tslib:
     specifier: 2.4.0
     version: 2.4.0
@@ -1971,8 +1971,8 @@ packages:
     engines: {node: '>=8'}
     dev: true
 
-  /siyuan@0.7.3:
-    resolution: {integrity: sha512-LyuMvrKwbZrjak5qvoXLoSV3RDn3XWgqexf6kif6rGz2KTkWso6f4pkTp5Cj3yooik8hYnqNjNgxsdFMwQ9Y4g==}
+  /siyuan@0.7.4:
+    resolution: {integrity: sha512-Lj+GgxRqjB0YZt4XmBBOgoMrZ9Cwd82h/CxHACi2t23baXC7W2zYG8eYWkZMDcLy50gQC94PzuLZrq9pZIeasw==}
     dev: true
 
   /slash@3.0.0:
