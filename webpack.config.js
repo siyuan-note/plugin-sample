@@ -72,7 +72,7 @@ module.exports = (env, argv) => {
             ],
         },
         resolve: {
-            extensions: [".ts", ".scss"],
+            extensions: [".ts", ".scss", ".js", ".json"],
         },
         module: {
             rules: [
