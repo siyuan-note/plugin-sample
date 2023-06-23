@@ -230,10 +230,10 @@ export default class PluginSample extends Plugin {
         });
         new Protyle(this.app, dialog.element.querySelector("#protyle"), {
             blockId: "20200812220555-lj3enxa",
-        })
+        });
         fetchPost("/api/system/currentTime", {}, (response) => {
-            dialog.element.querySelector("#time").innerHTML = new Date(response.data).toString()
-        })
+            dialog.element.querySelector("#time").innerHTML = new Date(response.data).toString();
+        });
     }
 
     private addMenu(rect?: DOMRect) {
@@ -245,7 +245,7 @@ export default class PluginSample extends Plugin {
             label: "Dialog(open help first)",
             accelerator: this.commands[0].customHotkey,
             click: () => {
-                this.showDialog()
+                this.showDialog();
             }
         });
         if (!this.isMobile) {
