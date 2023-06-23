@@ -1,6 +1,7 @@
 ## 0.1.8
 
-* [Add plugin API protyle ](https://github.com/siyuan-note/siyuan/issues/8445)
+* [Add protyleSlash to the plugin](https://github.com/siyuan-note/siyuan/issues/8599)
+* [Add plugin API protyle](https://github.com/siyuan-note/siyuan/issues/8445)
 
 ## 0.1.7
 
