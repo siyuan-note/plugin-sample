@@ -9,7 +9,9 @@ import {
     getFrontend,
     getBackend,
     IModel,
-    Setting, fetchPost
+    Setting,
+    fetchPost,
+    Protyle
 } from "siyuan";
 import "./index.scss";
 
@@ -213,12 +215,24 @@ export default class PluginSample extends Plugin {
     private showDialog() {
         const dialog = new Dialog({
             title: "Info",
-            content: '<div class="b3-dialog__content">System current time: <span id="time"></span></div>',
-            width: this.isMobile ? "92vw" : "520px",
+            content: `<div class="b3-dialog__content">
+    <div>API demo:</div>
+    <div class="fn__hr"></div>
+    <div class="plugin-sample__time">System current time: <span id="time"></span></div>
+    <div class="fn__hr"></div>
+    <div class="fn__hr"></div>
+    <div>Protyle demo:</div>
+    <div class="fn__hr"></div>
+    <div id="protyle" style="height: 360px;"></div>
+</div>`,
+            width: this.isMobile ? "92vw" : "560px",
+            height: "540px",
         });
+        new Protyle(this.app, dialog.element.querySelector("#protyle"), {
+            blockId: "20200812220555-lj3enxa",
+        })
         fetchPost("/api/system/currentTime", {}, (response) => {
             dialog.element.querySelector("#time").innerHTML = new Date(response.data).toString()
-
         })
     }
 
@@ -228,7 +242,7 @@ export default class PluginSample extends Plugin {
         });
         menu.addItem({
             icon: "iconInfo",
-            label: "Dialog",
+            label: "Dialog(open help first)",
             accelerator: this.commands[0].customHotkey,
             click: () => {
                 this.showDialog()
