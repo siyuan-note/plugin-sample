@@ -7,5 +7,6 @@
   "byePlugin": "再见，插件！",
   "showDialog": "弹出一个对话框",
   "removedData": "数据已删除",
-  "confirmRemove": "确认删除 ${name} 中的数据？"
+  "confirmRemove": "确认删除 ${name} 中的数据？",
+  "insertEmoji": "插入表情"
 }

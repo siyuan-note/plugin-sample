@@ -7,5 +7,6 @@
   "byePlugin": "Bye, Plugin!",
   "showDialog": "Show dialog",
   "removedData": "Data deleted",
-  "confirmRemove": "Confirm to delete the data in ${name}?"
+  "confirmRemove": "Confirm to delete the data in ${name}?",
+  "insertEmoji": "Insert Emoji"
 }
