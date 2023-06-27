@@ -1,5 +1,9 @@
 lockfileVersion: '6.0'
 
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
 devDependencies:
   '@typescript-eslint/eslint-plugin':
     specifier: 5.29.0
@@ -29,8 +33,8 @@ devDependencies:
     specifier: ^12.6.0
     version: 12.6.0(sass@1.62.1)(webpack@5.76.0)
   siyuan:
-    specifier: 0.7.4
-    version: 0.7.4
+    specifier: 0.7.5
+    version: 0.7.5
   tslib:
     specifier: 2.4.0
     version: 2.4.0
@@ -1971,8 +1975,8 @@ packages:
     engines: {node: '>=8'}
     dev: true
 
-  /siyuan@0.7.4:
-    resolution: {integrity: sha512-Lj+GgxRqjB0YZt4XmBBOgoMrZ9Cwd82h/CxHACi2t23baXC7W2zYG8eYWkZMDcLy50gQC94PzuLZrq9pZIeasw==}
+  /siyuan@0.7.5:
+    resolution: {integrity: sha512-Ea/Waisy1KSo9uOGJAFKyS9BB8fYacRKBB5z9HRp9wnAlAS674WKf/5y/RY3/fFJaqkCvlFTbb6Kr6xl8HXdQw==}
     dev: true
 
   /slash@3.0.0:
