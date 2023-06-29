@@ -429,6 +429,90 @@ export default class PluginSample extends Plugin {
                 click: () => {
                     this.eventBus.off("loaded-protyle", this.eventBusLog);
                 }
+            }, {
+                icon: "iconSelect",
+                label: "On open-menu-blockref",
+                click: () => {
+                    this.eventBus.on("open-menu-blockref", this.eventBusLog);
+                }
+            }, {
+                icon: "iconClose",
+                label: "Off open-menu-blockref",
+                click: () => {
+                    this.eventBus.off("open-menu-blockref", this.eventBusLog);
+                }
+            }, {
+                icon: "iconSelect",
+                label: "On open-menu-fileannotationref",
+                click: () => {
+                    this.eventBus.on("open-menu-fileannotationref", this.eventBusLog);
+                }
+            }, {
+                icon: "iconClose",
+                label: "Off open-menu-fileannotationref",
+                click: () => {
+                    this.eventBus.off("open-menu-fileannotationref", this.eventBusLog);
+                }
+            }, {
+                icon: "iconSelect",
+                label: "On open-menu-tag",
+                click: () => {
+                    this.eventBus.on("open-menu-tag", this.eventBusLog);
+                }
+            }, {
+                icon: "iconClose",
+                label: "Off open-menu-tag",
+                click: () => {
+                    this.eventBus.off("open-menu-tag", this.eventBusLog);
+                }
+            }, {
+                icon: "iconSelect",
+                label: "On open-menu-link",
+                click: () => {
+                    this.eventBus.on("open-menu-link", this.eventBusLog);
+                }
+            }, {
+                icon: "iconClose",
+                label: "Off open-menu-link",
+                click: () => {
+                    this.eventBus.off("open-menu-link", this.eventBusLog);
+                }
+            }, {
+                icon: "iconSelect",
+                label: "On open-menu-image",
+                click: () => {
+                    this.eventBus.on("open-menu-image", this.eventBusLog);
+                }
+            }, {
+                icon: "iconClose",
+                label: "Off open-menu-image",
+                click: () => {
+                    this.eventBus.off("open-menu-image", this.eventBusLog);
+                }
+            }, {
+                icon: "iconSelect",
+                label: "On open-menu-av",
+                click: () => {
+                    this.eventBus.on("open-menu-av", this.eventBusLog);
+                }
+            }, {
+                icon: "iconClose",
+                label: "Off open-menu-av",
+                click: () => {
+                    this.eventBus.off("open-menu-av", this.eventBusLog);
+                }
+            }, {
+                icon: "iconSelect",
+                label: "On open-menu-content",
+                click: () => {
+                    this.eventBus.on("open-menu-content", this.eventBusLog);
+                }
+            }, {
+                icon: "iconClose",
+                label: "Off open-menu-content",
+                click: () => {
+                    this.eventBus.off("open-menu-content", this.eventBusLog);
+                }
             }]
         });
         menu.addSeparator();
