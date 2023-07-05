@@ -1,6 +1,7 @@
 ## 0.1.10
 
 * [Add `bind this` example for eventBus in plugins](https://github.com/siyuan-note/siyuan/issues/8668)
+* [Add `open-menu-breadcrumbmore` event bus to plugins](https://github.com/siyuan-note/siyuan/issues/8666)
 
 ## 0.1.9
 
