@@ -23,6 +23,7 @@ export default class PluginSample extends Plugin {
 
     private customTab: () => IModel;
     private isMobile: boolean;
+    private blockIconEventBindThis = this.blockIconEvent.bind(this)
 
     onload() {
         this.data[STORAGE_NAME] = {readonlyText: "Readonly"};
@@ -361,13 +362,13 @@ export default class PluginSample extends Plugin {
                 icon: "iconSelect",
                 label: "On click-blockicon",
                 click: () => {
-                    this.eventBus.on("click-blockicon", this.blockIconEvent);
+                    this.eventBus.on("click-blockicon", this.blockIconEventBindThis);
                 }
             }, {
                 icon: "iconClose",
                 label: "Off click-blockicon",
                 click: () => {
-                    this.eventBus.off("click-blockicon", this.blockIconEvent);
+                    this.eventBus.off("click-blockicon", this.blockIconEventBindThis);
                 }
             }, {
                 icon: "iconSelect",
