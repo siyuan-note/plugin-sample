@@ -526,6 +526,18 @@ export default class PluginSample extends Plugin {
                 click: () => {
                     this.eventBus.off("open-menu-breadcrumbmore", this.eventBusLog);
                 }
+            }, {
+                icon: "iconSelect",
+                label: "On input-search",
+                click: () => {
+                    this.eventBus.on("input-search", this.eventBusLog);
+                }
+            }, {
+                icon: "iconClose",
+                label: "Off input-search",
+                click: () => {
+                    this.eventBus.off("input-search", this.eventBusLog);
+                }
             }]
         });
         menu.addSeparator();

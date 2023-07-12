@@ -1,3 +1,7 @@
+## 0.1.11
+
+* [Add `input-search` event bus to plugins](https://github.com/siyuan-note/siyuan/issues/8725)
+
 ## 0.1.10
 
 * [Add `bind this` example for eventBus in plugins](https://github.com/siyuan-note/siyuan/issues/8668)
