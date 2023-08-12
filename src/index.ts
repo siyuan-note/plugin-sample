@@ -23,7 +23,7 @@ export default class PluginSample extends Plugin {
 
     private customTab: () => IModel;
     private isMobile: boolean;
-    private blockIconEventBindThis = this.blockIconEvent.bind(this)
+    private blockIconEventBindThis = this.blockIconEvent.bind(this);
 
     onload() {
         this.data[STORAGE_NAME] = {readonlyText: "Readonly"};
@@ -98,13 +98,13 @@ export default class PluginSample extends Plugin {
                 this.showDialog();
             },
             fileTreeCallback: (file: any) => {
-                console.log(file, 'fileTreeCallback')
+                console.log(file, "fileTreeCallback");
             },
             editorCallback: (protyle: any) => {
-                console.log(protyle, 'editorCallback')
+                console.log(protyle, "editorCallback");
             },
             dockCallback: (element: HTMLElement) => {
-                console.log(element, 'dockCallback')
+                console.log(element, "dockCallback");
             },
         });
 
