@@ -280,7 +280,7 @@ export default class PluginSample extends Plugin {
                             data: {
                                 text: "This is my custom tab",
                             },
-                            fn: this.customTab
+                            id: this.name + TAB_TYPE
                         },
                     });
                     console.log(tab);
