@@ -350,6 +350,12 @@ export default class PluginSample extends Plugin {
                     });
                 }
             });
+            menu.addItem({
+                label: "Get Opened Custom Tab",
+                click: () => {
+                    console.log(this.getOpenedTab());
+                }
+            });
         }
         menu.addItem({
             icon: "iconScrollHoriz",
