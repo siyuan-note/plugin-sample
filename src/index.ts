@@ -447,6 +447,30 @@ export default class PluginSample extends Plugin {
                 }
             }, {
                 icon: "iconSelect",
+                label: "On loaded-protyle-dynamic",
+                click: () => {
+                    this.eventBus.on("loaded-protyle-dynamic", this.eventBusLog);
+                }
+            }, {
+                icon: "iconClose",
+                label: "Off loaded-protyle-dynamic",
+                click: () => {
+                    this.eventBus.off("loaded-protyle-dynamic", this.eventBusLog);
+                }
+            }, {
+                icon: "iconSelect",
+                label: "On destroy-protyle",
+                click: () => {
+                    this.eventBus.on("destroy-protyle", this.eventBusLog);
+                }
+            }, {
+                icon: "iconClose",
+                label: "Off destroy-protyle",
+                click: () => {
+                    this.eventBus.off("destroy-protyle", this.eventBusLog);
+                }
+            }, {
+                icon: "iconSelect",
                 label: "On open-menu-blockref",
                 click: () => {
                     this.eventBus.on("open-menu-blockref", this.eventBusLog);
