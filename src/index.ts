@@ -93,18 +93,17 @@ export default class PluginSample extends Plugin {
 
         this.addCommand({
             langKey: "showDialog",
-            hotkey: "⇧⌘M",
+            hotkey: "⇧⌘O",
             callback: () => {
                 this.showDialog();
             },
-            fileTreeCallback: (file: any) => {
-                console.log(file, "fileTreeCallback");
-            },
-            editorCallback: (protyle: any) => {
-                console.log(protyle, "editorCallback");
-            },
-            dockCallback: (element: HTMLElement) => {
-                console.log(element, "dockCallback");
+        });
+
+        this.addCommand({
+            langKey: "showMessage",
+            hotkey: "⇧⌘M",
+            globalCallback: () => {
+                showMessage("👋 I'm from global command");
             },
         });
 

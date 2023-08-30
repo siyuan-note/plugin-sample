@@ -1,5 +1,7 @@
 ## 0.2.3 2023-08
 
+* [Plugin API add openWindow and command.globalCallback](https://github.com/siyuan-note/siyuan/issues/9032)
+
 ## 0.2.2 2023-08-29
 
 * [Add plugin event bus `destroy-protyle`](https://github.com/siyuan-note/siyuan/issues/9033)

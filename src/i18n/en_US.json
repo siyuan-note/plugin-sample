@@ -6,6 +6,7 @@
   "helloPlugin": "Hello, Plugin!",
   "byePlugin": "Bye, Plugin!",
   "showDialog": "Show dialog",
+  "showMessage": "Show message",
   "removedData": "Data deleted",
   "confirmRemove": "Confirm to delete the data in ${name}?",
   "insertEmoji": "Insert Emoji"
