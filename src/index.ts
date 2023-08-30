@@ -11,7 +11,7 @@ import {
     IModel,
     Setting,
     fetchPost,
-    Protyle
+    Protyle, openWindow
 } from "siyuan";
 import "./index.scss";
 
@@ -100,10 +100,10 @@ export default class PluginSample extends Plugin {
         });
 
         this.addCommand({
-            langKey: "showMessage",
+            langKey: "getTab",
             hotkey: "⇧⌘M",
             globalCallback: () => {
-                showMessage("👋 I'm from global command");
+                console.log(this.getOpenedTab());
             },
         });
 
@@ -268,7 +268,7 @@ export default class PluginSample extends Plugin {
         });
         if (!this.isMobile) {
             menu.addItem({
-                icon: "iconLayoutBottom",
+                icon: "iconFace",
                 label: "Open Custom Tab",
                 click: () => {
                     const tab = openTab({
@@ -286,7 +286,7 @@ export default class PluginSample extends Plugin {
                 }
             });
             menu.addItem({
-                icon: "iconLayoutBottom",
+                icon: "iconImage",
                 label: "Open Asset Tab(open help first)",
                 click: () => {
                     const tab = openTab({
@@ -299,7 +299,7 @@ export default class PluginSample extends Plugin {
                 }
             });
             menu.addItem({
-                icon: "iconLayoutBottom",
+                icon: "iconFile",
                 label: "Open Doc Tab(open help first)",
                 click: async () => {
                     const tab = await openTab({
@@ -312,7 +312,7 @@ export default class PluginSample extends Plugin {
                 }
             });
             menu.addItem({
-                icon: "iconLayoutBottom",
+                icon: "iconSearch",
                 label: "Open Search Tab",
                 click: () => {
                     const tab = openTab({
@@ -325,7 +325,7 @@ export default class PluginSample extends Plugin {
                 }
             });
             menu.addItem({
-                icon: "iconLayoutBottom",
+                icon: "iconRiffCard",
                 label: "Open Card Tab",
                 click: () => {
                     const tab = openTab({
@@ -350,9 +350,12 @@ export default class PluginSample extends Plugin {
                 }
             });
             menu.addItem({
-                label: "Get Opened Custom Tab",
+                icon: "iconOpenWindow",
+                label: "Open Doc Window(open help first)",
                 click: () => {
-                    console.log(this.getOpenedTab());
+                    openWindow({
+                        doc: {id: "20200812220555-lj3enxa"}
+                    });
                 }
             });
         }
