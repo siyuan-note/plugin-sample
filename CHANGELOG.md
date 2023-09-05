@@ -1,4 +1,8 @@
-## 0.2.3 2023-09
+# Changelog
+
+## 0.2.4 2023-09
+
+## 0.2.3 2023-09-05
 
 * [Plugin API add openWindow and command.globalCallback](https://github.com/siyuan-note/siyuan/issues/9032)
 
