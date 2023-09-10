@@ -4,8 +4,15 @@
   "url": "https://github.com/siyuan-note/plugin-sample",
   "version": "0.2.3",
   "minAppVersion": "2.10.3",
-  "backends": ["windows", "linux", "darwin"],
-  "frontends": ["desktop"],
+  "backends": [
+    "windows",
+    "linux",
+    "darwin"
+  ],
+  "frontends": [
+    "desktop",
+    "desktop-window"
+  ],
   "displayName": {
     "default": "Plugin Sample",
     "zh_CN": "插件示例"
