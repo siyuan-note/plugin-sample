@@ -60,7 +60,7 @@ export default class PluginSample extends Plugin {
         });
 
         const statusIconTemp = document.createElement("template");
-        statusIconTemp.innerHTML = `<div class="toolbar__item b3-tooltips b3-tooltips__w" aria-label="Remove plugin-sample Data">
+        statusIconTemp.innerHTML = `<div class="toolbar__item ariaLabel" aria-label="Remove plugin-sample Data">
     <svg>
         <use xlink:href="#iconTrashcan"></use>
     </svg>
