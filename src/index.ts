@@ -11,7 +11,7 @@ import {
     IModel,
     Setting,
     fetchPost,
-    Protyle, openWindow
+    Protyle, openWindow, IOperation
 } from "siyuan";
 import "./index.scss";
 
@@ -220,13 +220,24 @@ export default class PluginSample extends Plugin {
 
     private blockIconEvent({detail}: any) {
         const ids: string[] = [];
-        detail.blockElements.forEach((item: HTMLElement) => {
-            ids.push(item.getAttribute("data-node-id"));
-        });
         detail.menu.addItem({
             iconHTML: "",
-            type: "readonly",
-            label: "IDs<br>" + ids.join("<br>"),
+            label: this.i18n.removeSpace,
+            click: () => {
+                const doOperations: IOperation[] = []
+                detail.blockElements.forEach((item: HTMLElement) => {
+                    const editElement = item.querySelector('[contenteditable="true"]');
+                    if (editElement) {
+                        editElement.textContent = editElement.textContent.replace(/ /g, "");
+                        doOperations.push({
+                            id: item.dataset.nodeId,
+                            data: item.outerHTML,
+                            action: "update"
+                        });
+                    }
+                });
+                detail.protyle.getInstance().transaction(doOperations);
+            }
         });
     }
 

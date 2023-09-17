@@ -9,5 +9,6 @@
   "getTab": "Print out all opened custom tabs in the debugger",
   "removedData": "Data deleted",
   "confirmRemove": "Confirm to delete the data in ${name}?",
-  "insertEmoji": "Insert Emoji"
+  "insertEmoji": "Insert Emoji",
+  "removeSpace": "Remove Space"
 }

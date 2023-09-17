@@ -9,5 +9,6 @@
   "getTab": "在日志中打印出已打开的所有自定义页签",
   "removedData": "数据已删除",
   "confirmRemove": "确认删除 ${name} 中的数据？",
-  "insertEmoji": "插入表情"
+  "insertEmoji": "插入表情",
+  "removeSpace": "移除空格"
 }

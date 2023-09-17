@@ -6,6 +6,7 @@
 
 ## 0.2.3 2023-09-05
 
+* [Add plugin function `transaction`](https://github.com/siyuan-note/siyuan/issues/9172)
 * [Plugin API add openWindow and command.globalCallback](https://github.com/siyuan-note/siyuan/issues/9032)
 
 ## 0.2.2 2023-08-29
