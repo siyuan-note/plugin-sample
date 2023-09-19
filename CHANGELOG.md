@@ -1,6 +1,8 @@
 # Changelog
 
-## 0.2.4 2023-09
+## 0.2.5 2023-09
+
+## 0.2.4 2023-09-19
 
 * Supports use in windows
 
