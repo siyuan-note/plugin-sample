@@ -5,6 +5,7 @@
 ## 0.2.4 2023-09-19
 
 * Supports use in windows
+* [Add plugin function `transaction`](https://github.com/siyuan-note/siyuan/issues/9172)
 
 ## 0.2.3 2023-09-05
 
