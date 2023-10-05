@@ -484,6 +484,18 @@ export default class PluginSample extends Plugin {
                 }
             }, {
                 icon: "iconSelect",
+                label: "On open-menu-doctree",
+                click: () => {
+                    this.eventBus.on("open-menu-doctree", this.eventBusLog);
+                }
+            }, {
+                icon: "iconClose",
+                label: "Off open-menu-doctree",
+                click: () => {
+                    this.eventBus.off("open-menu-doctree", this.eventBusLog);
+                }
+            }, {
+                icon: "iconSelect",
                 label: "On open-menu-blockref",
                 click: () => {
                     this.eventBus.on("open-menu-blockref", this.eventBusLog);

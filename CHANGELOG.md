@@ -2,6 +2,8 @@
 
 ## 0.2.5 2023-09
 
+* [Add plugin event bus `open-menu-doctree`](https://github.com/siyuan-note/siyuan/issues/9351)
+
 ## 0.2.4 2023-09-19
 
 * Supports use in windows
