@@ -214,6 +214,15 @@ export default class PluginSample extends Plugin {
     }
     */
 
+    private eventBusPaste(event: any) {
+        // 如果需异步处理请调用 preventDefault， 否则会进行默认处理
+        event.preventDefault();
+        // 如果使用了 preventDefault，必须调用 resolve，否则程序会卡死
+        event.detail.resolve({
+            textPlain: event.detail.textPlain.trim(),
+        })
+    }
+
     private eventBusLog({detail}: any) {
         console.log(detail);
     }
@@ -601,6 +610,18 @@ export default class PluginSample extends Plugin {
                 label: "Off input-search",
                 click: () => {
                     this.eventBus.off("input-search", this.eventBusLog);
+                }
+            }, {
+                icon: "iconSelect",
+                label: "On paste",
+                click: () => {
+                    this.eventBus.on("paste", this.eventBusPaste);
+                }
+            }, {
+                icon: "iconClose",
+                label: "Off paste",
+                click: () => {
+                    this.eventBus.off("paste", this.eventBusPaste);
                 }
             }, {
                 icon: "iconSelect",
