@@ -228,7 +228,6 @@ export default class PluginSample extends Plugin {
     }
 
     private blockIconEvent({detail}: any) {
-        const ids: string[] = [];
         detail.menu.addItem({
             iconHTML: "",
             label: this.i18n.removeSpace,
