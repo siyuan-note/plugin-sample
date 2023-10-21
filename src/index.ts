@@ -457,15 +457,15 @@ export default class PluginSample extends Plugin {
                 }
             }, {
                 icon: "iconSelect",
-                label: "On loaded-protyle",
+                label: "On loaded-protyle-static",
                 click: () => {
-                    this.eventBus.on("loaded-protyle", this.eventBusLog);
+                    this.eventBus.on("loaded-protyle-static", this.eventBusLog);
                 }
             }, {
                 icon: "iconClose",
-                label: "Off loaded-protyle",
+                label: "Off loaded-protyle-static",
                 click: () => {
-                    this.eventBus.off("loaded-protyle", this.eventBusLog);
+                    this.eventBus.off("loaded-protyle-static", this.eventBusLog);
                 }
             }, {
                 icon: "iconSelect",

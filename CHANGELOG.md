@@ -2,6 +2,8 @@
 
 ## 0.2.6 2023-10
 
+* [Deprecated `loaded-protyle` use `loaded-protyle-static` instead](https://github.com/siyuan-note/siyuan/issues/9468)
+
 ## 0.2.5 2023-10-10
 
 * [Add plugin event bus `open-menu-doctree`](https://github.com/siyuan-note/siyuan/issues/9351)
