@@ -220,7 +220,7 @@ export default class PluginSample extends Plugin {
         // 如果使用了 preventDefault，必须调用 resolve，否则程序会卡死
         event.detail.resolve({
             textPlain: event.detail.textPlain.trim(),
-        })
+        });
     }
 
     private eventBusLog({detail}: any) {
@@ -233,7 +233,7 @@ export default class PluginSample extends Plugin {
             iconHTML: "",
             label: this.i18n.removeSpace,
             click: () => {
-                const doOperations: IOperation[] = []
+                const doOperations: IOperation[] = [];
                 detail.blockElements.forEach((item: HTMLElement) => {
                     const editElement = item.querySelector('[contenteditable="true"]');
                     if (editElement) {
