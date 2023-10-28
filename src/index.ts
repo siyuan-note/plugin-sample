@@ -480,6 +480,18 @@ export default class PluginSample extends Plugin {
                 }
             }, {
                 icon: "iconSelect",
+                label: "On switch-protyle",
+                click: () => {
+                    this.eventBus.on("switch-protyle", this.eventBusLog);
+                }
+            }, {
+                icon: "iconClose",
+                label: "Off switch-protyle",
+                click: () => {
+                    this.eventBus.off("switch-protyle", this.eventBusLog);
+                }
+            }, {
+                icon: "iconSelect",
                 label: "On destroy-protyle",
                 click: () => {
                     this.eventBus.on("destroy-protyle", this.eventBusLog);

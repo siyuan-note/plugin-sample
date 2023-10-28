@@ -2,6 +2,8 @@
 
 ## 0.2.7 2023-10
 
+* [Add plugin event bus `switch-protyle`](https://github.com/siyuan-note/siyuan/issues/9454)
+
 ## 0.2.6 2023-10-24
 
 * [Deprecated `loaded-protyle` use `loaded-protyle-static` instead](https://github.com/siyuan-note/siyuan/issues/9468)
