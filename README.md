@@ -70,7 +70,10 @@ conveniently.
     "custom": [
       "https://ld246.com/sponsor"
     ]
-  }
+  },
+  "keywords": [
+    "sample", "示例"
+  ]
 }
 ```
 
@@ -109,6 +112,7 @@ conveniently.
     * `patreon`: Patreon name
     * `github`: GitHub login name
     * `custom`: Custom sponsorship link list
+* `keywords`: Search keyword list, used for marketplace search function
 
 ## Package
 
