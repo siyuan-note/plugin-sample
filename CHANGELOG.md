@@ -2,6 +2,7 @@
 
 ## 0.2.7 2023-10
 
+* [Add plugin `app.appId`](https://github.com/siyuan-note/siyuan/issues/9538)
 * [Add plugin event bus `switch-protyle`](https://github.com/siyuan-note/siyuan/issues/9454)
 
 ## 0.2.6 2023-10-24

@@ -253,6 +253,11 @@ export default class PluginSample extends Plugin {
         const dialog = new Dialog({
             title: "Info",
             content: `<div class="b3-dialog__content">
+    <div>appId:</div>
+    <div class="fn__hr"></div>
+    <div class="plugin-sample__time">${this.app.appId}</div>
+    <div class="fn__hr"></div>
+    <div class="fn__hr"></div>
     <div>API demo:</div>
     <div class="fn__hr"></div>
     <div class="plugin-sample__time">System current time: <span id="time"></span></div>
