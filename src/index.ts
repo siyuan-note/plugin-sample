@@ -11,7 +11,10 @@ import {
     IModel,
     Setting,
     fetchPost,
-    Protyle, openWindow, IOperation
+    Protyle,
+    openWindow,
+    IOperation,
+    Constants
 } from "siyuan";
 import "./index.scss";
 
@@ -251,7 +254,7 @@ export default class PluginSample extends Plugin {
 
     private showDialog() {
         const dialog = new Dialog({
-            title: "Info",
+            title: `SiYuan ${Constants.SIYUAN_VERSION}`,
             content: `<div class="b3-dialog__content">
     <div>appId:</div>
     <div class="fn__hr"></div>

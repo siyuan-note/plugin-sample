@@ -2,6 +2,7 @@
 
 ## 0.2.7 2023-10
 
+* [Export `Constants` to plugin](https://github.com/siyuan-note/siyuan/issues/9555)
 * [Add plugin `app.appId`](https://github.com/siyuan-note/siyuan/issues/9538)
 * [Add plugin event bus `switch-protyle`](https://github.com/siyuan-note/siyuan/issues/9454)
 
