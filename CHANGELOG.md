@@ -1,6 +1,9 @@
 # Changelog
 
-## 0.2.7 2023-10
+## 0.2.8 2023-11
+
+
+## 0.2.7 2023-10-31
 
 * [Export `Constants` to plugin](https://github.com/siyuan-note/siyuan/issues/9555)
 * [Add plugin `app.appId`](https://github.com/siyuan-note/siyuan/issues/9538)
