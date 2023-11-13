@@ -2,6 +2,7 @@
 
 ## 0.2.8 2023-11
 
+* [`resize` cannot be triggered after dragging to unpin the dock](https://github.com/siyuan-note/siyuan/issues/9640)
 
 ## 0.2.7 2023-10-31
 
