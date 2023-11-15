@@ -122,7 +122,7 @@ export default class PluginSample extends Plugin {
             },
             type: DOCK_TYPE,
             resize() {
-                console.log(DOCK_TYPE + " resize")
+                console.log(DOCK_TYPE + " resize");
             },
             init() {
                 this.element.innerHTML = `<div class="fn__flex-1 fn__flex-column">
