@@ -14,7 +14,7 @@ import {
     Protyle,
     openWindow,
     IOperation,
-    Constants
+    Constants, openMobileFileById
 } from "siyuan";
 import "./index.scss";
 
@@ -386,6 +386,14 @@ export default class PluginSample extends Plugin {
                     openWindow({
                         doc: {id: "20200812220555-lj3enxa"}
                     });
+                }
+            });
+        } else {
+            menu.addItem({
+                icon: "iconFile",
+                label: "Open Doc(open help first)",
+                click: () => {
+                    openMobileFileById(this.app, "20200812220555-lj3enxa");
                 }
             });
         }

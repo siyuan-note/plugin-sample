@@ -1,6 +1,10 @@
 # Changelog
 
-## 0.2.9 2023-11
+## 0.3.0 2023-12
+
+## 0.2.9 2023-11-28
+
+* [Add plugin method `openMobileFileById`](https://github.com/siyuan-note/siyuan/issues/9738)
 
 ## 0.2.8 2023-11-15
 
