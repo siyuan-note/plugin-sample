@@ -7,10 +7,15 @@
   "backends": [
     "windows",
     "linux",
-    "darwin"
+    "darwin",
+    "ios",
+    "android"
   ],
   "frontends": [
     "desktop",
+    "mobile",
+    "browser-desktop",
+    "browser-mobile",
     "desktop-window"
   ],
   "displayName": {
@@ -34,6 +39,7 @@
     ]
   },
   "keywords": [
-    "sample", "示例"
+    "sample",
+    "示例"
   ]
 }
