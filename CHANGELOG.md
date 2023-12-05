@@ -1,6 +1,11 @@
 # Changelog
 
-## 0.3.0 2023-12
+## 0.3.1 2023-12
+
+## 0.3.0 2023-12-05
+
+* Upgrade Siyuan to 0.9.0
+* Support more platforms
 
 ## 0.2.9 2023-11-28
 
