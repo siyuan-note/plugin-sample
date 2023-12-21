@@ -2,6 +2,8 @@
 
 ## 0.3.1 2023-12
 
+* [Support `dock plugin` and `Command Palette` on mobile](https://github.com/siyuan-note/siyuan/issues/9926)
+
 ## 0.3.0 2023-12-05
 
 * Upgrade Siyuan to 0.9.0

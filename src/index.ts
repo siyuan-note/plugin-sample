@@ -14,7 +14,8 @@ import {
     Protyle,
     openWindow,
     IOperation,
-    Constants, openMobileFileById
+    Constants,
+    openMobileFileById
 } from "siyuan";
 import "./index.scss";
 
@@ -109,7 +110,6 @@ export default class PluginSample extends Plugin {
                 console.log(this.getOpenedTab());
             },
         });
-
         this.addDock({
             config: {
                 position: "LeftBottom",
@@ -124,8 +124,21 @@ export default class PluginSample extends Plugin {
             resize() {
                 console.log(DOCK_TYPE + " resize");
             },
-            init() {
-                this.element.innerHTML = `<div class="fn__flex-1 fn__flex-column">
+            update() {
+                console.log(DOCK_TYPE + " update");
+            },
+            init: (dock) => {
+                if (this.isMobile) {
+                    dock.element.innerHTML = `<div class="toolbar toolbar--border toolbar--dark">
+    <svg class="toolbar__icon"><use xlink:href="#iconEmoji"></use></svg>
+        <div class="toolbar__text">Custom Dock</div>
+    </div>
+    <div class="fn__flex-1 plugin-sample__custom-dock">
+        ${dock.data.text}
+    </div>
+</div>`;
+                } else {
+                    dock.element.innerHTML = `<div class="fn__flex-1 fn__flex-column">
     <div class="block__icons">
         <div class="block__logo">
             <svg><use xlink:href="#iconEmoji"></use></svg>
@@ -135,9 +148,10 @@ export default class PluginSample extends Plugin {
         <span data-type="min" class="block__icon b3-tooltips b3-tooltips__sw" aria-label="Min ${adaptHotkey("⌘W")}"><svg><use xlink:href="#iconMin"></use></svg></span>
     </div>
     <div class="fn__flex-1 plugin-sample__custom-dock">
-        ${this.data.text}
+        ${dock.data.text}
     </div>
 </div>`;
+                }
             },
             destroy() {
                 console.log("destroy dock:", DOCK_TYPE);
