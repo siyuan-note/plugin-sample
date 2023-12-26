@@ -2,6 +2,8 @@
 
 ## 0.3.2 2024-01
 
+* [Add plugin event bus `open-menu-inbox`](https://github.com/siyuan-note/siyuan/pull/9967)
+
 ## 0.3.1 2023-12-06
 
 * [Support `Dock Plugin` and `Command Palette` on mobile](https://github.com/siyuan-note/siyuan/issues/9926)

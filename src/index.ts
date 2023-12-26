@@ -645,6 +645,18 @@ export default class PluginSample extends Plugin {
                 }
             }, {
                 icon: "iconSelect",
+                label: "On open-menu-inbox",
+                click: () => {
+                    this.eventBus.on("open-menu-inbox", this.eventBusLog);
+                }
+            }, {
+                icon: "iconClose",
+                label: "Off open-menu-inbox",
+                click: () => {
+                    this.eventBus.off("open-menu-inbox", this.eventBusLog);
+                }
+            }, {
+                icon: "iconSelect",
                 label: "On input-search",
                 click: () => {
                     this.eventBus.on("input-search", this.eventBusLog);
