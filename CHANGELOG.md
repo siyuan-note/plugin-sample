@@ -1,8 +1,10 @@
 # Changelog
 
-## 0.3.1 2023-12
+## 0.3.2 2024-01
 
-* [Support `dock plugin` and `Command Palette` on mobile](https://github.com/siyuan-note/siyuan/issues/9926)
+## 0.3.1 2023-12-06
+
+* [Support `Dock Plugin` and `Command Palette` on mobile](https://github.com/siyuan-note/siyuan/issues/9926)
 
 ## 0.3.0 2023-12-05
 
