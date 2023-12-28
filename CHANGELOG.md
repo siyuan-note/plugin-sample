@@ -2,6 +2,7 @@
 
 ## 0.3.2 2024-01
 
+* [Add plugin event bus `lock-screen`](https://github.com/siyuan-note/siyuan/pull/9967)
 * [Add plugin event bus `open-menu-inbox`](https://github.com/siyuan-note/siyuan/pull/9967)
 
 ## 0.3.1 2023-12-06
