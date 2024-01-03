@@ -15,7 +15,8 @@ import {
     openWindow,
     IOperation,
     Constants,
-    openMobileFileById
+    openMobileFileById,
+    lockScreen
 } from "siyuan";
 import "./index.scss";
 
@@ -411,6 +412,13 @@ export default class PluginSample extends Plugin {
                 }
             });
         }
+        menu.addItem({
+            icon: "iconLock",
+            label: "Lockscreen",
+            click: () => {
+                lockScreen(this.app);
+            }
+        });
         menu.addItem({
             icon: "iconScrollHoriz",
             label: "Event Bus",
