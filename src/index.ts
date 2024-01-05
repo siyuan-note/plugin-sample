@@ -16,7 +16,8 @@ import {
     IOperation,
     Constants,
     openMobileFileById,
-    lockScreen
+    lockScreen,
+    ICard
 } from "siyuan";
 import "./index.scss";
 
@@ -710,6 +711,28 @@ export default class PluginSample extends Plugin {
                 label: "Off open-siyuan-url-block",
                 click: () => {
                     this.eventBus.off("open-siyuan-url-block", this.eventBusLog);
+                }
+            }, {
+                icon: "iconSelect",
+                label: "On update-cards",
+                click: () => {
+                    this.eventBus.on("update-cards", (event) => {
+                        event.detail.cardsData.cards.sort((a: ICard, b: ICard) => {
+                            if (a.blockID < b.blockID) {
+                                return -1;
+                            }
+                            if (a.blockID > b.blockID) {
+                                return 1;
+                            }
+                            return 0;
+                        })
+                    });
+                }
+            }, {
+                icon: "iconClose",
+                label: "Off update-cards",
+                click: () => {
+                    this.eventBus.off("update-cards", this.eventBusLog);
                 }
             }]
         });
