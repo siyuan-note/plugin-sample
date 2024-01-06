@@ -208,6 +208,10 @@ export default class PluginSample extends Plugin {
         console.log(this.i18n.byePlugin);
     }
 
+    uninstall() {
+        console.log("uninstall");
+    }
+
     /* 自定义设置
     openSetting() {
         const dialog = new Dialog({
