@@ -2,7 +2,7 @@
 
 ## 0.3.2 2024-01
 
-* [Add plugin `protyleOptions`](https://github.com/siyuan-note/siyuan/issues/10063)
+* [Add plugin `protyleOptions`](https://github.com/siyuan-note/siyuan/issues/10090)
 * [Add plugin api `uninstall`](https://github.com/siyuan-note/siyuan/issues/10063)
 * [Add plugin event bus `update-cards`](https://github.com/siyuan-note/siyuan/issues/10065)
 * [Add plugin function `lockScreen`](https://github.com/siyuan-note/siyuan/issues/10063)
