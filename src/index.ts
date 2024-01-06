@@ -196,6 +196,38 @@ export default class PluginSample extends Plugin {
             }
         }];
 
+        this.protyleOptions = {
+            toolbar: ["block-ref",
+                "a",
+                "|",
+                "text",
+                "strong",
+                "em",
+                "u",
+                "s",
+                "mark",
+                "sup",
+                "sub",
+                "clear",
+                "|",
+                "code",
+                "kbd",
+                "tag",
+                "inline-math",
+                "inline-memo",
+                "|",
+                {
+                    name: "insert-smail-emoji",
+                    icon: "iconEmoji",
+                    hotkey: "⇧⌘I",
+                    tipPosition: "n",
+                    tip: this.i18n.insertEmoji,
+                    click(protyle: Protyle) {
+                        protyle.insert("😊");
+                    }
+                }],
+        };
+
         console.log(this.i18n.helloPlugin);
     }
 
