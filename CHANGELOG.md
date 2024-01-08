@@ -4,7 +4,7 @@
 
 * [Add plugin `protyleOptions`](https://github.com/siyuan-note/siyuan/issues/10090)
 * [Add plugin api `uninstall`](https://github.com/siyuan-note/siyuan/issues/10063)
-* [Add plugin event bus `update-cards`](https://github.com/siyuan-note/siyuan/issues/10065)
+* [Add plugin method `updateCards`](https://github.com/siyuan-note/siyuan/issues/10065)
 * [Add plugin function `lockScreen`](https://github.com/siyuan-note/siyuan/issues/10063)
 * [Add plugin event bus `lock-screen`](https://github.com/siyuan-note/siyuan/pull/9967)
 * [Add plugin event bus `open-menu-inbox`](https://github.com/siyuan-note/siyuan/pull/9967)
