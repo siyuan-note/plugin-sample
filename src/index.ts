@@ -254,7 +254,7 @@ export default class PluginSample extends Plugin {
                 return 1;
             }
             return 0;
-        })
+        });
         return options;
     }
 
