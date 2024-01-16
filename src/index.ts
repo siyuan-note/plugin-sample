@@ -119,6 +119,7 @@ export default class PluginSample extends Plugin {
                 size: {width: 200, height: 0},
                 icon: "iconSaving",
                 title: "Custom Dock",
+                hotkey: "⌥⌘W",
             },
             data: {
                 text: "This is my custom dock"
