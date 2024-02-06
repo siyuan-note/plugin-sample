@@ -2,6 +2,8 @@
 
 ## 0.3.4 2024-02
 
+* [Add plugin event bus `click-flashcard-action`](https://github.com/siyuan-note/siyuan/issues/10318)
+
 ## 0.3.3 2024-01-24
 
 * Update dock icon class

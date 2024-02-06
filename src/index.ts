@@ -536,6 +536,18 @@ export default class PluginSample extends Plugin {
                 }
             }, {
                 icon: "iconSelect",
+                label: "On click-flashcard-action",
+                click: () => {
+                    this.eventBus.on("click-flashcard-action", this.eventBusLog);
+                }
+            }, {
+                icon: "iconClose",
+                label: "Off click-flashcard-action",
+                click: () => {
+                    this.eventBus.off("click-flashcard-action", this.eventBusLog);
+                }
+            }, {
+                icon: "iconSelect",
                 label: "On open-noneditableblock",
                 click: () => {
                     this.eventBus.on("open-noneditableblock", this.eventBusLog);
