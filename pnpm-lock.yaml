@@ -33,8 +33,8 @@ devDependencies:
     specifier: ^12.6.0
     version: 12.6.0(sass@1.62.1)(webpack@5.76.0)
   siyuan:
-    specifier: 0.9.3
-    version: 0.9.3
+    specifier: 0.9.4
+    version: 0.9.4
   tslib:
     specifier: 2.4.0
     version: 2.4.0
@@ -1975,8 +1975,8 @@ packages:
     engines: {node: '>=8'}
     dev: true
 
-  /siyuan@0.9.3:
-    resolution: {integrity: sha512-MCH5vu+cXIOMe47g7E/e4Bxfp5Q1yBmzb8OQplHDmKZae9pqTL3ChzHwqouwoiQqUgf220FU70vcW0DXbm4gCQ==}
+  /siyuan@0.9.4:
+    resolution: {integrity: sha512-ciwR4UHOeiw+dZVSmxRV7K1m6XGKNNO622+SQNPS7BPrxxEARQTK/mYrJaCep9jxtou+AfrexMn6a3plZ4pPqw==}
     dev: true
 
   /slash@3.0.0:

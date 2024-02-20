@@ -1,6 +1,8 @@
 # Changelog
 
-## 0.3.4 2024-02
+## 0.3.5 2024-03
+
+## 0.3.4 2024-02-20
 
 * [Add plugin event bus `click-flashcard-action`](https://github.com/siyuan-note/siyuan/issues/10318)
 
