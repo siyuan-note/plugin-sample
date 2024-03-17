@@ -166,13 +166,13 @@ Related APIs can be found at: `/api/file/*` (e.g., `/api/file/getFile`).
 
 ### 2. Daily Note Attribute Specifications
 
-When creating a diary in SiYuan, a custom-dailynote-yyyymmdd attribute will be automatically added to the document to distinguish it from regular documents.
+When creating a daily note in SiYuan, a custom-dailynote-yyyymmdd attribute will be automatically added to the document to distinguish it from regular documents.
 
 > For more details, please refer to [Github Issue #9807](https://github.com/siyuan-note/siyuan/issues/9807).
 
 Developers should pay attention to the following when developing the functionality to manually create Daily Notes:
 
 * If `/api/filetree/createDailyNote` is called to create a daily note, the attribute will be automatically added to the document, and developers do not need to handle it separately
-* If a document is created manually by developer's code (e.g., using the `createDocWithMd` API to create a diary), please manually add this attribute to the document
+* If a document is created manually by developer's code (e.g., using the `createDocWithMd` API to create a daily note), please manually add this attribute to the document
 
 
