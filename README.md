@@ -153,3 +153,26 @@ don't need to PR the community bazaar repo.
 
 Under normal circumstances, the community bazaar repo will automatically update the index and deploy every hour,
 and you can check the deployment status at https://github.com/siyuan-note/bazaar/actions.
+
+
+## Developer's Guide
+
+Developers of SiYuan need to pay attention to the following specifications.
+
+### 1. File Reading and Writing Specifications
+
+If plugins or external extensions require direct reading or writing of files under the `data` directory, please use the kernel API to achieve this. **Do not call `fs` or other electron or nodejs APIs directly**, as it may result in data loss during synchronization and cause damage to cloud data.
+
+Related APIs can be found at: `/api/file/*` (e.g., `/api/file/getFile`).
+
+### 2. Daily Note Attribute Specifications
+
+When creating a diary in SiYuan, a custom-dailynote-yyyymmdd attribute will be automatically added to the document to distinguish it from regular documents.
+
+> For more details, please refer to [Github Issue #9807](https://github.com/siyuan-note/siyuan/issues/9807).
+
+Developers should pay attention to the following when developing the functionality to manually create Daily Notes:
+- If `/api/filetree/createDailyNote` is called to create a diary, the attribute will be automatically added to the document, and developers do not need to handle it separately.
+- If a document is created manually by developer's code (e.g., using the `createDocWithMd` API to create a diary), please manually add this attribute to the document.
+
+

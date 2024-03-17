@@ -142,3 +142,23 @@ PR 被合并以后集市会通过 GitHub Actions 自动更新索引并部署。�
 PR 社区集市仓库。
 
 正常情况下，社区集市仓库每隔 1 小时会自动更新索引并部署，可在 https://github.com/siyuan-note/bazaar/actions 查看部署状态。
+
+## 开发者须知
+
+思源开发者需注意以下规范。
+
+### 1. 读写文件规范
+
+插件或者外部扩展如果有直接读取或者写入 data 下文件的需求，请通过调用内核 API 来实现，**不要自行调用 `fs` 或者其他 electron、nodejs API**，否则可能会导致数据同步时分块丢失，造成云端数据损坏。
+
+相关 API 见: `/api/file/*`（例如 `/api/file/getFile` 等）。
+
+### 2. Daily Note 属性规范
+
+思源在创建日记的时候会自动为文档添加 custom-dailynote-yyyymmdd 属性, 以方便将日记文档同普通文档区分。
+
+> 详情请见 [Github Issue #9807](https://github.com/siyuan-note/siyuan/issues/9807)。
+
+开发者在开发手动创建 Daily Note 的功能时请注意：
+- 如果调用了 `/api/filetree/createDailyNote` 创建日记，那么文档会自动添加这个属性，无需开发者特别处理。
+- 如果是开发者代码手动创建文档（例如使用 `createDocWithMd` API 创建日记），请手动为文档添加该属性。
