@@ -145,7 +145,7 @@ PR 社区集市仓库。
 
 ## 开发者须知
 
-思源开发者需注意以下规范。
+开发者需注意以下规范。
 
 ### 1. 读写文件规范
 
@@ -160,5 +160,6 @@ PR 社区集市仓库。
 > 详情请见 [Github Issue #9807](https://github.com/siyuan-note/siyuan/issues/9807)。
 
 开发者在开发手动创建 Daily Note 的功能时请注意：
+
 - 如果调用了 `/api/filetree/createDailyNote` 创建日记，那么文档会自动添加这个属性，无需开发者特别处理。
 - 如果是开发者代码手动创建文档（例如使用 `createDocWithMd` API 创建日记），请手动为文档添加该属性。
