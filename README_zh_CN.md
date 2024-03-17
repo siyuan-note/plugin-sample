@@ -151,11 +151,11 @@ PR 社区集市仓库。
 
 插件或者外部扩展如果有直接读取或者写入 data 下文件的需求，请通过调用内核 API 来实现，**不要自行调用 `fs` 或者其他 electron、nodejs API**，否则可能会导致数据同步时分块丢失，造成云端数据损坏。
 
-相关 API 见: `/api/file/*`（例如 `/api/file/getFile` 等）。
+相关 API 见 `/api/file/*`（例如 `/api/file/getFile` 等）。
 
 ### 2. Daily Note 属性规范
 
-思源在创建日记的时候会自动为文档添加 custom-dailynote-yyyymmdd 属性, 以方便将日记文档同普通文档区分。
+思源在创建日记的时候会自动为文档添加 custom-dailynote-yyyymmdd 属性，以方便将日记文档同普通文档区分。
 
 > 详情请见 [Github Issue #9807](https://github.com/siyuan-note/siyuan/issues/9807)。
 
