@@ -1,6 +1,8 @@
 # Changelog
 
-## 0.3.5 2024-03
+## 0.3.5 2024-04-30
+
+* [Add `direction` to plugin method `Setting.addItem`](https://github.com/siyuan-note/siyuan/issues/11183)
 
 ## 0.3.4 2024-02-20
 

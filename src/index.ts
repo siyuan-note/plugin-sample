@@ -169,6 +169,8 @@ export default class PluginSample extends Plugin {
         });
         this.setting.addItem({
             title: "Readonly text",
+            direction: "row",
+            description: "Open plugin url in browser",
             createActionElement: () => {
                 textareaElement.className = "b3-text-field fn__block";
                 textareaElement.placeholder = "Readonly text in the menu";
