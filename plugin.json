@@ -2,8 +2,8 @@
   "name": "plugin-sample",
   "author": "Vanessa",
   "url": "https://github.com/siyuan-note/plugin-sample",
-  "version": "0.3.4",
-  "minAppVersion": "3.0.0",
+  "version": "0.3.5",
+  "minAppVersion": "3.0.12",
   "backends": [
     "windows",
     "linux",
