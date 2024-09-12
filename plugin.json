@@ -9,7 +9,8 @@
     "linux",
     "darwin",
     "ios",
-    "android"
+    "android",
+    "docker"
   ],
   "frontends": [
     "desktop",
