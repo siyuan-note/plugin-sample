@@ -776,6 +776,30 @@ export default class PluginSample extends Plugin {
                 click: () => {
                     this.eventBus.off("open-siyuan-url-block", this.eventBusLog);
                 }
+            }, {
+                icon: "iconSelect",
+                label: "On opened-notebook",
+                click: () => {
+                    this.eventBus.on("opened-notebook", this.eventBusLog);
+                }
+            }, {
+                icon: "iconClose",
+                label: "Off opened-notebook",
+                click: () => {
+                    this.eventBus.off("opened-notebook", this.eventBusLog);
+                }
+            },  {
+                icon: "iconSelect",
+                label: "On closed-notebook",
+                click: () => {
+                    this.eventBus.on("closed-notebook", this.eventBusLog);
+                }
+            }, {
+                icon: "iconClose",
+                label: "Off closed-notebook",
+                click: () => {
+                    this.eventBus.off("closed-notebook", this.eventBusLog);
+                }
             }]
         });
         menu.addSeparator();

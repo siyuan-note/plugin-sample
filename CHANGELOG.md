@@ -2,6 +2,7 @@
 
 ## v0.3.6 2024-07
 
+* [Add plugin event bus `opened-notebook` & `closed-notebook`](https://github.com/siyuan-note/siyuan/issues/11974)
 * [⬆️ Bump braces from 3.0.2 to 3.0.3](https://github.com/siyuan-note/plugin-sample/pull/16)
 
 ## v0.3.5 2024-04-30
