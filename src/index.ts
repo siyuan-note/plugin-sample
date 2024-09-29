@@ -303,6 +303,7 @@ export default class PluginSample extends Plugin {
 
     private blockIconEvent({detail}: any) {
         detail.menu.addItem({
+            id: "pluginSample_removeSpace",
             iconHTML: "",
             label: this.i18n.removeSpace,
             click: () => {
