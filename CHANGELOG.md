@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.3.7 2024-10
+
+* [Add `data-id` attribute to menu button](https://github.com/siyuan-note/plugin-sample/pull/20)
+
 ## v0.3.6 2024-09-27
 
 * [Add plugin event bus `opened-notebook` & `closed-notebook`](https://github.com/siyuan-note/siyuan/issues/11974)
