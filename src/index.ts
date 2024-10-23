@@ -370,8 +370,7 @@ export default class PluginSample extends Plugin {
             label: "Select Opened Doc(open doc first)",
             accelerator: this.commands[0].customHotkey,
             click: () => {
-                // TODO
-                (getModelByDockType('file') as Files).selectItem(this.getEditor().protyle.notebookId, this.getEditor().protyle.path);
+                (getModelByDockType("file") as Files).selectItem(this.getEditor().protyle.notebookId, this.getEditor().protyle.path);
             }
         });
         if (!this.isMobile) {
@@ -836,10 +835,10 @@ export default class PluginSample extends Plugin {
     }
 
     private getEditor() {
-        const editors = getAllEditor()
+        const editors = getAllEditor();
         if (editors.length === 0) {
-            showMessage("please open doc first")
-            return
+            showMessage("please open doc first");
+            return;
         }
         return editors[0];
     }
