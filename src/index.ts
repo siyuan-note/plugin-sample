@@ -8,7 +8,6 @@ import {
     adaptHotkey,
     getFrontend,
     getBackend,
-    IModel,
     Setting,
     fetchPost,
     Protyle,
@@ -18,7 +17,8 @@ import {
     openMobileFileById,
     lockScreen,
     ICard,
-    ICardData
+    ICardData,
+    Custom, exitSiYuan, getModelByDockType, getAllEditor, Files
 } from "siyuan";
 import "./index.scss";
 
@@ -28,7 +28,7 @@ const DOCK_TYPE = "dock_tab";
 
 export default class PluginSample extends Plugin {
 
-    private customTab: () => IModel;
+    private custom: () => Custom;
     private isMobile: boolean;
     private blockIconEventBindThis = this.blockIconEvent.bind(this);
 
@@ -85,7 +85,7 @@ export default class PluginSample extends Plugin {
             element: statusIconTemp.content.firstElementChild as HTMLElement,
         });
 
-        this.customTab = this.addTab({
+        this.custom = this.addTab({
             type: TAB_TYPE,
             init() {
                 this.element.innerHTML = `<div class="plugin-sample__custom-tab">${this.data.text}</div>`;
@@ -346,7 +346,7 @@ export default class PluginSample extends Plugin {
             height: "540px",
         });
         new Protyle(this.app, dialog.element.querySelector("#protyle"), {
-            blockId: "20200812220555-lj3enxa",
+            blockId: this.getEditor().protyle.block.rootID,
         });
         fetchPost("/api/system/currentTime", {}, (response) => {
             dialog.element.querySelector("#time").innerHTML = new Date(response.data).toString();
@@ -359,10 +359,19 @@ export default class PluginSample extends Plugin {
         });
         menu.addItem({
             icon: "iconInfo",
-            label: "Dialog(open help first)",
+            label: "Dialog(open doc first)",
             accelerator: this.commands[0].customHotkey,
             click: () => {
                 this.showDialog();
+            }
+        });
+        menu.addItem({
+            icon: "iconInfo",
+            label: "Select Opened Doc(open doc first)",
+            accelerator: this.commands[0].customHotkey,
+            click: () => {
+                // TODO
+                (getModelByDockType('file') as Files).selectItem(this.getEditor().protyle.notebookId, this.getEditor().protyle.path);
             }
         });
         if (!this.isMobile) {
@@ -386,7 +395,7 @@ export default class PluginSample extends Plugin {
             });
             menu.addItem({
                 icon: "iconImage",
-                label: "Open Asset Tab(open help first)",
+                label: "Open Asset Tab(First open the Chinese help document)",
                 click: () => {
                     const tab = openTab({
                         app: this.app,
@@ -399,12 +408,12 @@ export default class PluginSample extends Plugin {
             });
             menu.addItem({
                 icon: "iconFile",
-                label: "Open Doc Tab(open help first)",
+                label: "Open Doc Tab(open doc first)",
                 click: async () => {
                     const tab = await openTab({
                         app: this.app,
                         doc: {
-                            id: "20200812220555-lj3enxa",
+                            id: this.getEditor().protyle.block.rootID,
                         }
                     });
                     console.log(tab);
@@ -438,11 +447,10 @@ export default class PluginSample extends Plugin {
             });
             menu.addItem({
                 icon: "iconLayout",
-                label: "Open Float Layer(open help first)",
+                label: "Open Float Layer(open doc first)",
                 click: () => {
                     this.addFloatLayer({
-                        ids: ["20210428212840-8rqwn5o", "20201225220955-l154bn4"],
-                        defIds: ["20230415111858-vgohvf3", "20200813131152-0wk5akh"],
+                        ids: [this.getEditor().protyle.block.rootID],
                         x: window.innerWidth - 768 - 120,
                         y: 32
                     });
@@ -450,19 +458,19 @@ export default class PluginSample extends Plugin {
             });
             menu.addItem({
                 icon: "iconOpenWindow",
-                label: "Open Doc Window(open help first)",
+                label: "Open Doc Window(open doc first)",
                 click: () => {
                     openWindow({
-                        doc: {id: "20200812220555-lj3enxa"}
+                        doc: {id: this.getEditor().protyle.block.rootID}
                     });
                 }
             });
         } else {
             menu.addItem({
                 icon: "iconFile",
-                label: "Open Doc(open help first)",
+                label: "Open Doc(open doc first)",
                 click: () => {
-                    openMobileFileById(this.app, "20200812220555-lj3enxa");
+                    openMobileFileById(this.app, this.getEditor().protyle.block.rootID);
                 }
             });
         }
@@ -471,6 +479,13 @@ export default class PluginSample extends Plugin {
             label: "Lockscreen",
             click: () => {
                 lockScreen(this.app);
+            }
+        });
+        menu.addItem({
+            icon: "iconQuit",
+            label: "Exit Application",
+            click: () => {
+                exitSiYuan();
             }
         });
         menu.addItem({
@@ -789,7 +804,7 @@ export default class PluginSample extends Plugin {
                 click: () => {
                     this.eventBus.off("opened-notebook", this.eventBusLog);
                 }
-            },  {
+            }, {
                 icon: "iconSelect",
                 label: "On closed-notebook",
                 click: () => {
@@ -818,5 +833,14 @@ export default class PluginSample extends Plugin {
                 isLeft: true,
             });
         }
+    }
+
+    private getEditor() {
+        const editors = getAllEditor()
+        if (editors.length === 0) {
+            showMessage("please open doc first")
+            return
+        }
+        return editors[0];
     }
 }

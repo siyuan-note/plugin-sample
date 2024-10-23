@@ -1,7 +1,10 @@
 # Changelog
 
-## v0.3.7 2024-10
+## v0.3.7 2024-11
 
+* [Add plugin function `getAllEditor`](https://github.com/siyuan-note/siyuan/issues/12884)
+* [Add plugin function `getModelByDockType`](https://github.com/siyuan-note/siyuan/issues/11782)
+* [Replace `any` in IProtyle with the corresponding type](https://github.com/siyuan-note/petal/issues/34)
 * [Add `data-id` attribute to menu button](https://github.com/siyuan-note/plugin-sample/pull/20)
 
 ## v0.3.6 2024-09-27
