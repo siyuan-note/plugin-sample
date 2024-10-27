@@ -18,7 +18,7 @@ import {
     lockScreen,
     ICard,
     ICardData,
-    Custom, exitSiYuan, getModelByDockType, getAllEditor, Files
+    Custom, exitSiYuan, getModelByDockType, getAllEditor, Files, platformUtils
 } from "siyuan";
 import "./index.scss";
 
@@ -384,7 +384,7 @@ export default class PluginSample extends Plugin {
                             icon: "iconFace",
                             title: "Custom Tab",
                             data: {
-                                text: "This is my custom tab",
+                                text: platformUtils.isHuawei() ? "Hello, Huawei!" : "This is my custom tab",
                             },
                             id: this.name + TAB_TYPE
                         },
