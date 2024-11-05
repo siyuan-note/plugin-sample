@@ -2,6 +2,8 @@
 
 ## v0.3.7 2024-11
 
+## v0.3.7 2024-11-05
+
 * [Add plugin util `platformUtils`](https://github.com/siyuan-note/siyuan/issues/12930)
 * [Add plugin function `getAllEditor`](https://github.com/siyuan-note/siyuan/issues/12884)
 * [Add plugin function `getModelByDockType`](https://github.com/siyuan-note/siyuan/issues/11782)
