@@ -21,6 +21,7 @@ import {
     Custom, exitSiYuan, getModelByDockType, getAllEditor, Files, platformUtils
 } from "siyuan";
 import "./index.scss";
+import {IMenuItem} from "siyuan/types";
 
 const STORAGE_NAME = "menu-config";
 const TAB_TYPE = "custom_tab";
@@ -31,6 +32,21 @@ export default class PluginSample extends Plugin {
     private custom: () => Custom;
     private isMobile: boolean;
     private blockIconEventBindThis = this.blockIconEvent.bind(this);
+
+    updateProtyleToolbar(toolbar: Array<string | IMenuItem>) {
+        toolbar.push("|")
+        toolbar.push({
+            name: "insert-smail-emoji",
+            icon: "iconEmoji",
+            hotkey: "⇧⌘I",
+            tipPosition: "n",
+            tip: this.i18n.insertEmoji,
+            click(protyle: Protyle) {
+                protyle.insert("😊");
+            }
+        })
+        return toolbar;
+    }
 
     onload() {
         this.data[STORAGE_NAME] = {readonlyText: "Readonly"};
@@ -218,17 +234,7 @@ export default class PluginSample extends Plugin {
                 "tag",
                 "inline-math",
                 "inline-memo",
-                "|",
-                {
-                    name: "insert-smail-emoji",
-                    icon: "iconEmoji",
-                    hotkey: "⇧⌘I",
-                    tipPosition: "n",
-                    tip: this.i18n.insertEmoji,
-                    click(protyle: Protyle) {
-                        protyle.insert("😊");
-                    }
-                }],
+            ],
         };
 
         console.log(this.i18n.helloPlugin);
