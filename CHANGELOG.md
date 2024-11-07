@@ -2,6 +2,8 @@
 
 ## v0.3.8 2024-11
 
+* [Add plugin method `updateProtyleToolbar`](https://github.com/siyuan-note/plugin-sample/issues/24)
+
 ## v0.3.7 2024-11-05
 
 * [Add plugin util `platformUtils`](https://github.com/siyuan-note/siyuan/issues/12930)
