@@ -83,13 +83,14 @@ conveniently.
 * `url`: Plugin repo URL
 * `version`: Plugin version number, it is recommended to follow the [semver](https://semver.org/) specification
 * `minAppVersion`: Minimum version number of SiYuan required to use this plugin
-* `backends`: Backend environment required by the plugin, optional values are `windows`, `linux`, `darwin`, `docker`, `android`, `ios` and `all`
+* `backends`: Backend environment required by the plugin, optional values are `windows`, `linux`, `darwin`, `docker`, `android`, `ios`, `harmony` and `all`
   * `windows`: Windows desktop
   * `linux`: Linux desktop
   * `darwin`: macOS desktop
   * `docker`: Docker
   * `android`: Android APP
   * `ios`: iOS APP
+  * `harmony`: HarmonyOS APP
   * `all`: All environments
 * `frontends`: Frontend environment required by the plugin, optional values are `desktop`, `desktop-window`, `mobile`, `browser-desktop`, `browser-mobile` and `all`
   * `desktop`: Desktop

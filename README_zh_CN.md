@@ -77,13 +77,14 @@
 * `url`：插件仓库地址
 * `version`：插件版本号，建议遵循 [semver](https://semver.org/lang/zh-CN/) 规范
 * `minAppVersion`：插件支持的最低思源笔记版本号
-* `backends`：插件需要的后端环境，可选值为 `windows`, `linux`, `darwin`, `docker`, `android`, `ios` and `all`
+* `backends`：插件需要的后端环境，可选值为 `windows`, `linux`, `darwin`, `docker`, `android`, `ios`, `harmony` and `all`
   * `windows`：Windows 桌面端
   * `linux`：Linux 桌面端
   * `darwin`：macOS 桌面端
   * `docker`：Docker 端
   * `android`：Android 端
   * `ios`：iOS 端
+  * `harmony`：鸿蒙端
   * `all`：所有环境
 * `frontends`：插件需要的前端环境，可选值为 `desktop`, `desktop-window`, `mobile`, `browser-desktop`, `browser-mobile` and `all`
   * `desktop`：桌面端
