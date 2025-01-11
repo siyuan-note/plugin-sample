@@ -18,7 +18,7 @@ import {
     lockScreen,
     ICard,
     ICardData,
-    Custom, exitSiYuan, getModelByDockType, getAllEditor, Files, platformUtils
+    Custom, exitSiYuan, getModelByDockType, getAllEditor, Files, platformUtils, openSetting
 } from "siyuan";
 import "./index.scss";
 import {IMenuItem} from "siyuan/types";
@@ -34,7 +34,7 @@ export default class PluginSample extends Plugin {
     private blockIconEventBindThis = this.blockIconEvent.bind(this);
 
     updateProtyleToolbar(toolbar: Array<string | IMenuItem>) {
-        toolbar.push("|")
+        toolbar.push("|");
         toolbar.push({
             name: "insert-smail-emoji",
             icon: "iconEmoji",
@@ -44,7 +44,7 @@ export default class PluginSample extends Plugin {
             click(protyle: Protyle) {
                 protyle.insert("😊");
             }
-        })
+        });
         return toolbar;
     }
 
@@ -364,6 +364,14 @@ export default class PluginSample extends Plugin {
             console.log(this.i18n.byeMenu);
         });
         menu.addItem({
+            icon: "iconSettings",
+            label: "Open Setting",
+            accelerator: this.commands[0].customHotkey,
+            click: () => {
+                openSetting(this.app);
+            }
+        });
+        menu.addItem({
             icon: "iconInfo",
             label: "Dialog(open doc first)",
             accelerator: this.commands[0].customHotkey,
@@ -372,7 +380,7 @@ export default class PluginSample extends Plugin {
             }
         });
         menu.addItem({
-            icon: "iconInfo",
+            icon: "iconFocus",
             label: "Select Opened Doc(open doc first)",
             accelerator: this.commands[0].customHotkey,
             click: () => {
