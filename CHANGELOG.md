@@ -1,6 +1,8 @@
 # Changelog
 
-## v0.3.8 2025-01
+## v0.3.9 2025-03
+
+## v0.3.8 2025-02-11
 
 * [Add plugin util `openSetting`](https://github.com/siyuan-note/siyuan/pull/13761)
 * [Add plugin method `updateProtyleToolbar`](https://github.com/siyuan-note/plugin-sample/issues/24)
