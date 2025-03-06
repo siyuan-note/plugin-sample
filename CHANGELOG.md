@@ -2,6 +2,8 @@
 
 ## v0.4.0 2025-03
 
+* [Add plugin function `openAttributePanel`](https://github.com/siyuan-note/siyuan/issues/14276)
+
 ## v0.3.9 2025-03-04
 
 * [Add parameter `nodeElement` to `protyleSlash.callback`](https://github.com/siyuan-note/siyuan/issues/14036)

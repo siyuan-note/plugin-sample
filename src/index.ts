@@ -18,7 +18,7 @@ import {
     lockScreen,
     ICard,
     ICardData,
-    Custom, exitSiYuan, getModelByDockType, getAllEditor, Files, platformUtils, openSetting
+    Custom, exitSiYuan, getModelByDockType, getAllEditor, Files, platformUtils, openSetting, openAttributePanel
 } from "siyuan";
 import "./index.scss";
 import {IMenuItem} from "siyuan/types";
@@ -366,9 +366,19 @@ export default class PluginSample extends Plugin {
         menu.addItem({
             icon: "iconSettings",
             label: "Open Setting",
-            accelerator: this.commands[0].customHotkey,
             click: () => {
                 openSetting(this.app);
+            }
+        });
+        menu.addItem({
+            icon: "iconDrag",
+            label: "Open Attribute Panel",
+            click: () => {
+                openAttributePanel({
+                    nodeElement: this.getEditor().protyle.wysiwyg.element.firstElementChild as HTMLElement,
+                    protyle: this.getEditor().protyle,
+                    focusName: "custom",
+                });
             }
         });
         menu.addItem({
@@ -382,7 +392,6 @@ export default class PluginSample extends Plugin {
         menu.addItem({
             icon: "iconFocus",
             label: "Select Opened Doc(open doc first)",
-            accelerator: this.commands[0].customHotkey,
             click: () => {
                 (getModelByDockType("file") as Files).selectItem(this.getEditor().protyle.notebookId, this.getEditor().protyle.path);
             }
@@ -463,9 +472,10 @@ export default class PluginSample extends Plugin {
                 label: "Open Float Layer(open doc first)",
                 click: () => {
                     this.addFloatLayer({
-                        ids: [this.getEditor().protyle.block.rootID],
+                        refDefs: [{refID: this.getEditor().protyle.block.rootID}],
                         x: window.innerWidth - 768 - 120,
-                        y: 32
+                        y: 32,
+                        isBacklink: false
                     });
                 }
             });
