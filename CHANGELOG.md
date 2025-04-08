@@ -1,6 +1,8 @@
 # Changelog
 
-## v0.4.0 2025-03
+## v0.4.1 2025-05
+
+## v0.4.0 2025-04-08
 
 * [Add plugin function `openAttributePanel`](https://github.com/siyuan-note/siyuan/issues/14276)
 
