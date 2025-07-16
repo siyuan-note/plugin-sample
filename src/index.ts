@@ -18,7 +18,15 @@ import {
     lockScreen,
     ICard,
     ICardData,
-    Custom, exitSiYuan, getModelByDockType, getAllEditor, Files, platformUtils, openSetting, openAttributePanel
+    Custom,
+    exitSiYuan,
+    getModelByDockType,
+    getAllEditor,
+    Files,
+    platformUtils,
+    openSetting,
+    openAttributePanel,
+    saveLayout
 } from "siyuan";
 import "./index.scss";
 import {IMenuItem} from "siyuan/types";
@@ -509,6 +517,15 @@ export default class PluginSample extends Plugin {
             label: "Exit Application",
             click: () => {
                 exitSiYuan();
+            }
+        });
+        menu.addItem({
+            icon: "iconSaving",
+            label: "Save Layout",
+            click: () => {
+                saveLayout(() => {
+                    showMessage("Layout saved");
+                });
             }
         });
         menu.addItem({

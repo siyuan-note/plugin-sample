@@ -1,6 +1,8 @@
 # Changelog
 
-## v0.4.1 2025-05
+## v0.4.1 2025-07
+
+* [Add plugin function `saveLayout`](https://github.com/siyuan-note/siyuan/issues/15308)
 
 ## v0.4.0 2025-04-08
 
