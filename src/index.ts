@@ -520,7 +520,7 @@ export default class PluginSample extends Plugin {
             }
         });
         menu.addItem({
-            icon: "iconSaving",
+            icon: "iconDownload",
             label: "Save Layout",
             click: () => {
                 saveLayout(() => {
