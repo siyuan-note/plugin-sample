@@ -69,46 +69,6 @@ export default class PluginSample extends Plugin {
 <path d="M20 13.333c0-0.733 0.6-1.333 1.333-1.333s1.333 0.6 1.333 1.333c0 0.733-0.6 1.333-1.333 1.333s-1.333-0.6-1.333-1.333zM10.667 12h6.667v-2.667h-6.667v2.667zM29.333 10v9.293l-3.76 1.253-2.24 7.453h-7.333v-2.667h-2.667v2.667h-7.333c0 0-3.333-11.28-3.333-15.333s3.28-7.333 7.333-7.333h6.667c1.213-1.613 3.147-2.667 5.333-2.667 1.107 0 2 0.893 2 2 0 0.28-0.053 0.533-0.16 0.773-0.187 0.453-0.347 0.973-0.427 1.533l3.027 3.027h2.893zM26.667 12.667h-1.333l-4.667-4.667c0-0.867 0.12-1.72 0.347-2.547-1.293 0.333-2.347 1.293-2.787 2.547h-8.227c-2.573 0-4.667 2.093-4.667 4.667 0 2.507 1.627 8.867 2.68 12.667h2.653v-2.667h8v2.667h2.68l2.067-6.867 3.253-1.093v-4.707z"></path>
 </symbol>`);
 
-        const topBarElement = this.addTopBar({
-            icon: "iconFace",
-            title: this.i18n.addTopBarIcon,
-            position: "right",
-            callback: () => {
-                if (this.isMobile) {
-                    this.addMenu();
-                } else {
-                    let rect = topBarElement.getBoundingClientRect();
-                    // 如果被隐藏，则使用更多按钮
-                    if (rect.width === 0) {
-                        rect = document.querySelector("#barMore").getBoundingClientRect();
-                    }
-                    if (rect.width === 0) {
-                        rect = document.querySelector("#barPlugins").getBoundingClientRect();
-                    }
-                    this.addMenu(rect);
-                }
-            }
-        });
-
-        const statusIconTemp = document.createElement("template");
-        statusIconTemp.innerHTML = `<div class="toolbar__item ariaLabel" aria-label="Remove plugin-sample Data">
-    <svg>
-        <use xlink:href="#iconTrashcan"></use>
-    </svg>
-</div>`;
-        statusIconTemp.content.firstElementChild.addEventListener("click", () => {
-            confirm("⚠️", this.i18n.confirmRemove.replace("${name}", this.name), () => {
-                this.removeData(STORAGE_NAME).then(() => {
-                    this.data[STORAGE_NAME] = {readonlyText: "Readonly"};
-                    showMessage(`[${this.name}]: ${this.i18n.removedData}`);
-                });
-            });
-        });
-
-        this.addStatusBar({
-            element: statusIconTemp.content.firstElementChild as HTMLElement,
-        });
-
         this.custom = this.addTab({
             type: TAB_TYPE,
             init() {
@@ -249,6 +209,43 @@ export default class PluginSample extends Plugin {
     }
 
     onLayoutReady() {
+        const topBarElement = this.addTopBar({
+            icon: "iconFace",
+            title: this.i18n.addTopBarIcon,
+            position: "right",
+            callback: () => {
+                if (this.isMobile) {
+                    this.addMenu();
+                } else {
+                    let rect = topBarElement.getBoundingClientRect();
+                    // 如果被隐藏，则使用更多按钮
+                    if (rect.width === 0) {
+                        rect = document.querySelector("#barMore").getBoundingClientRect();
+                    }
+                    if (rect.width === 0) {
+                        rect = document.querySelector("#barPlugins").getBoundingClientRect();
+                    }
+                    this.addMenu(rect);
+                }
+            }
+        });
+        const statusIconTemp = document.createElement("template");
+        statusIconTemp.innerHTML = `<div class="toolbar__item ariaLabel" aria-label="Remove plugin-sample Data">
+    <svg>
+        <use xlink:href="#iconTrashcan"></use>
+    </svg>
+</div>`;
+        statusIconTemp.content.firstElementChild.addEventListener("click", () => {
+            confirm("⚠️", this.i18n.confirmRemove.replace("${name}", this.name), () => {
+                this.removeData(STORAGE_NAME).then(() => {
+                    this.data[STORAGE_NAME] = {readonlyText: "Readonly"};
+                    showMessage(`[${this.name}]: ${this.i18n.removedData}`);
+                });
+            });
+        });
+        this.addStatusBar({
+            element: statusIconTemp.content.firstElementChild as HTMLElement,
+        });
         this.loadData(STORAGE_NAME);
         console.log(`frontend: ${getFrontend()}; backend: ${getBackend()}`);
     }
