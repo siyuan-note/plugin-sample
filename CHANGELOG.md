@@ -2,6 +2,7 @@
 
 ## v0.4.2
 
+* [Upgrade ESLint to 9.33.0](https://github.com/siyuan-note/plugin-sample/issues/30)
 * [Adjust `addTopBar` and `addStatusBar` from `onload` lifecycle to `onLayoutReady`](https://github.com/siyuan-note/siyuan/issues/15455)
 
 ## v0.4.1 2025-07-22
