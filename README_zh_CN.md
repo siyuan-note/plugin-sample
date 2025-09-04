@@ -77,6 +77,7 @@
 * `url`：插件仓库地址
 * `version`：插件版本号，建议遵循 [semver](https://semver.org/lang/zh-CN/) 规范
 * `minAppVersion`：插件支持的最低思源笔记版本号
+* `disabledInPublish`：使用发布服务时是否禁用该插件，默认为 false
 * `backends`：插件需要的后端环境，可选值为 `windows`, `linux`, `darwin`, `docker`, `android`, `ios`, `harmony` and `all`
   * `windows`：Windows 桌面端
   * `linux`：Linux 桌面端
