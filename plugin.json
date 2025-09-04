@@ -20,6 +20,7 @@
     "browser-mobile",
     "desktop-window"
   ],
+  "disabledInPublish": false,
   "displayName": {
     "default": "Plugin Sample",
     "zh_CN": "插件示例"
