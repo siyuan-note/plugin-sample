@@ -46,6 +46,7 @@
   "minAppVersion": "2.8.8",
   "backends": ["windows", "linux", "darwin"],
   "frontends": ["desktop"],
+  "disabledInPublish": false,
   "displayName": {
     "default": "Plugin Sample",
     "zh_CN": "插件示例"
