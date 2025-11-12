@@ -27,13 +27,12 @@
 国际化方面我们主要考虑的是支持多语言，具体需要完成以下工作：
 
 * 插件自身的元信息，比如插件描述和自述文件
-  * plugin.json 中的 `description` 和 `readme` 字段，以及对应的 README*.md 文件
+  * plugin.json 中的 `displayName`、`description` 和 `readme` 字段，以及对应的 README*.md 文件
 * 插件中使用的文本，比如按钮文字和提示信息
   * src/i18n/*.json 语言配置文件
   * 代码中使用 `this.i18.key` 获取文本
-* 最后在 plugin.json 中的 `i18n` 字段中声明该插件支持的语言
 
-建议插件至少支持英文和简体中文，这样可以方便更多人使用。
+建议插件至少支持英文和简体中文，这样可以方便更多人使用。不支持的语种不需要在 plugin.json 中的 `displayName`、`description` 和 `readme` 字段中声明。
 
 ## plugin.json
 
@@ -94,21 +93,21 @@
   * `browser-desktop`：桌面端浏览器
   * `browser-mobile`：移动端浏览器
   * `all`：所有环境
-* `displayName`：插件名称，在插件集市列表中显示，支持多语言，建议至少提供中文和英文
-  * `default`：默认语言，必须存在，建议使用英文
+* `displayName`：插件名称，在插件集市列表中显示
+  * `default`：默认语言，必须存在。如果插件支持英文，此处应使用英文
   * `zh_CN`、`en_US` 等其他语言：可选
-* `description`：插件描述，在插件集市列表中显示，支持多语言，建议至少提供中文和英文
-  * `default`：默认语言，必须存在，建议使用英文
+* `description`：插件描述，在插件集市列表中显示
+  * `default`：默认语言，必须存在。如果插件支持英文，此处应使用英文
   * `zh_CN`、`en_US` 等其他语言：可选
-* `readme`：自述文件名，在插件集市详情页中显示，支持多语言，建议至少提供中文和英文
-  * `default`：默认语言，必须存在，建议使用英文
+* `readme`：自述文件名，在插件集市详情页中显示
+  * `default`：默认语言，必须存在。如果插件支持英文，此处应使用英文
   * `zh_CN`、`en_US` 等其他语言：可选
 * `funding`：插件赞助信息，集市仅显示其中一种
   * `openCollective`：Open Collective 名称
   * `patreon`：Patreon 名称
   * `github`：GitHub 登录名
   * `custom`：自定义赞助链接列表
-* `keywords`：搜索关键字列表，用于集市搜索功能，补充 name、author、displayName、description 字段值以外的搜索关键词
+* `keywords`：搜索关键字列表，用于集市搜索功能，补充 `name`、`author`、`displayName`、`description` 字段值以外的搜索关键词
 
 ## 打包
 
