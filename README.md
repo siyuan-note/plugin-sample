@@ -4,12 +4,9 @@
 
 ## Get started
 
-* Make a copy of this repo as a template with the <kbd>Use this template</kbd> button, please note that the repo name
-  must be the same as the plugin name, the default branch must be `main`
-* Clone your repo to a local development folder. For convenience, you can place this folder in
-  your `{workspace}/data/plugins/` folder
-* Install [NodeJS](https://nodejs.org/en/download) and [pnpm](https://pnpm.io/installation), then run `pnpm i` in the
-  command line under your repo folder
+* Make a copy of this repo as a template with the <kbd>Use this template</kbd> button, please note that the repo name must be the same as the plugin name, the default branch must be `main`
+* Clone your repo to a local development folder. For convenience, you can place this folder in your `{workspace}/data/plugins/` folder
+* Install [NodeJS](https://nodejs.org/en/download) and [pnpm](https://pnpm.io/installation), then run `pnpm i` in the command line under your repo folder
 * Execute `pnpm run dev` for real-time compilation
 * Open SiYuan marketplace and enable plugin in downloaded tab
 
@@ -31,14 +28,12 @@ In terms of internationalization, our main consideration is to support multiple 
 complete the following tasks:
 
 * Meta information about the plugin itself, such as plugin description and readme
-    * `description` and `readme` fields in plugin.json, and the corresponding README*.md file
+  * `displayName`, `description` and `readme` fields in plugin.json, and the corresponding README*.md file
 * Text used in the plugin, such as button text and tooltips
-    * src/i18n/*.json language configuration files
-    * Use `this.i18.key` to get the text in the code
-* Finally, declare the language supported by the plugin in the `i18n` field in plugin.json
+  * src/i18n/*.json language configuration files
+  * Use `this.i18.key` to get the text in the code
 
-It is recommended that the plugin supports at least English and Simplified Chinese, so that more people can use it more
-conveniently.
+It is recommended that the plugin supports at least English and Simplified Chinese, so that more people can use it more conveniently. Unsupported languages do not need to be declared in the `displayName`, `description` and `readme` fields in plugin.json.
 
 ## plugin.json
 
@@ -99,21 +94,21 @@ A typical example is as follows:
   * `browser-desktop`: Desktop browser
   * `browser-mobile`: Mobile browser
   * `all`: All environments
-* `displayName`: Plugin name, displayed in the marketplace list, supports multiple languages, it is recommended to provide at least Chinese and English
-  * `default`: Default language, must exist, it is recommended to use English
+* `displayName`: Plugin name, displayed in the marketplace list
+  * `default`: Default language, must exist. If the plugin supports English, English should be used here
   * `zh_CN`, `en_US` and other languages: optional
-* `description`: Plugin description, displayed in the marketplace list, supports multiple languages, it is recommended to provide at least Chinese and English
-  * `default`: Default language, must exist, it is recommended to use English
+* `description`: Plugin description, displayed in the marketplace list
+  * `default`: Default language, must exist. If the plugin supports English, English should be used here
   * `zh_CN`, `en_US` and other languages: optional
-* `readme`: Readme file name, displayed in the marketplace details page, supports multiple languages, it is recommended to provide at least Chinese and English
-  * `default`: Default language, must exist, it is recommended to use English
+* `readme`: Readme file name, displayed in the marketplace details page
+  * `default`: Default language, must exist. If the plugin supports English, English should be used here
   * `zh_CN`, `en_US` and other languages: optional
 * `funding`: Plugin sponsorship information, only one type will be displayed in the marketplace
   * `openCollective`: Open Collective name
   * `patreon`: Patreon name
   * `github`: GitHub login name
   * `custom`: Custom sponsorship link list
-* `keywords`: Search keyword list, used for marketplace search function, supplements search keywords beyond the values of name, author, displayName, and description fields
+* `keywords`: Search keyword list, used for marketplace search function, supplements search keywords beyond the values of `name`, `author`, `displayName`, and `description` fields
 
 ## Package
 
