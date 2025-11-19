@@ -115,7 +115,7 @@ A typical example is as follows:
 No matter which method is used to compile and package, we finally need to generate a package.zip, which contains at
 least the following files:
 
-* i18n/*
+* i18n/* (If the plugin supports multiple languages, language files need to be packaged to this directory, otherwise this directory is not needed)
 * icon.png (recommended size: 160*160, file size should not exceed 20KB)
 * index.css
 * index.js
