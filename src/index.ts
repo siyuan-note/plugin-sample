@@ -254,7 +254,10 @@ export default class PluginSample extends Plugin {
         console.log(this.i18n.byePlugin);
     }
 
-    uninstall() {
+    async uninstall() {
+        // 卸载插件时删除插件数据
+        // Delete plugin data when uninstalling the plugin
+        await this.removeData(STORAGE_NAME);
         console.log("uninstall");
     }
 
