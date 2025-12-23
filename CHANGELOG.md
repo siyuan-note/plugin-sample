@@ -1,5 +1,7 @@
 # Changelog
 
+## v0.4.5 2026
+
 ## v0.4.4 2025-12-23
 
 * [Delete plugin data when uninstalling the plugin](https://github.com/siyuan-note/plugin-sample/pull/37)
