@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.4.4 2025-12-23
+
+* [Delete plugin data when uninstalling the plugin](https://github.com/siyuan-note/plugin-sample/pull/37)
+
 ## v0.4.3 2025-12-02
 
 * [Add onDataChanged method to handle data changes in the plugin](https://github.com/siyuan-note/siyuan/pull/16244)
