@@ -4,12 +4,9 @@
 
 ## Get started
 
-* Make a copy of this repo as a template with the <kbd>Use this template</kbd> button, please note that the repo name
-  must be the same as the plugin name, the default branch must be `main`
-* Clone your repo to a local development folder. For convenience, you can place this folder in
-  your `{workspace}/data/plugins/` folder
-* Install [NodeJS](https://nodejs.org/en/download) and [pnpm](https://pnpm.io/installation), then run `pnpm i` in the
-  command line under your repo folder
+* Make a copy of this repo as a template with the <kbd>Use this template</kbd> button, please note that the repo name must be the same as the plugin name, the default branch must be `main`
+* Clone your repo to a local development folder. For convenience, you can place this folder in your `{workspace}/data/plugins/` folder
+* Install [NodeJS](https://nodejs.org/en/download) and [pnpm](https://pnpm.io/installation), then run `pnpm i` in the command line under your repo folder
 * Execute `pnpm run dev` for real-time compilation
 * Open SiYuan marketplace and enable plugin in downloaded tab
 
@@ -31,59 +28,56 @@ In terms of internationalization, our main consideration is to support multiple 
 complete the following tasks:
 
 * Meta information about the plugin itself, such as plugin description and readme
-    * `description` and `readme` fields in plugin.json, and the corresponding README*.md file
+  * `displayName`, `description` and `readme` fields in plugin.json, and the corresponding README*.md file
 * Text used in the plugin, such as button text and tooltips
-    * src/i18n/*.json language configuration files
-    * Use `this.i18.key` to get the text in the code
-* Finally, declare the language supported by the plugin in the `i18n` field in plugin.json
+  * src/i18n/*.json language configuration files
+  * Use `this.i18.key` to get the text in the code
 
-It is recommended that the plugin supports at least English and Simplified Chinese, so that more people can use it more
-conveniently.
+It is recommended that the plugin supports at least English and Simplified Chinese, so that more people can use it more conveniently. Unsupported languages do not need to be declared in the `displayName`, `description` and `readme` fields in plugin.json.
 
 ## plugin.json
+
+A typical example is as follows:
 
 ```json
 {
   "name": "plugin-sample",
   "author": "Vanessa",
   "url": "https://github.com/siyuan-note/plugin-sample",
-  "version": "0.1.3",
-  "minAppVersion": "2.8.8",
-  "backends": ["windows", "linux", "darwin"],
-  "frontends": ["desktop"],
+  "version": "0.4.2",
+  "minAppVersion": "3.3.0",
+  "backends": ["all"],
+  "frontends": ["all"],
+  "disabledInPublish": false,
   "displayName": {
     "default": "Plugin Sample",
     "zh_CN": "插件示例"
   },
   "description": {
-    "default": "This is a plugin sample",
-    "zh_CN": "这是一个插件示例"
+    "default": "This is a plugin development sample",
+    "zh_CN": "这是一个插件开发示例"
   },
   "readme": {
     "default": "README.md",
     "zh_CN": "README_zh_CN.md"
   },
   "funding": {
-    "openCollective": "",
-    "patreon": "",
-    "github": "",
-    "custom": [
-      "https://ld246.com/sponsor"
-    ]
+    "custom": ["https://ld246.com/sponsor"]
   },
   "keywords": [
-    "sample", "示例"
+    "开发者参考",
+    "developer reference",
+    "示例插件"
   ]
 }
 ```
 
-* `name`: Plugin name, must be the same as the repo name, and must be unique globally (no duplicate plugin names in the
-  marketplace)
+* `name`: Plugin package name, must be the same as the GitHub repository name, and cannot be duplicated with other plugins in the marketplace
 * `author`: Plugin author name
 * `url`: Plugin repo URL
-* `version`: Plugin version number, it is recommended to follow the [semver](https://semver.org/) specification
-* `minAppVersion`: Minimum version number of SiYuan required to use this plugin
-* `disabledInPublish`: Whether to diable the plugin in publish service
+* `version`: Plugin version number, needs to follow the [semver](https://semver.org/) specification
+* `minAppVersion`: Minimum SiYuan version required to use this plugin
+* `disabledInPublish`: Whether to disable the plugin when using the publish service, defaults to false, i.e., not disabled
 * `backends`: Backend environment required by the plugin, optional values are `windows`, `linux`, `darwin`, `docker`, `android`, `ios`, `harmony` and `all`
   * `windows`: Windows desktop
   * `linux`: Linux desktop
@@ -100,46 +94,44 @@ conveniently.
   * `browser-desktop`: Desktop browser
   * `browser-mobile`: Mobile browser
   * `all`: All environments
-* `displayName`: Template display name, mainly used for display in the marketplace list, supports multiple languages
-    * `default`: Default language, must exist
-    * `zh_CN`, `en_US` and other languages: optional, it is recommended to provide at least Chinese and English
-* `description`: Plugin description, mainly used for display in the marketplace list, supports multiple languages
-    * `default`: Default language, must exist
-    * `zh_CN`, `en_US` and other languages: optional, it is recommended to provide at least Chinese and English
-* `readme`: readme file name, mainly used to display in the marketplace details page, supports multiple languages
-    * `default`: Default language, must exist
-    * `zh_CN`, `en_US` and other languages: optional, it is recommended to provide at least Chinese and English
-* `funding`: Plugin sponsorship information
-    * `openCollective`: Open Collective name
-    * `patreon`: Patreon name
-    * `github`: GitHub login name
-    * `custom`: Custom sponsorship link list
-* `keywords`: Search keyword list, used for marketplace search function
+* `displayName`: Plugin name, displayed in the marketplace list
+  * `default`: Default language, must exist. If the plugin supports English, English should be used here
+  * `zh_CN`, `en_US` and other languages: optional
+* `description`: Plugin description, displayed in the marketplace list
+  * `default`: Default language, must exist. If the plugin supports English, English should be used here
+  * `zh_CN`, `en_US` and other languages: optional
+* `readme`: Readme file name, displayed in the marketplace details page
+  * `default`: Default language, must exist. If the plugin supports English, English should be used here
+  * `zh_CN`, `en_US` and other languages: optional
+* `funding`: Plugin sponsorship information, only one type will be displayed in the marketplace
+  * `openCollective`: Open Collective name
+  * `patreon`: Patreon name
+  * `github`: GitHub login name
+  * `custom`: Custom sponsorship link list
+* `keywords`: Search keyword list, used for marketplace search function, supplements search keywords beyond the values of `name`, `author`, `displayName`, and `description` fields
 
 ## Package
 
 No matter which method is used to compile and package, we finally need to generate a package.zip, which contains at
 least the following files:
 
-* i18n/*
-* icon.png (160*160)
+* i18n/* (If the plugin supports multiple languages, language files need to be packaged to this directory, otherwise this directory is not needed)
+* icon.png (recommended size: 160*160, file size should not exceed 20KB)
 * index.css
 * index.js
 * plugin.json
-* preview.png (1024*768)
+* preview.png (recommended size: 1024*768, file size should not exceed 200KB)
 * README*.md
 
 ## List on the marketplace
 
-* `pnpm run build` to generate package.zip
+* Execute `pnpm run build` to generate package.zip
 * Create a new GitHub release using your new version number as the "Tag version". See here for an
   example: https://github.com/siyuan-note/plugin-sample/releases
 * Upload the file package.zip as binary attachments
 * Publish the release
 
-If it is the first release, please create a pull request to
-the [Community Bazaar](https://github.com/siyuan-note/bazaar) repository and modify the plugins.json file in it. This
-file is the index of all community plugin repositories, the format is:
+If this is the first release, you also need to create a PR to the [Community Bazaar](https://github.com/siyuan-note/bazaar) repository and modify the plugins.json file in it. This file is the index of all community plugin repositories, the format is:
 
 ```json
 {
@@ -149,12 +141,9 @@ file is the index of all community plugin repositories, the format is:
 }
 ```
 
-After the PR is merged, the bazaar will automatically update the index and deploy through GitHub Actions. When releasing
-a new version of the plugin in the future, you only need to follow the above steps to create a new release, and you
-don't need to PR the community bazaar repo.
+After the PR is merged, the bazaar will automatically update the index and deploy through GitHub Actions. For subsequent plugin releases, you only need to follow the above steps to create a new release, and you don't need to PR the community bazaar repository.
 
-Under normal circumstances, the community bazaar repo will automatically update the index and deploy every hour,
-and you can check the deployment status at https://github.com/siyuan-note/bazaar/actions.
+Under normal circumstances, the community bazaar repository will automatically update the index and deploy every hour, and you can check the deployment status at https://github.com/siyuan-note/bazaar/actions.
 
 ## Developer's Guide
 

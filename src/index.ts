@@ -254,9 +254,18 @@ export default class PluginSample extends Plugin {
         console.log(this.i18n.byePlugin);
     }
 
-    uninstall() {
+    async uninstall() {
+        // 卸载插件时删除插件数据
+        // Delete plugin data when uninstalling the plugin
+        await this.removeData(STORAGE_NAME);
         console.log("uninstall");
     }
+
+    // 使用 saveData() 存储的数据发生变更时触发，注释掉则自动禁用插件再重新启用
+    // Triggered when data stored using saveData() changes. If commented out, the plugin will be automatically disabled and then re-enabled.
+    // onDataChanged() {
+    //     console.log("onDataChanged");
+    // }
 
     async updateCards(options: ICardData) {
         options.cards.sort((a: ICard, b: ICard) => {

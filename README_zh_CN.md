@@ -27,58 +27,57 @@
 国际化方面我们主要考虑的是支持多语言，具体需要完成以下工作：
 
 * 插件自身的元信息，比如插件描述和自述文件
-  * plugin.json 中的 `description` 和 `readme` 字段，以及对应的 README*.md 文件
+  * plugin.json 中的 `displayName`、`description` 和 `readme` 字段，以及对应的 README*.md 文件
 * 插件中使用的文本，比如按钮文字和提示信息
   * src/i18n/*.json 语言配置文件
   * 代码中使用 `this.i18.key` 获取文本
-* 最后在 plugin.json 中的 `i18n` 字段中声明该插件支持的语言
 
-建议插件至少支持英文和简体中文，这样可以方便更多人使用。
+建议插件至少支持英文和简体中文，这样可以方便更多人使用。不支持的语种不需要在 plugin.json 中的 `displayName`、`description` 和 `readme` 字段中声明。
 
 ## plugin.json
+
+一个典型的示例如下：
 
 ```json
 {
   "name": "plugin-sample",
   "author": "Vanessa",
   "url": "https://github.com/siyuan-note/plugin-sample",
-  "version": "0.1.3",
-  "minAppVersion": "2.8.8",
-  "backends": ["windows", "linux", "darwin"],
-  "frontends": ["desktop"],
+  "version": "0.4.2",
+  "minAppVersion": "3.3.0",
+  "backends": ["all"],
+  "frontends": ["all"],
+  "disabledInPublish": false,
   "displayName": {
     "default": "Plugin Sample",
     "zh_CN": "插件示例"
   },
   "description": {
-    "default": "This is a plugin sample",
-    "zh_CN": "这是一个插件示例"
+    "default": "This is a plugin development sample",
+    "zh_CN": "这是一个插件开发示例"
   },
   "readme": {
     "default": "README.md",
     "zh_CN": "README_zh_CN.md"
   },
   "funding": {
-    "openCollective": "",
-    "patreon": "",
-    "github": "",
-    "custom": [
-      "https://ld246.com/sponsor"
-    ]
+    "custom": ["https://ld246.com/sponsor"]
   },
   "keywords": [
-    "sample", "示例"
+    "开发者参考",
+    "developer reference",
+    "示例插件"
   ]
 }
 ```
 
-* `name`：插件名称，必须和库名一致，且全局唯一（集市中不能有重名插件）
+* `name`：插件包名，必须和 GitHub 仓库名一致，且不能与集市中的其他插件重复
 * `author`：插件作者名
 * `url`：插件仓库地址
-* `version`：插件版本号，建议遵循 [semver](https://semver.org/lang/zh-CN/) 规范
+* `version`：插件版本号，需要遵循 [semver](https://semver.org/lang/zh-CN/) 规范
 * `minAppVersion`：插件支持的最低思源笔记版本号
-* `disabledInPublish`：使用发布服务时是否禁用该插件，默认为 false
-* `backends`：插件需要的后端环境，可选值为 `windows`, `linux`, `darwin`, `docker`, `android`, `ios`, `harmony` and `all`
+* `disabledInPublish`：使用发布服务时是否禁用该插件，默认为 false，即不禁用
+* `backends`：插件需要的后端环境，可选值为 `windows`, `linux`, `darwin`, `docker`, `android`, `ios`, `harmony` 和 `all`
   * `windows`：Windows 桌面端
   * `linux`：Linux 桌面端
   * `darwin`：macOS 桌面端
@@ -87,39 +86,39 @@
   * `ios`：iOS 端
   * `harmony`：鸿蒙端
   * `all`：所有环境
-* `frontends`：插件需要的前端环境，可选值为 `desktop`, `desktop-window`, `mobile`, `browser-desktop`, `browser-mobile` and `all`
+* `frontends`：插件需要的前端环境，可选值为 `desktop`, `desktop-window`, `mobile`, `browser-desktop`, `browser-mobile` 和 `all`
   * `desktop`：桌面端
   * `desktop-window`：桌面端页签转换的独立窗口
   * `mobile`：移动端
   * `browser-desktop`：桌面端浏览器
   * `browser-mobile`：移动端浏览器
   * `all`：所有环境
-* `displayName`：模板显示名称，主要用于模板集市列表中显示，支持多语言
-  * `default`：默认语言，必须存在
-  * `zh_CN`、`en_US` 等其他语言：可选，建议至少提供中文和英文
-* `description`：插件描述，主要用于插件集市列表中显示，支持多语言
-  * `default`：默认语言，必须存在
-  * `zh_CN`、`en_US` 等其他语言：可选，建议至少提供中文和英文
-* `readme`：自述文件名，主要用于插件集市详情页中显示，支持多语言
-  * `default`：默认语言，必须存在
-  * `zh_CN`、`en_US` 等其他语言：可选，建议至少提供中文和英文
-* `funding`：插件赞助信息
+* `displayName`：插件名称，在插件集市列表中显示
+  * `default`：默认语言，必须存在。如果插件支持英文，此处应使用英文
+  * `zh_CN`、`en_US` 等其他语言：可选
+* `description`：插件描述，在插件集市列表中显示
+  * `default`：默认语言，必须存在。如果插件支持英文，此处应使用英文
+  * `zh_CN`、`en_US` 等其他语言：可选
+* `readme`：自述文件名，在插件集市详情页中显示
+  * `default`：默认语言，必须存在。如果插件支持英文，此处应使用英文
+  * `zh_CN`、`en_US` 等其他语言：可选
+* `funding`：插件赞助信息，集市仅显示其中一种
   * `openCollective`：Open Collective 名称
   * `patreon`：Patreon 名称
   * `github`：GitHub 登录名
   * `custom`：自定义赞助链接列表
-* `keywords`：搜索关键字列表，用于集市搜索功能
+* `keywords`：搜索关键字列表，用于集市搜索功能，补充 `name`、`author`、`displayName`、`description` 字段值以外的搜索关键词
 
 ## 打包
 
 无论使用何种方式编译打包，我们最终需要生成一个 package.zip，它至少包含如下文件：
 
-* i18n/*
-* icon.png (160*160)
+* i18n/* (如果插件支持多语言，则需要将语言文件打包到该目录下，否则不需要该目录)
+* icon.png (建议尺寸为 160*160、文件大小不超过 20KB)
 * index.css
 * index.js
 * plugin.json
-* preview.png (1024*768)
+* preview.png (建议尺寸为 1024*768、文件大小不超过 200KB)
 * README*.md
 
 ## 上架集市
@@ -129,8 +128,7 @@
 * 上传 package.zip 作为二进制附件
 * 提交发布
 
-如果是第一次发布版本，还需要创建一个 PR 到 [Community Bazaar](https://github.com/siyuan-note/bazaar) 社区集市仓库，修改该库的
-plugins.json。该文件是所有社区插件库的索引，格式为：
+如果是第一次发布版本，还需要创建一个 PR 到 [Community Bazaar](https://github.com/siyuan-note/bazaar) 社区集市仓库，修改该库的 plugins.json。该文件是所有社区插件库的索引，格式为：
 
 ```json
 {
@@ -140,8 +138,7 @@ plugins.json。该文件是所有社区插件库的索引，格式为：
 }
 ```
 
-PR 被合并以后集市会通过 GitHub Actions 自动更新索引并部署。后续发布新版本插件时只需要按照上述步骤创建新的发布即可，不需要再
-PR 社区集市仓库。
+PR 被合并以后集市会通过 GitHub Actions 自动更新索引并部署。后续发布新版本插件时只需要按照上述步骤创建新的发布即可，不需要再 PR 社区集市仓库。
 
 正常情况下，社区集市仓库每隔 1 小时会自动更新索引并部署，可在 https://github.com/siyuan-note/bazaar/actions 查看部署状态。
 

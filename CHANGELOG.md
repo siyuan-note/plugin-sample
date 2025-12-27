@@ -1,5 +1,15 @@
 # Changelog
 
+## v0.4.5 2026
+
+## v0.4.4 2025-12-23
+
+* [Delete plugin data when uninstalling the plugin](https://github.com/siyuan-note/plugin-sample/pull/37)
+
+## v0.4.3 2025-12-02
+
+* [Add onDataChanged method to handle data changes in the plugin](https://github.com/siyuan-note/siyuan/pull/16244)
+
 ## v0.4.2 2025-08-26
 
 * [Upgrade ESLint to 9.33.0](https://github.com/siyuan-note/plugin-sample/issues/30)
