@@ -3,7 +3,7 @@
   "author": "Vanessa",
   "url": "https://github.com/siyuan-note/plugin-sample",
   "version": "0.4.2",
-  "minAppVersion": "3.3.0",
+  "minAppVersion": "3.5.3",
   "backends": [
     "windows",
     "linux",
