@@ -1,6 +1,8 @@
 # Changelog
 
-## v0.4.5 2026
+## v0.4.5 2025-12-27
+
+* [Improve minimum version requirements for marketplace packages](https://github.com/siyuan-note/siyuan/issues/16688)
 
 ## v0.4.4 2025-12-23
 
