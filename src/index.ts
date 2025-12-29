@@ -148,7 +148,9 @@ export default class PluginSample extends Plugin {
         const textareaElement = document.createElement("textarea");
         this.setting = new Setting({
             confirmCallback: () => {
-                this.saveData(STORAGE_NAME, {readonlyText: textareaElement.value});
+                this.saveData(STORAGE_NAME, {readonlyText: textareaElement.value}).catch(e => {
+                    showMessage(`[${this.name}] save data [${STORAGE_NAME}] fail: `, e);
+                });
             }
         });
         this.setting.addItem({
@@ -240,13 +242,17 @@ export default class PluginSample extends Plugin {
                 this.removeData(STORAGE_NAME).then(() => {
                     this.data[STORAGE_NAME] = {readonlyText: "Readonly"};
                     showMessage(`[${this.name}]: ${this.i18n.removedData}`);
+                }).catch(e => {
+                    showMessage(`[${this.name}] remove data [${STORAGE_NAME}] fail: `, e);
                 });
             });
         });
         this.addStatusBar({
             element: statusIconTemp.content.firstElementChild as HTMLElement,
         });
-        this.loadData(STORAGE_NAME);
+        this.loadData(STORAGE_NAME).catch(e => {
+            console.log(`[${this.name}] load data [${STORAGE_NAME}] fail: `, e);
+        });
         console.log(`frontend: ${getFrontend()}; backend: ${getBackend()}`);
     }
 
@@ -254,11 +260,12 @@ export default class PluginSample extends Plugin {
         console.log(this.i18n.byePlugin);
     }
 
-    async uninstall() {
+    uninstall() {
         // 卸载插件时删除插件数据
         // Delete plugin data when uninstalling the plugin
-        await this.removeData(STORAGE_NAME);
-        console.log("uninstall");
+        this.removeData(STORAGE_NAME).catch(e => {
+            showMessage(`uninstall [${this.name}] remove data [${STORAGE_NAME}] fail: ${e.msg}`);
+        });
     }
 
     // 使用 saveData() 存储的数据发生变更时触发，注释掉则自动禁用插件再重新启用

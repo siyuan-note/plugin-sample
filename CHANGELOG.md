@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.4.6 2026
+
+* [Improve error handling and security for plugin data storage methods](https://github.com/siyuan-note/siyuan/pull/16717)
+
 ## v0.4.5 2025-12-27
 
 * [Improve minimum version requirements for marketplace packages](https://github.com/siyuan-note/siyuan/issues/16688)
