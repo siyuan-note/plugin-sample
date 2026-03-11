@@ -1,6 +1,8 @@
 # Changelog
 
-## v0.4.6 2026
+## v0.4.7
+
+## v0.4.6 2026-03-11
 
 * [Improve error handling and security for plugin data storage methods](https://github.com/siyuan-note/siyuan/pull/16717)
 

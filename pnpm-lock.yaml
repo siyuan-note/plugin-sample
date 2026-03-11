@@ -45,8 +45,8 @@ importers:
         specifier: ^12.6.0
         version: 12.6.0(sass@1.94.2)(webpack@5.104.1)
       siyuan:
-        specifier: 1.1.7
-        version: 1.1.7
+        specifier: 1.1.8
+        version: 1.1.8
       tslib:
         specifier: 2.4.0
         version: 2.4.0
@@ -1250,8 +1250,8 @@ packages:
     resolution: {integrity: sha512-7++dFhtcx3353uBaq8DDR4NuxBetBzC7ZQOhmTQInHEd6bSrXdiEyzCvG07Z44UYdLShWUyXt5M/yhz8ekcb1A==}
     engines: {node: '>=8'}
 
-  siyuan@1.1.7:
-    resolution: {integrity: sha512-ReLjCyE+OT3Ie3iFig/3fhiMreqfyN4mteZliMz62wllLjRIeVGsC75LKW748LiEH7Xr5WcVk0ZQI+UUmlKYQw==}
+  siyuan@1.1.8:
+    resolution: {integrity: sha512-58Ub76EFROPytymqx8bgb6BnL7M+DeZZFRwMzcpVAJDngGw7XmrE0uaHFnBf9tc89faY4aWovL3zsFQT12JJfw==}
 
   slash@4.0.0:
     resolution: {integrity: sha512-3dOsAHXXUkQTpOYcoAxLIorMTp4gIQr5IW3iVb7A7lFIp0VHhnynm9izx6TssdrIcVIESAlVjtnO2K8bg+Coew==}
@@ -2518,7 +2518,7 @@ snapshots:
 
   shebang-regex@3.0.0: {}
 
-  siyuan@1.1.7: {}
+  siyuan@1.1.8: {}
 
   slash@4.0.0: {}
 
