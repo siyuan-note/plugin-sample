@@ -93,10 +93,10 @@
   * `browser-desktop`：桌面端浏览器
   * `browser-mobile`：移动端浏览器
   * `all`：所有环境
-* `displayName`：插件名称，在插件集市列表中显示
+* `displayName`：插件名称（纯文本），在插件集市列表中显示
   * `default`：默认语言，必须存在。如果插件支持英文，此处应使用英文
   * `zh_CN`、`en_US` 等其他语言：可选
-* `description`：插件描述，在插件集市列表中显示
+* `description`：插件描述（纯文本），在插件集市列表中显示
   * `default`：默认语言，必须存在。如果插件支持英文，此处应使用英文
   * `zh_CN`、`en_US` 等其他语言：可选
 * `readme`：自述文件名，在插件集市详情页中显示
