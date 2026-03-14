@@ -94,10 +94,10 @@ A typical example is as follows:
   * `browser-desktop`: Desktop browser
   * `browser-mobile`: Mobile browser
   * `all`: All environments
-* `displayName`: Plugin name, displayed in the marketplace list
+* `displayName`: Plugin name (plain text), displayed in the marketplace list
   * `default`: Default language, must exist. If the plugin supports English, English should be used here
   * `zh_CN`, `en_US` and other languages: optional
-* `description`: Plugin description, displayed in the marketplace list
+* `description`: Plugin description (plain text), displayed in the marketplace list
   * `default`: Default language, must exist. If the plugin supports English, English should be used here
   * `zh_CN`, `en_US` and other languages: optional
 * `readme`: Readme file name, displayed in the marketplace details page
