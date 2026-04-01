@@ -2,6 +2,8 @@
 
 ## v0.4.7
 
+* [Improve the dock panel title and tooltips](https://github.com/siyuan-note/siyuan/issues/17366)
+
 ## v0.4.6 2026-03-11
 
 * [Improve error handling and security for plugin data storage methods](https://github.com/siyuan-note/siyuan/pull/16717)
