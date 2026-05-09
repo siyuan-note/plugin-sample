@@ -4,6 +4,16 @@
   "url": "https://github.com/siyuan-note/plugin-sample",
   "version": "0.4.7",
   "minAppVersion": "3.6.4",
+  "kernels": [
+    "windows",
+    "linux",
+    "darwin",
+    "ios",
+    "android",
+    "harmony",
+    "docker",
+    "all"
+  ],
   "backends": [
     "windows",
     "linux",

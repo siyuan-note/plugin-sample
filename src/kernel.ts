@@ -1,15 +1,6 @@
 /// <reference types="siyuan/kernel" />
 
-import type {
-    ISiyuan,
-    IWebSocket,
-    IEventSource,
-    IEventMessage,
-    IServerRequest,
-    IHttpResponse,
-    IServerWsRequest,
-    IServerEsRequest,
-} from 'siyuan/kernel';
+import type * as kernel from 'siyuan/kernel';
 
 /**
  * Reference implementation of the kernel plugin API for SiYuan.
@@ -38,13 +29,13 @@ import type {
  *    non-obvious constraints.
  */
 class KernelPlugin {
-    private readonly siyuan: ISiyuan = siyuan;
+    private readonly siyuan: kernel.ISiyuan = siyuan;
 
     /** Client-side WebSocket connection to the plugin's own RPC endpoint. */
-    private ws: IWebSocket | null = null;
+    private ws: kernel.IWebSocket | null = null;
 
     /** Client-side SSE connection to the kernel broadcast endpoint. */
-    private es: IEventSource | null = null;
+    private es: kernel.IEventSource | null = null;
 
     constructor() {
         // Wire lifecycle hooks
@@ -65,16 +56,16 @@ class KernelPlugin {
     // ── Lifecycle ─────────────────────────────────────────────────────────────
 
     /**
-     * Demonstrates {@link IRpc} and {@link IStorage}.
+     * Demonstrates {@link kernel.IRpc} and {@link kernel.IStorage}.
      *
      * @remarks
      * Called when the plugin script is first evaluated. Register RPC methods
      * here so they are ready once the plugin reaches the `running` state.
      * RPC calls are rejected with `-32002` before `running` is reached.
      *
-     * {@link IStorage} paths are relative to
+     * {@link kernel.IStorage} paths are relative to
      * `data/storage/petal/<plugin-name>/`. Path traversal is blocked by the
-     * kernel. Each {@link IDataObject} returned by `storage.get` is
+     * kernel. Each {@link kernel.IDataObject} returned by `storage.get` is
      * single-use — call at most one decoder per instance.
      *
      * @example
@@ -113,7 +104,7 @@ class KernelPlugin {
 
         // ── siyuan.storage ────────────────────────────────────────────────────
         // put: write a UTF-8 string to a path relative to the plugin data dir
-        await storage.put("demo.txt", new Date().toISOString());
+        await storage.put("demo.txt", JSON.stringify(new Date().toISOString()));
 
         // get: returns IDataObject — a lazy accessor. Each IDataObject is single-use:
         // call at most one decoder (.text(), .json(), or .arrayBuffer()) per instance.
@@ -121,11 +112,11 @@ class KernelPlugin {
         const obj = await storage.get("demo.txt");
         await logger.debug("storage.get → text():", await obj.text());
 
-        const obj2 = await storage.get("demo.txt");
-        await logger.debug("storage.get → json():", await obj2.json());
+        await logger.debug("storage.get → json():", await obj.json());
 
-        const obj3 = await storage.get("demo.txt");
-        await logger.debug("storage.get → arrayBuffer():", await obj3.arrayBuffer());
+        await logger.debug("storage.get → arrayBuffer():", await obj.arrayBuffer());
+
+        await logger.debug("storage.get → buffer():", await obj.buffer());
 
         // list: returns IStorageEntry[] for the given relative directory
         const entries = await storage.list(".");
@@ -133,6 +124,12 @@ class KernelPlugin {
 
         // remove: deletes a file or directory tree
         await storage.remove("demo.txt");
+
+        try {
+            throw new Error("This is a test error to demonstrate logger.error with stack trace");
+        } catch (error) {
+            console.error((error as Error).stack?.trim());
+        }
     }
 
     /**
@@ -292,7 +289,7 @@ class KernelPlugin {
      *
      * @param event - The incoming kernel event message.
      */
-    private async eventHandler(event: IEventMessage): Promise<void> {
+    private async eventHandler(event: kernel.IEventMessage): Promise<void> {
         const { event: eventApi, logger } = this.siyuan;
 
         await logger.debug("event received:", event);
@@ -323,7 +320,7 @@ class KernelPlugin {
      * @param request - Parsed URL, headers, body, and Gin routing context.
      * @returns An {@link IHttpResponse} that the kernel writes to the client.
      */
-    private async httpHandler(request: IServerRequest): Promise<IHttpResponse> {
+    private async httpHandler(request: kernel.IServerRequest): Promise<kernel.IHttpResponse> {
         await this.siyuan.logger.debug("http handler: path =", request.url.path);
 
         return {
@@ -366,7 +363,7 @@ class KernelPlugin {
      * @param request - Server request augmented with `port` (a bidirectional
      *   WebSocket back-channel to the connected client).
      */
-    private async wsHandler(request: IServerWsRequest): Promise<void> {
+    private async wsHandler(request: kernel.IServerWsRequest): Promise<void> {
         const { logger } = this.siyuan;
 
         request.port.onopen = async (event) => {
@@ -411,7 +408,7 @@ class KernelPlugin {
      * @param request - Server request augmented with `port` (an SSE
      *   back-channel to the connected client).
      */
-    private async esHandler(request: IServerEsRequest): Promise<void> {
+    private async esHandler(request: kernel.IServerEsRequest): Promise<void> {
         const { logger } = this.siyuan;
 
         request.port.onopen = async (event) => {

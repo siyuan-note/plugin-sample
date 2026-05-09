@@ -46,11 +46,11 @@ The current `IServerRequestHandler<TRes>` hard-codes `IServerRequest` as the han
 
 | Addition | Purpose |
 |---|---|
-| `IEsServerPort` | Server-side SSE port: `onopen`, `onclose`, `send(eventType, data)`, `close()` |
+| `IEsServerPort` | Server-side SSE port: `onopen`, `onclose`, `send(eventType: string, data: string): void` (synchronous — no `await` needed), `close(): void` |
 | `IServerWsRequest extends IServerRequest` | Adds `port: IWebSocket` for WS server handlers |
 | `IServerEsRequest extends IServerRequest` | Adds `port: IEsServerPort` for SSE server handlers |
-| `IServerRequestHandler<TRes, TReq extends IServerRequest = IServerRequest>` | Second type param (default = `IServerRequest`) for request type — backward-compatible |
-| `IServerScope.ws` / `.es` updated | Use `IServerWsRequest` / `IServerEsRequest` as handler argument |
+| `IServerRequestHandler<TRes, TReq extends IServerRequest = IServerRequest>` | Second type param (default = `IServerRequest`) — backward-compatible. The `handler` field body is updated to `((request: TReq) => TRes \| Promise<TRes>) \| null` so the type parameter is actually applied to the handler argument |
+| `IServerScope.ws` / `.es` updated | `IServerRequestHandler<void, IServerWsRequest>` / `IServerRequestHandler<void, IServerEsRequest>` |
 
 ---
 
