@@ -39,7 +39,7 @@ module.exports = (env, argv) => {
     } else {
         plugins.push(new CopyPlugin({
             patterns: [
-                {from: "src/i18n/", to: "./i18n/"},
+                { from: "src/i18n/", to: "./i18n/" },
             ],
         }));
     }

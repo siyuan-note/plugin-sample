@@ -363,7 +363,7 @@ class KernelPlugin {
      * @param request - Server request augmented with `port` (a bidirectional
      *   WebSocket back-channel to the connected client).
      */
-    private async wsHandler(request: kernel.IServerWsRequest): Promise<void> {
+    private async wsHandler(request: kernel.IServerWebSocketRequest): Promise<void> {
         const { logger } = this.siyuan;
 
         request.port.onopen = async (event) => {
@@ -408,7 +408,7 @@ class KernelPlugin {
      * @param request - Server request augmented with `port` (an SSE
      *   back-channel to the connected client).
      */
-    private async esHandler(request: kernel.IServerEsRequest): Promise<void> {
+    private async esHandler(request: kernel.IServerEventSourceRequest): Promise<void> {
         const { logger } = this.siyuan;
 
         request.port.onopen = async (event) => {
