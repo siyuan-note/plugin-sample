@@ -26,6 +26,9 @@ importers:
       css-loader:
         specifier: ^7.1.4
         version: 7.1.4(webpack@5.106.2)
+      dprint:
+        specifier: latest
+        version: 0.54.0
       esbuild-loader:
         specifier: ^4.4.3
         version: 4.4.3(webpack@5.106.2)
@@ -77,6 +80,68 @@ packages:
 
   '@dop251/types-goja_nodejs-url@0.0.0-20260212111938-1f56ff5bcf14':
     resolution: {integrity: sha512-RyxfUr5u0WOO0dV2/BxV+zJ2QwUqnIoSwIoPQcGHakWp8elJ/nSU86pUB9gSO77e2XHWZYAZvNN5tXa9yOXJaA==}
+
+  '@dprint/darwin-arm64@0.54.0':
+    resolution: {integrity: sha512-yqRI4enH+BDp+4+ZsPVdZM5h873JK1lN7li9l9A5u4C4cvh1oEsiBWAzEPccRkJ2ctF8LgaizBSxO38sqEVYbw==}
+    cpu: [arm64]
+    os: [darwin]
+
+  '@dprint/darwin-x64@0.54.0':
+    resolution: {integrity: sha512-W9BARpgHypcQwatg5mnHaCpX6pLX5dBxxiv+tZKruhOmq8MKYOrAYDXlceMuHSowmWREfUF5yL4SRgXDGI6WQw==}
+    cpu: [x64]
+    os: [darwin]
+
+  '@dprint/linux-arm64-glibc@0.54.0':
+    resolution: {integrity: sha512-VhM7p70VFuNqxZMdiv1e+nMboPj/hMFlTIBWrRaX7+6VThs9mJr9+94wrUeXgfnfsyaEKSbRFa/dru1PINoSNw==}
+    cpu: [arm64]
+    os: [linux]
+    libc: [glibc]
+
+  '@dprint/linux-arm64-musl@0.54.0':
+    resolution: {integrity: sha512-QS1A74Lv60/L9oemHCzbHgOLbV2smSJG5IxS5fjf8ZWetyUt918WDzIHBilz/+uiB+OlW2UVTsm952UG0YOrLw==}
+    cpu: [arm64]
+    os: [linux]
+    libc: [musl]
+
+  '@dprint/linux-loong64-glibc@0.54.0':
+    resolution: {integrity: sha512-8Myka2/0KbhuZnEKL6jagPXTgDKVpd/tfXDRa0oibUBgaqOSku6iRMzHGa/PhqHL+s14Gcp+/cIHz0zU3Tkgug==}
+    cpu: [loong64]
+    os: [linux]
+    libc: [glibc]
+
+  '@dprint/linux-loong64-musl@0.54.0':
+    resolution: {integrity: sha512-/AN3xCuMhC4PK7Pbj7/4zBuhFGr4m0OHV/5uGTfzpkKX/3+AXoyKl7PbT2VlNMGXAK0kuRThfjtx23gIwlWk7Q==}
+    cpu: [loong64]
+    os: [linux]
+    libc: [musl]
+
+  '@dprint/linux-riscv64-glibc@0.54.0':
+    resolution: {integrity: sha512-Aw2vXzzwFDpPbXh6ajsSabVCkCc66C3hCyMKprR/IxYvFtjYX80nh1ox0c7iaw6c4HacHMRLGw7FUSXvomPaEQ==}
+    cpu: [riscv64]
+    os: [linux]
+    libc: [glibc]
+
+  '@dprint/linux-x64-glibc@0.54.0':
+    resolution: {integrity: sha512-zZqj3wQELOX8n6QfT2uuWoMf64Wv0lMXNyam3btm+PKkg0P6a54TPL09Bs9XsViOdxgTcamsiQ7HlErt/LEjIA==}
+    cpu: [x64]
+    os: [linux]
+    libc: [glibc]
+
+  '@dprint/linux-x64-musl@0.54.0':
+    resolution: {integrity: sha512-it6Qdt06dyW2adbAXpOCb7/KQLxlm4i1UphUAWqWsZk4t3EYetyAza9J0g3Vu9itIWSEIo9MnccgANckQJ6+qw==}
+    cpu: [x64]
+    os: [linux]
+    libc: [musl]
+
+  '@dprint/win32-arm64@0.54.0':
+    resolution: {integrity: sha512-F5kjV/6I9YtNOTDWHUpTqM2HHHS510BPL7z4NJuU0nDnaVeks7GwNEltGr56CcsG8XQYhkiAsqZytPu6AhA2hQ==}
+    cpu: [arm64]
+    os: [win32]
+
+  '@dprint/win32-x64@0.54.0':
+    resolution: {integrity: sha512-AAr2ye/DtgYXDplRoPS+5U++x7T6W4a3I9FvTFWFxziFmUptvAg5G2c4FcXoAduSruhYZJvjDZrLseR2c3IwXg==}
+    cpu: [x64]
+    os: [win32]
 
   '@esbuild/aix-ppc64@0.27.7':
     resolution: {integrity: sha512-EKX3Qwmhz1eMdEJokhALr0YiD0lhQNwDqkPYyPhiSwKrh7/4KRjQc04sZ8db+5DVVnZ1LmbNDI1uAMPEUBnQPg==}
@@ -671,6 +736,10 @@ packages:
   detect-libc@2.1.2:
     resolution: {integrity: sha512-Btj2BOOO83o3WyH59e8MgXsxEQVcarkUOpEYrubB0urwnN10yQ364rsiByU11nZlqWYZm05i/of7io4mzihBtQ==}
     engines: {node: '>=8'}
+
+  dprint@0.54.0:
+    resolution: {integrity: sha512-sIy25poR2gRP/tWPTgP0MPeJoJcpv0xzYDcsboapvthbEt1Qw3Al252CA0xFyIh2cYEGGKyBJtKokryv4ERlJw==}
+    hasBin: true
 
   electron-to-chromium@1.5.352:
     resolution: {integrity: sha512-9wHk8x6dyuimoe18EdiDPWKExNdxYqo4fn4FwOVVper6RxT3cmpBwBkWWfSOCYJjQdIco/nPhJhNLmn4Ufg1Yg==}
@@ -1347,6 +1416,39 @@ snapshots:
     dependencies:
       '@dop251/types-goja_nodejs-global': 0.0.0-20260212111938-1f56ff5bcf14
 
+  '@dprint/darwin-arm64@0.54.0':
+    optional: true
+
+  '@dprint/darwin-x64@0.54.0':
+    optional: true
+
+  '@dprint/linux-arm64-glibc@0.54.0':
+    optional: true
+
+  '@dprint/linux-arm64-musl@0.54.0':
+    optional: true
+
+  '@dprint/linux-loong64-glibc@0.54.0':
+    optional: true
+
+  '@dprint/linux-loong64-musl@0.54.0':
+    optional: true
+
+  '@dprint/linux-riscv64-glibc@0.54.0':
+    optional: true
+
+  '@dprint/linux-x64-glibc@0.54.0':
+    optional: true
+
+  '@dprint/linux-x64-musl@0.54.0':
+    optional: true
+
+  '@dprint/win32-arm64@0.54.0':
+    optional: true
+
+  '@dprint/win32-x64@0.54.0':
+    optional: true
+
   '@esbuild/aix-ppc64@0.27.7':
     optional: true
 
@@ -1884,6 +1986,20 @@ snapshots:
 
   detect-libc@2.1.2:
     optional: true
+
+  dprint@0.54.0:
+    optionalDependencies:
+      '@dprint/darwin-arm64': 0.54.0
+      '@dprint/darwin-x64': 0.54.0
+      '@dprint/linux-arm64-glibc': 0.54.0
+      '@dprint/linux-arm64-musl': 0.54.0
+      '@dprint/linux-loong64-glibc': 0.54.0
+      '@dprint/linux-loong64-musl': 0.54.0
+      '@dprint/linux-riscv64-glibc': 0.54.0
+      '@dprint/linux-x64-glibc': 0.54.0
+      '@dprint/linux-x64-musl': 0.54.0
+      '@dprint/win32-arm64': 0.54.0
+      '@dprint/win32-x64': 0.54.0
 
   electron-to-chromium@1.5.352: {}
 

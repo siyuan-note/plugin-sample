@@ -1,0 +1,55 @@
+{
+  "$schema": "https://dprint.dev/schemas/v0.json",
+  "lineWidth": 180,
+  "indentWidth": 4,
+  "useTabs": false,
+  "newLineKind": "lf",
+  "includes": [
+    "**/*.{ts,tsx,js,jsx,mjs,cjs}",
+    "**/*.{json,jsonc}",
+    "**/*.{css,scss}",
+    "**/*.{md,markdown}",
+    "**/*.{yaml,yml}"
+  ],
+  "excludes": [
+    "**/.git",
+    "**/node_modules",
+    "**/dist",
+    "**/pnpm-lock.yaml",
+    "index.js",
+    "kernel.js",
+    "index.css"
+  ],
+  "typescript": {
+    "quoteStyle": "alwaysDouble",
+    "semiColons": "always",
+    "trailingCommas": "onlyMultiLine",
+    "operatorPosition": "sameLine",
+    "nextControlFlowPosition": "sameLine",
+    "importDeclaration.forceMultiLine": "always",
+    "importDeclaration.sortNamedImports": "caseInsensitive"
+  },
+  "json": {
+    "indentWidth": 2,
+    "trailingCommas": "never"
+  },
+  "markdown": {
+    "textWrap": "maintain",
+    "unorderedListKind": "asterisks"
+  },
+  "malva": {
+    "printWidth": 120,
+    "indentWidth": 2
+  },
+  "yaml": {
+    "printWidth": 120,
+    "indentWidth": 2
+  },
+  "plugins": [
+    "https://plugins.dprint.dev/typescript-0.96.0.wasm",
+    "https://plugins.dprint.dev/json-0.21.3.wasm",
+    "https://plugins.dprint.dev/markdown-0.21.1.wasm",
+    "https://plugins.dprint.dev/g-plane/malva-v0.15.3.wasm",
+    "https://plugins.dprint.dev/g-plane/pretty_yaml-v0.6.0.wasm"
+  ]
+}

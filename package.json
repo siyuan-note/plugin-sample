@@ -4,6 +4,8 @@
   "description": "This is a sample plugin for Siyuan (https://b3log.org/siyuan)",
   "main": ".src/index.js",
   "scripts": {
+    "format": "dprint fmt",
+    "format:check": "dprint check",
     "lint": "eslint . --fix --cache",
     "dev": "pnpm run dev:kernel & pnpm run dev:app",
     "dev:app": "webpack --config webpack.config.js --mode development",
@@ -16,6 +18,7 @@
   "author": "Vanessa",
   "license": "MIT",
   "devDependencies": {
+    "dprint": "latest",
     "@eslint/eslintrc": "^3.3.5",
     "@eslint/js": "^10.0.1",
     "@typescript-eslint/eslint-plugin": "^8.59.2",
