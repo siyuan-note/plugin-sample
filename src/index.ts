@@ -339,7 +339,7 @@ export default class PluginSample extends Plugin {
             click: () => {
                 const doOperations: IOperation[] = [];
                 detail.blockElements.forEach((item: HTMLElement) => {
-                    const editElement = item.querySelector("[contenteditable=\"true\"]");
+                    const editElement = item.querySelector('[contenteditable="true"]');
                     if (editElement) {
                         editElement.textContent = editElement.textContent.replace(/ /g, "");
                         doOperations.push({
