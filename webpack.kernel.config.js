@@ -42,7 +42,7 @@ module.exports = (env, argv) => {
                             loader: "esbuild-loader",
                             options: {
                                 target: "esnext",
-                            }
+                            },
                         },
                     ],
                 },

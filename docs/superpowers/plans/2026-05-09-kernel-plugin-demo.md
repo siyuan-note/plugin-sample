@@ -14,30 +14,31 @@
 
 ## File Map
 
-| File | Action | Responsibility |
-|---|---|---|
-| `petal/kernel.d.ts` | Modify lines 880–927 | Add `IEsServerPort`, `IServerWsRequest`, `IServerEsRequest`; extend `IServerRequestHandler` generic; update `IServerScope.ws`/`.es` |
-| `plugin-sample/node_modules/.pnpm/siyuan@1.2.2-alpha.0/node_modules/siyuan/kernel.d.ts` | Overwrite | Keep installed package in sync with `petal/kernel.d.ts` so TypeScript picks up new types locally |
-| `plugin-sample/src/kernel.ts` | Rewrite | Full `KernelPlugin` class with TSDoc |
+| File                                                                                    | Action               | Responsibility                                                                                                                      |
+| --------------------------------------------------------------------------------------- | -------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| `petal/kernel.d.ts`                                                                     | Modify lines 880–927 | Add `IEsServerPort`, `IServerWsRequest`, `IServerEsRequest`; extend `IServerRequestHandler` generic; update `IServerScope.ws`/`.es` |
+| `plugin-sample/node_modules/.pnpm/siyuan@1.2.2-alpha.0/node_modules/siyuan/kernel.d.ts` | Overwrite            | Keep installed package in sync with `petal/kernel.d.ts` so TypeScript picks up new types locally                                    |
+| `plugin-sample/src/kernel.ts`                                                           | Rewrite              | Full `KernelPlugin` class with TSDoc                                                                                                |
 
 ---
 
 ## Task 1: Extend `petal/kernel.d.ts` with server-side port types
 
 **Files:**
-- Modify: `petal/kernel.d.ts:880–927`
+
+* Modify: `petal/kernel.d.ts:880–927`
 
 ### Background
 
 `IServerRequestHandler<TRes>` currently hard-codes `IServerRequest` as the handler argument. WS and SSE server handlers receive an augmented request with a `port` property — so we need:
 
-- `IEsServerPort` — SSE server-side port (onopen/onclose/send/close)
-- `IServerWsRequest extends IServerRequest` — adds `port: IWebSocket`
-- `IServerEsRequest extends IServerRequest` — adds `port: IEsServerPort`
-- `IServerRequestHandler<TRes, TReq extends IServerRequest = IServerRequest>` — second generic (default preserves backward compat); `handler` field uses `TReq`
-- `IServerScope.ws` → `IServerRequestHandler<void, IServerWsRequest>`, `.es` → `IServerRequestHandler<void, IServerEsRequest>`
+* `IEsServerPort` — SSE server-side port (onopen/onclose/send/close)
+* `IServerWsRequest extends IServerRequest` — adds `port: IWebSocket`
+* `IServerEsRequest extends IServerRequest` — adds `port: IEsServerPort`
+* `IServerRequestHandler<TRes, TReq extends IServerRequest = IServerRequest>` — second generic (default preserves backward compat); `handler` field uses `TReq`
+* `IServerScope.ws` → `IServerRequestHandler<void, IServerWsRequest>`, `.es` → `IServerRequestHandler<void, IServerEsRequest>`
 
-- [ ] **Step 1: Insert new interfaces before `IServerRequestHandler`**
+* [ ] **Step 1: Insert new interfaces before `IServerRequestHandler`**
 
   Open `petal/kernel.d.ts`. Find the comment `// ── Server handler interfaces ─────────────────────────────────────────────────` (line ~879). Insert the following block immediately before the `IServerRequestHandler` interface (i.e. before line 882):
 
@@ -117,10 +118,9 @@
        */
       readonly port: IEsServerPort;
   }
-
   ```
 
-- [ ] **Step 2: Replace `IServerRequestHandler` with the generic version**
+* [ ] **Step 2: Replace `IServerRequestHandler` with the generic version**
 
   Replace the existing `IServerRequestHandler` interface (lines 882–899 approx):
 
@@ -168,7 +168,7 @@
   }
   ```
 
-- [ ] **Step 3: Update `IServerScope.ws` and `.es`**
+* [ ] **Step 3: Update `IServerScope.ws` and `.es`**
 
   Replace the `IServerScope` interface body (the `ws` and `es` readonly properties and their doc blocks). The `http` property is unchanged.
 
@@ -212,7 +212,7 @@
       readonly es: IServerRequestHandler<void, IServerEsRequest>;
   ```
 
-- [ ] **Step 4: Sync installed package**
+* [ ] **Step 4: Sync installed package**
 
   Copy the updated file so TypeScript in `plugin-sample` picks up the changes.
   Run from the `plugin-sample` root (both repos are siblings):
@@ -222,7 +222,7 @@
      node_modules/.pnpm/siyuan@1.2.2-alpha.0/node_modules/siyuan/kernel.d.ts
   ```
 
-- [ ] **Step 5: Commit `petal/kernel.d.ts`**
+* [ ] **Step 5: Commit `petal/kernel.d.ts`**
 
   ```bash
   cd ../petal
@@ -235,15 +235,16 @@
 ## Task 2: Implement `plugin-sample/src/kernel.ts`
 
 **Files:**
-- Modify: `plugin-sample/src/kernel.ts` (currently a one-line stub)
+
+* Modify: `plugin-sample/src/kernel.ts` (currently a one-line stub)
 
 The full file content is specified below. Each method covers one or more API namespaces as documented in the spec. All type annotations reference interfaces from `petal/kernel.d.ts` via `/// <reference types="siyuan/kernel" />`.
 
-- [ ] **Step 1: Write the full file**
+* [ ] **Step 1: Write the full file**
 
   Replace the entire contents of `plugin-sample/src/kernel.ts` with:
 
-  ```typescript
+  ````typescript
   /// <reference types="siyuan/kernel" />
 
   /**
@@ -283,18 +284,18 @@ The full file content is specified below. Each method covers one or more API nam
 
       constructor() {
           // Wire lifecycle hooks
-          this.siyuan.plugin.lifecycle.onload    = this.onload.bind(this);
-          this.siyuan.plugin.lifecycle.onloaded  = this.onloaded.bind(this);
+          this.siyuan.plugin.lifecycle.onload = this.onload.bind(this);
+          this.siyuan.plugin.lifecycle.onloaded = this.onloaded.bind(this);
           this.siyuan.plugin.lifecycle.onrunning = this.onrunning.bind(this);
-          this.siyuan.plugin.lifecycle.onunload  = this.onunload.bind(this);
+          this.siyuan.plugin.lifecycle.onunload = this.onunload.bind(this);
 
           // Wire the inbound kernel event handler
           this.siyuan.event.handler = this.eventHandler.bind(this);
 
           // Wire server-side request handlers (private scope: /plugin/private/<name>/*)
           this.siyuan.server.private.http.handler = this.httpHandler.bind(this);
-          this.siyuan.server.private.ws.handler   = this.wsHandler.bind(this);
-          this.siyuan.server.private.es.handler   = this.esHandler.bind(this);
+          this.siyuan.server.private.ws.handler = this.wsHandler.bind(this);
+          this.siyuan.server.private.es.handler = this.esHandler.bind(this);
       }
 
       // ── Lifecycle ─────────────────────────────────────────────────────────────
@@ -321,16 +322,16 @@ The full file content is specified below. Each method covers one or more API nam
 
           // ── siyuan.logger (all five levels) ───────────────────────────────────
           // Unlike console.*, each call returns a Promise and serialises args as JSON.
-          await logger.trace("onload: plugin name =",  plugin.name);
-          await logger.debug("onload: version =",      plugin.version);
-          await logger.info( "onload: platform =",     plugin.platform);
-          await logger.warn( "onload: i18n keys =",    Object.keys(plugin.i18n));
+          await logger.trace("onload: plugin name =", plugin.name);
+          await logger.debug("onload: version =", plugin.version);
+          await logger.info("onload: platform =", plugin.platform);
+          await logger.warn("onload: i18n keys =", Object.keys(plugin.i18n));
           await logger.error("onload: (error-level demo — not a real error)");
 
           // ── console.* (synchronous, Node.js util.format, 3 levels) ────────────
           // Routed to the kernel log at INFO/WARN/ERROR. No await needed.
-          console.log(  "onload: console.log  (sync, util.format)");
-          console.warn( "onload: console.warn");
+          console.log("onload: console.log  (sync, util.format)");
+          console.warn("onload: console.warn");
           console.error("onload: console.error");
 
           // ── siyuan.rpc ────────────────────────────────────────────────────────
@@ -351,10 +352,10 @@ The full file content is specified below. Each method covers one or more API nam
 
           // get: returns IDataObject — a lazy accessor; call each decoder at most once
           const obj = await storage.get("demo.txt");
-          await logger.debug("storage.get → text():",        await obj.text());
+          await logger.debug("storage.get → text():", await obj.text());
 
           const obj2 = await storage.get("demo.txt");
-          await logger.debug("storage.get → json():",        await obj2.json());
+          await logger.debug("storage.get → json():", await obj2.json());
 
           const obj3 = await storage.get("demo.txt");
           await logger.debug("storage.get → arrayBuffer():", await obj3.arrayBuffer());
@@ -394,10 +395,10 @@ The full file content is specified below. Each method covers one or more API nam
               body: "{}",
           });
 
-          await logger.debug("onloaded: resp.ok =",         resp.ok);
-          await logger.debug("onloaded: resp.status =",     resp.status);
+          await logger.debug("onloaded: resp.ok =", resp.ok);
+          await logger.debug("onloaded: resp.status =", resp.status);
           await logger.debug("onloaded: resp.statusText =", resp.statusText);
-          await logger.debug("onloaded: resp.headers =",    resp.headers);
+          await logger.debug("onloaded: resp.headers =", resp.headers);
           await logger.debug("onloaded: listLoadedPlugins =", await resp.json());
       }
 
@@ -438,9 +439,9 @@ The full file content is specified below. Each method covers one or more API nam
                   // body must be a string — stringify the JSON-RPC payload
                   body: JSON.stringify({
                       jsonrpc: "2.0",
-                      method:  "echo",
-                      params:  ["hello from onrunning", 42, { key: true }],
-                      id:      1,
+                      method: "echo",
+                      params: ["hello from onrunning", 42, { key: true }],
+                      id: 1,
                   }),
               },
           );
@@ -456,28 +457,46 @@ The full file content is specified below. Each method covers one or more API nam
               // Send a JSON-RPC request over the WebSocket connection
               await this.ws!.send(JSON.stringify({
                   jsonrpc: "2.0",
-                  method:  "echo",
-                  params:  { message: "hello via WebSocket", ts: Date.now() },
-                  id:      2,
+                  method: "echo",
+                  params: { message: "hello via WebSocket", ts: Date.now() },
+                  id: 2,
               }));
               // Demonstrate ping/pong control frames
               await this.ws!.ping("ping from plugin");
           };
-          this.ws.onmessage = async (event) => { await logger.debug("ws client: message", event); };
-          this.ws.onping    = async (event) => { await logger.debug("ws client: ping",    event); };
-          this.ws.onpong    = async (event) => { await logger.debug("ws client: pong",    event); };
-          this.ws.onerror   = async (event) => { await logger.debug("ws client: error",   event); };
-          this.ws.onclose   = async (event) => { await logger.debug("ws client: close",   event); };
+          this.ws.onmessage = async (event) => {
+              await logger.debug("ws client: message", event);
+          };
+          this.ws.onping = async (event) => {
+              await logger.debug("ws client: ping", event);
+          };
+          this.ws.onpong = async (event) => {
+              await logger.debug("ws client: pong", event);
+          };
+          this.ws.onerror = async (event) => {
+              await logger.debug("ws client: error", event);
+          };
+          this.ws.onclose = async (event) => {
+              await logger.debug("ws client: close", event);
+          };
 
           // Initiate the connection after wiring all callbacks
           await this.ws.open();
 
           // ── SSE / EventSource client ──────────────────────────────────────────
           this.es = await client.event("/es/broadcast/subscribe");
-          this.es.onopen    = async (e) => { await logger.debug("es client: open",    e); };
-          this.es.onmessage = async (e) => { await logger.debug("es client: message", e); };
-          this.es.onclose   = async (e) => { await logger.debug("es client: close",   e); };
-          this.es.onerror   = async (e) => { await logger.debug("es client: error",   e); };
+          this.es.onopen = async (e) => {
+              await logger.debug("es client: open", e);
+          };
+          this.es.onmessage = async (e) => {
+              await logger.debug("es client: message", e);
+          };
+          this.es.onclose = async (e) => {
+              await logger.debug("es client: close", e);
+          };
+          this.es.onerror = async (e) => {
+              await logger.debug("es client: error", e);
+          };
       }
 
       /**
@@ -531,8 +550,8 @@ The full file content is specified below. Each method covers one or more API nam
 
           // Re-publish the event under the "plugin" topic
           await eventApi.emit("plugin", {
-              id:     event.id,
-              type:   "echo",
+              id: event.id,
+              type: "echo",
               detail: event,
           });
       }
@@ -569,11 +588,11 @@ The full file content is specified below. Each method covers one or more API nam
                   data: {
                       type: "JSON",
                       data: {
-                          path:        request.url.path,
-                          method:      request.request.method,
+                          path: request.url.path,
+                          method: request.request.method,
                           contentType: request.request.contentType,
-                          query:       request.url.query,
-                          params:      request.context.params,
+                          query: request.url.query,
+                          params: request.context.params,
                       },
                   },
               },
@@ -616,9 +635,15 @@ The full file content is specified below. Each method covers one or more API nam
               // Reply with a pong carrying the same application data
               await request.port.pong(event.data);
           };
-          request.port.onpong  = async (event) => { await logger.debug("ws server: pong",  event); };
-          request.port.onclose = async (event) => { await logger.debug("ws server: close", event); };
-          request.port.onerror = async (event) => { await logger.debug("ws server: error", event); };
+          request.port.onpong = async (event) => {
+              await logger.debug("ws server: pong", event);
+          };
+          request.port.onclose = async (event) => {
+              await logger.debug("ws server: close", event);
+          };
+          request.port.onerror = async (event) => {
+              await logger.debug("ws server: error", event);
+          };
           // port.open() is optional — the kernel auto-opens after this handler returns.
       }
 
@@ -645,7 +670,7 @@ The full file content is specified below. Each method covers one or more API nam
               await logger.debug("sse server: port open", event);
               // send is synchronous; eventType becomes the SSE `event:` field
               request.port.send("message", "Connected to plugin SSE!");
-              request.port.send("update",  JSON.stringify({ ts: Date.now() }));
+              request.port.send("update", JSON.stringify({ ts: Date.now() }));
           };
           request.port.onclose = async (event) => {
               await logger.debug("sse server: port close", event);
@@ -654,9 +679,9 @@ The full file content is specified below. Each method covers one or more API nam
   }
 
   new KernelPlugin();
-  ```
+  ````
 
-- [ ] **Step 2: Verify TypeScript types**
+* [ ] **Step 2: Verify TypeScript types**
 
   The project uses `esbuild-loader` which strips types without checking them — `npm run build` will succeed even if types are wrong. Use `tsc --noEmit` to actually type-check.
   Run from the `plugin-sample` root:
@@ -667,7 +692,7 @@ The full file content is specified below. Each method covers one or more API nam
 
   Expected: no output (zero errors). Fix any reported errors before proceeding.
 
-- [ ] **Step 3: Build the production bundle**
+* [ ] **Step 3: Build the production bundle**
 
   ```bash
   npm run build 2>&1 | tail -20
@@ -675,7 +700,7 @@ The full file content is specified below. Each method covers one or more API nam
 
   Expected: webpack exits with code 0. The build produces `dist/kernel.js`.
 
-- [ ] **Step 4: Commit `plugin-sample/src/kernel.ts`**
+* [ ] **Step 4: Commit `plugin-sample/src/kernel.ts`**
 
   ```bash
   git add src/kernel.ts
@@ -688,7 +713,7 @@ The full file content is specified below. Each method covers one or more API nam
 
 The webpack build outputs `kernel.js` in CommonJS2 format. The goja runtime in the kernel loads it as a CommonJS module.
 
-- [ ] **Step 1: Confirm `siyuan` is the only external `require` call**
+* [ ] **Step 1: Confirm `siyuan` is the only external `require` call**
 
   `webpack.config.js` declares `siyuan` as an external, so `require("siyuan")` will appear in the bundle — that is expected and intentional. Any other `require("<package-name>")` would indicate an accidental import of a module the goja runtime cannot resolve.
   Run from the `plugin-sample` root:
@@ -699,7 +724,7 @@ The webpack build outputs `kernel.js` in CommonJS2 format. The goja runtime in t
 
   Expected output: exactly `require("siyuan")` (the external stub). Any additional package name is a bug — investigate and remove the offending import.
 
-- [ ] **Step 2: Confirm file size is reasonable**
+* [ ] **Step 2: Confirm file size is reasonable**
 
   ```bash
   wc -c dist/kernel.js

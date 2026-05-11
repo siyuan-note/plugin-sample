@@ -11,37 +11,45 @@ module.exports = (env, argv) => {
     const plugins = [
         new MiniCssExtractPlugin({
             filename: production ? "dist/index.css" : "index.css",
-        })
+        }),
     ];
     if (production) {
-        plugins.push(new webpack.BannerPlugin({
-            banner: () => {
-                return fs.readFileSync("LICENSE").toString();
-            },
-        }));
-        plugins.push(new CopyPlugin({
-            patterns: [
-                { from: "preview.png", to: "./dist/" },
-                { from: "icon.png", to: "./dist/" },
-                { from: "README*.md", to: "./dist/" },
-                { from: "plugin.json", to: "./dist/" },
-                { from: "src/i18n/", to: "./dist/i18n/" },
-            ],
-        }));
-        plugins.push(new ZipPlugin({
-            filename: "package.zip",
-            algorithm: "gzip",
-            include: [/dist/],
-            pathMapper: (assetPath) => {
-                return assetPath.replace("dist/", "");
-            },
-        }));
+        plugins.push(
+            new webpack.BannerPlugin({
+                banner: () => {
+                    return fs.readFileSync("LICENSE").toString();
+                },
+            }),
+        );
+        plugins.push(
+            new CopyPlugin({
+                patterns: [
+                    { from: "preview.png", to: "./dist/" },
+                    { from: "icon.png", to: "./dist/" },
+                    { from: "README*.md", to: "./dist/" },
+                    { from: "plugin.json", to: "./dist/" },
+                    { from: "src/i18n/", to: "./dist/i18n/" },
+                ],
+            }),
+        );
+        plugins.push(
+            new ZipPlugin({
+                filename: "package.zip",
+                algorithm: "gzip",
+                include: [/dist/],
+                pathMapper: (assetPath) => {
+                    return assetPath.replace("dist/", "");
+                },
+            }),
+        );
     } else {
-        plugins.push(new CopyPlugin({
-            patterns: [
-                { from: "src/i18n/", to: "./i18n/" },
-            ],
-        }));
+        plugins.push(
+            new CopyPlugin({
+                patterns: [
+                    { from: "src/i18n/", to: "./i18n/" },
+                ],
+            }),
+        );
     }
     return {
         mode: argv.mode || "development",
@@ -80,7 +88,7 @@ module.exports = (env, argv) => {
                             loader: "esbuild-loader",
                             options: {
                                 target: "es6",
-                            }
+                            },
                         },
                     ],
                 },
@@ -96,7 +104,7 @@ module.exports = (env, argv) => {
                             loader: "sass-loader", // compiles Sass to CSS
                         },
                     ],
-                }
+                },
             ],
         },
         plugins,

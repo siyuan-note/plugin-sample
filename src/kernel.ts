@@ -1,6 +1,6 @@
 /// <reference types="siyuan/kernel" />
 
-import type * as kernel from 'siyuan/kernel';
+import type * as kernel from "siyuan/kernel";
 
 /**
  * Reference implementation of the kernel plugin API for SiYuan.
@@ -228,21 +228,39 @@ class KernelPlugin {
             // Demonstrate ping/pong control frames
             await this.ws!.ping("ping from plugin");
         };
-        this.ws.onmessage = async (event) => { await logger.debug("ws client: message", event); };
-        this.ws.onping = async (event) => { await logger.debug("ws client: ping", event); };
-        this.ws.onpong = async (event) => { await logger.debug("ws client: pong", event); };
-        this.ws.onerror = async (event) => { await logger.debug("ws client: error", event); };
-        this.ws.onclose = async (event) => { await logger.debug("ws client: close", event); };
+        this.ws.onmessage = async (event) => {
+            await logger.debug("ws client: message", event);
+        };
+        this.ws.onping = async (event) => {
+            await logger.debug("ws client: ping", event);
+        };
+        this.ws.onpong = async (event) => {
+            await logger.debug("ws client: pong", event);
+        };
+        this.ws.onerror = async (event) => {
+            await logger.debug("ws client: error", event);
+        };
+        this.ws.onclose = async (event) => {
+            await logger.debug("ws client: close", event);
+        };
 
         // Initiate the connection after wiring all callbacks
         await this.ws.open();
 
         // ── SSE / EventSource client ──────────────────────────────────────────
         this.es = await client.event("/es/broadcast/subscribe");
-        this.es.onopen = async (e) => { await logger.debug("es client: open", e); };
-        this.es.onmessage = async (e) => { await logger.debug("es client: message", e); };
-        this.es.onclose = async (e) => { await logger.debug("es client: close", e); };
-        this.es.onerror = async (e) => { await logger.debug("es client: error", e); };
+        this.es.onopen = async (e) => {
+            await logger.debug("es client: open", e);
+        };
+        this.es.onmessage = async (e) => {
+            await logger.debug("es client: message", e);
+        };
+        this.es.onclose = async (e) => {
+            await logger.debug("es client: close", e);
+        };
+        this.es.onerror = async (e) => {
+            await logger.debug("es client: error", e);
+        };
     }
 
     /**
@@ -386,9 +404,15 @@ class KernelPlugin {
             // Reply with a pong carrying the same application data
             await request.port.pong(event.data);
         };
-        request.port.onpong = async (event) => { await logger.debug("ws server: pong", event); };
-        request.port.onclose = async (event) => { await logger.debug("ws server: close", event); };
-        request.port.onerror = async (event) => { await logger.debug("ws server: error", event); };
+        request.port.onpong = async (event) => {
+            await logger.debug("ws server: pong", event);
+        };
+        request.port.onclose = async (event) => {
+            await logger.debug("ws server: close", event);
+        };
+        request.port.onerror = async (event) => {
+            await logger.debug("ws server: error", event);
+        };
         // port.open() is optional — the kernel auto-opens after this handler returns.
     }
 

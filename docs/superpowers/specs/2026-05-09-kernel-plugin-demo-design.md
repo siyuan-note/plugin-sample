@@ -1,7 +1,7 @@
 # Kernel Plugin Demo — Design Spec
 
-**Date:** 2026-05-09  
-**Status:** Approved  
+**Date:** 2026-05-09\
+**Status:** Approved\
 **Scope:** `plugin-sample/src/kernel.ts` + `petal/kernel.d.ts`
 
 ---
@@ -44,13 +44,13 @@ new KernelPlugin();
 
 The current `IServerRequestHandler<TRes>` hard-codes `IServerRequest` as the handler argument. WS and SSE server handlers receive an augmented request that also carries a `port` back-channel to the connected client. The following additions are required (all backward-compatible):
 
-| Addition | Purpose |
-|---|---|
-| `IEsServerPort` | Server-side SSE port: `onopen`, `onclose`, `send(eventType: string, data: string): void` (synchronous — no `await` needed), `close(): void` |
-| `IServerWsRequest extends IServerRequest` | Adds `port: IWebSocket` for WS server handlers |
-| `IServerEsRequest extends IServerRequest` | Adds `port: IEsServerPort` for SSE server handlers |
+| Addition                                                                    | Purpose                                                                                                                                                                                                                             |
+| --------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `IEsServerPort`                                                             | Server-side SSE port: `onopen`, `onclose`, `send(eventType: string, data: string): void` (synchronous — no `await` needed), `close(): void`                                                                                         |
+| `IServerWsRequest extends IServerRequest`                                   | Adds `port: IWebSocket` for WS server handlers                                                                                                                                                                                      |
+| `IServerEsRequest extends IServerRequest`                                   | Adds `port: IEsServerPort` for SSE server handlers                                                                                                                                                                                  |
 | `IServerRequestHandler<TRes, TReq extends IServerRequest = IServerRequest>` | Second type param (default = `IServerRequest`) — backward-compatible. The `handler` field body is updated to `((request: TReq) => TRes \| Promise<TRes>) \| null` so the type parameter is actually applied to the handler argument |
-| `IServerScope.ws` / `.es` updated | `IServerRequestHandler<void, IServerWsRequest>` / `IServerRequestHandler<void, IServerEsRequest>` |
+| `IServerScope.ws` / `.es` updated                                           | `IServerRequestHandler<void, IServerWsRequest>` / `IServerRequestHandler<void, IServerEsRequest>`                                                                                                                                   |
 
 ---
 
@@ -58,16 +58,16 @@ The current `IServerRequestHandler<TRes>` hard-codes `IServerRequest` as the han
 
 Every public API on `globalThis.siyuan` is exercised:
 
-| Namespace | Demonstrated |
-|---|---|
-| `siyuan.plugin` | `name`, `version`, `platform`, `i18n`; all four lifecycle hooks |
-| `siyuan.logger` | All five levels: `trace`, `debug`, `info`, `warn`, `error` |
-| `console` | Sync logging; note difference vs `siyuan.logger` (sync, 3 levels, `util.format`) |
-| `siyuan.storage` | `put`, `get` → `.text()` / `.json()` / `.arrayBuffer()`, `list`, `remove` |
-| `siyuan.rpc` | `bind` (with description), `unbind`, `broadcast` |
-| `siyuan.client` | `fetch` (HTTP RPC loopback), `socket` (WS client), `event` (SSE client) |
-| `siyuan.event` | `handler` (receive), `emit` (publish) |
-| `siyuan.server` | `private.http.handler`, `private.ws.handler`, `private.es.handler` |
+| Namespace        | Demonstrated                                                                     |
+| ---------------- | -------------------------------------------------------------------------------- |
+| `siyuan.plugin`  | `name`, `version`, `platform`, `i18n`; all four lifecycle hooks                  |
+| `siyuan.logger`  | All five levels: `trace`, `debug`, `info`, `warn`, `error`                       |
+| `console`        | Sync logging; note difference vs `siyuan.logger` (sync, 3 levels, `util.format`) |
+| `siyuan.storage` | `put`, `get` → `.text()` / `.json()` / `.arrayBuffer()`, `list`, `remove`        |
+| `siyuan.rpc`     | `bind` (with description), `unbind`, `broadcast`                                 |
+| `siyuan.client`  | `fetch` (HTTP RPC loopback), `socket` (WS client), `event` (SSE client)          |
+| `siyuan.event`   | `handler` (receive), `emit` (publish)                                            |
+| `siyuan.server`  | `private.http.handler`, `private.ws.handler`, `private.es.handler`               |
 
 ---
 
@@ -76,9 +76,10 @@ Every public API on `globalThis.siyuan` is exercised:
 ### Method-level TSDoc blocks
 
 Every method gets a TSDoc block with:
-- Summary line describing which API/feature it demonstrates
-- `@remarks` for behavioral constraints (e.g. lifecycle state semantics, when RPC calls are accepted)
-- `@example` snippet for non-obvious usage patterns (e.g. `ws.open()` must be called explicitly)
+
+* Summary line describing which API/feature it demonstrates
+* `@remarks` for behavioral constraints (e.g. lifecycle state semantics, when RPC calls are accepted)
+* `@example` snippet for non-obvious usage patterns (e.g. `ws.open()` must be called explicitly)
 
 Example:
 
@@ -107,40 +108,41 @@ await this.ws.open();
 ### Class-level TSDoc
 
 `KernelPlugin` gets a full class-level doc block explaining:
-- purpose (living reference for the kernel plugin API)
-- lifecycle state diagram reference
-- how to update the file when new APIs are added
+
+* purpose (living reference for the kernel plugin API)
+* lifecycle state diagram reference
+* how to update the file when new APIs are added
 
 ---
 
 ## Type Usage
 
-| Location | Type |
-|---|---|
-| `this.siyuan` field | `ISiyuan` |
-| `this.ws` field | `IWebSocket \| null` |
-| `this.es` field | `IEventSource \| null` |
-| `onload` / `onloaded` / `onrunning` / `onunload` | `() => Promise<void>` |
-| `eventHandler` param | `IEventMessage` |
-| `httpHandler` param | `IServerRequest` |
-| `httpHandler` return | `IHttpResponse` |
-| `wsHandler` param | `IServerWsRequest` |
-| `esHandler` param | `IServerEsRequest` |
-| `any` | Only where the underlying API type is already `any` (e.g. `IEventMessage.detail`, `IRpc.bind` fn args) |
+| Location                                         | Type                                                                                                   |
+| ------------------------------------------------ | ------------------------------------------------------------------------------------------------------ |
+| `this.siyuan` field                              | `ISiyuan`                                                                                              |
+| `this.ws` field                                  | `IWebSocket \| null`                                                                                   |
+| `this.es` field                                  | `IEventSource \| null`                                                                                 |
+| `onload` / `onloaded` / `onrunning` / `onunload` | `() => Promise<void>`                                                                                  |
+| `eventHandler` param                             | `IEventMessage`                                                                                        |
+| `httpHandler` param                              | `IServerRequest`                                                                                       |
+| `httpHandler` return                             | `IHttpResponse`                                                                                        |
+| `wsHandler` param                                | `IServerWsRequest`                                                                                     |
+| `esHandler` param                                | `IServerEsRequest`                                                                                     |
+| `any`                                            | Only where the underlying API type is already `any` (e.g. `IEventMessage.detail`, `IRpc.bind` fn args) |
 
 ---
 
 ## Files Changed
 
-| File | Change |
-|---|---|
-| `plugin-sample/src/kernel.ts` | Full implementation (was a one-line stub) |
-| `petal/kernel.d.ts` | Add `IEsServerPort`, `IServerWsRequest`, `IServerEsRequest`; extend `IServerRequestHandler` generic; update `IServerScope` |
+| File                          | Change                                                                                                                     |
+| ----------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| `plugin-sample/src/kernel.ts` | Full implementation (was a one-line stub)                                                                                  |
+| `petal/kernel.d.ts`           | Add `IEsServerPort`, `IServerWsRequest`, `IServerEsRequest`; extend `IServerRequestHandler` generic; update `IServerScope` |
 
 ---
 
 ## Out of Scope
 
-- No changes to `src/index.ts`, `plugin.json`, `webpack.config.js`, or any other file
-- No new dependencies
-- No unit tests (kernel plugin runs inside goja; tested by loading in a live SiYuan instance)
+* No changes to `src/index.ts`, `plugin.json`, `webpack.config.js`, or any other file
+* No new dependencies
+* No unit tests (kernel plugin runs inside goja; tested by loading in a live SiYuan instance)

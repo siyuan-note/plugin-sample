@@ -27,7 +27,7 @@ import {
     openSetting,
     openAttributePanel,
     saveLayout,
-    IMenuItem
+    IMenuItem,
 } from "siyuan";
 import "./index.scss";
 
@@ -36,7 +36,6 @@ const TAB_TYPE = "custom_tab";
 const DOCK_TYPE = "dock_tab";
 
 export default class PluginSample extends Plugin {
-
     private custom: () => Custom;
     private isMobile: boolean;
     private blockIconEventBindThis = this.blockIconEvent.bind(this);
@@ -51,7 +50,7 @@ export default class PluginSample extends Plugin {
             tip: this.i18n.insertEmoji,
             click(protyle: Protyle) {
                 protyle.insert("😊");
-            }
+            },
         });
         return toolbar;
     }
@@ -79,7 +78,7 @@ export default class PluginSample extends Plugin {
             },
             destroy() {
                 console.log("destroy tab:", TAB_TYPE);
-            }
+            },
         });
 
         this.addCommand({
@@ -106,7 +105,7 @@ export default class PluginSample extends Plugin {
                 hotkey: "⌥⌘W",
             },
             data: {
-                text: "This is my custom dock"
+                text: "This is my custom dock",
             },
             type: DOCK_TYPE,
             resize() {
@@ -132,7 +131,9 @@ export default class PluginSample extends Plugin {
             <svg class="block__logoicon"><use xlink:href="#iconEmoji"></use></svg>Custom Dock
         </div>
         <span class="fn__flex-1 fn__space"></span>
-        <span data-type="min" class="block__icon ariaLabel" data-position="north" aria-label="Min ${adaptHotkey("⌘W")}"><svg><use xlink:href="#iconMin"></use></svg></span>
+        <span data-type="min" class="block__icon ariaLabel" data-position="north" aria-label="Min ${
+                        adaptHotkey("⌘W")
+                    }"><svg><use xlink:href="#iconMin"></use></svg></span>
     </div>
     <div class="fn__flex-1 plugin-sample__custom-dock">
         ${dock.data.text}
@@ -142,7 +143,7 @@ export default class PluginSample extends Plugin {
             },
             destroy() {
                 console.log("destroy dock:", DOCK_TYPE);
-            }
+            },
         });
 
         const textareaElement = document.createElement("textarea");
@@ -151,7 +152,7 @@ export default class PluginSample extends Plugin {
                 this.saveData(STORAGE_NAME, { readonlyText: textareaElement.value }).catch(e => {
                     showMessage(`[${this.name}] save data [${STORAGE_NAME}] fail: `, e);
                 });
-            }
+            },
         });
         this.setting.addItem({
             title: "Readonly text",
@@ -178,15 +179,17 @@ export default class PluginSample extends Plugin {
 
         this.protyleSlash = [{
             filter: ["insert emoji 😊", "插入表情 😊", "crbqwx"],
-            html: `<div class="b3-list-item__first"><span class="b3-list-item__text">${this.i18n.insertEmoji}</span><span class="b3-list-item__meta">😊</span></div>`,
+            html:
+                `<div class="b3-list-item__first"><span class="b3-list-item__text">${this.i18n.insertEmoji}</span><span class="b3-list-item__meta">😊</span></div>`,
             id: "insertEmoji",
             callback(protyle: Protyle) {
                 protyle.insert("😊");
-            }
+            },
         }];
 
         this.protyleOptions = {
-            toolbar: ["block-ref",
+            toolbar: [
+                "block-ref",
                 "a",
                 "|",
                 "text",
@@ -229,7 +232,7 @@ export default class PluginSample extends Plugin {
                     }
                     this.addMenu(rect);
                 }
-            }
+            },
         });
         const statusIconTemp = document.createElement("template");
         statusIconTemp.innerHTML = `<div class="toolbar__item ariaLabel" aria-label="Remove plugin-sample Data">
@@ -336,18 +339,18 @@ export default class PluginSample extends Plugin {
             click: () => {
                 const doOperations: IOperation[] = [];
                 detail.blockElements.forEach((item: HTMLElement) => {
-                    const editElement = item.querySelector('[contenteditable="true"]');
+                    const editElement = item.querySelector("[contenteditable=\"true\"]");
                     if (editElement) {
                         editElement.textContent = editElement.textContent.replace(/ /g, "");
                         doOperations.push({
                             id: item.dataset.nodeId,
                             data: item.outerHTML,
-                            action: "update"
+                            action: "update",
                         });
                     }
                 });
                 detail.protyle.getInstance().transaction(doOperations);
-            }
+            },
         });
     }
 
@@ -389,7 +392,7 @@ export default class PluginSample extends Plugin {
             label: "Open Setting",
             click: () => {
                 openSetting(this.app);
-            }
+            },
         });
         menu.addItem({
             icon: "iconDrag",
@@ -400,7 +403,7 @@ export default class PluginSample extends Plugin {
                     protyle: this.getEditor().protyle,
                     focusName: "custom",
                 });
-            }
+            },
         });
         menu.addItem({
             icon: "iconInfo",
@@ -408,14 +411,17 @@ export default class PluginSample extends Plugin {
             accelerator: this.commands[0].customHotkey,
             click: () => {
                 this.showDialog();
-            }
+            },
         });
         menu.addItem({
             icon: "iconFocus",
             label: "Select Opened Doc(open doc first)",
             click: () => {
-                (getModelByDockType("file") as Files).selectItem(this.getEditor().protyle.notebookId, this.getEditor().protyle.path);
-            }
+                (getModelByDockType("file") as Files).selectItem(
+                    this.getEditor().protyle.notebookId,
+                    this.getEditor().protyle.path,
+                );
+            },
         });
         if (!this.isMobile) {
             menu.addItem({
@@ -430,11 +436,11 @@ export default class PluginSample extends Plugin {
                             data: {
                                 text: platformUtils.isHuawei() ? "Hello, Huawei!" : "This is my custom tab",
                             },
-                            id: this.name + TAB_TYPE
+                            id: this.name + TAB_TYPE,
                         },
                     });
                     console.log(tab);
-                }
+                },
             });
             menu.addItem({
                 icon: "iconImage",
@@ -443,11 +449,11 @@ export default class PluginSample extends Plugin {
                     const tab = openTab({
                         app: this.app,
                         asset: {
-                            path: "assets/paragraph-20210512165953-ag1nib4.svg"
-                        }
+                            path: "assets/paragraph-20210512165953-ag1nib4.svg",
+                        },
                     });
                     console.log(tab);
-                }
+                },
             });
             menu.addItem({
                 icon: "iconFile",
@@ -457,10 +463,10 @@ export default class PluginSample extends Plugin {
                         app: this.app,
                         doc: {
                             id: this.getEditor().protyle.block.rootID,
-                        }
+                        },
                     });
                     console.log(tab);
-                }
+                },
             });
             menu.addItem({
                 icon: "iconSearch",
@@ -469,11 +475,11 @@ export default class PluginSample extends Plugin {
                     const tab = openTab({
                         app: this.app,
                         search: {
-                            k: "SiYuan"
-                        }
+                            k: "SiYuan",
+                        },
                     });
                     console.log(tab);
-                }
+                },
             });
             menu.addItem({
                 icon: "iconRiffCard",
@@ -482,11 +488,11 @@ export default class PluginSample extends Plugin {
                     const tab = openTab({
                         app: this.app,
                         card: {
-                            type: "all"
-                        }
+                            type: "all",
+                        },
                     });
                     console.log(tab);
-                }
+                },
             });
             menu.addItem({
                 icon: "iconLayout",
@@ -496,18 +502,18 @@ export default class PluginSample extends Plugin {
                         refDefs: [{ refID: this.getEditor().protyle.block.rootID }],
                         x: window.innerWidth - 768 - 120,
                         y: 32,
-                        isBacklink: false
+                        isBacklink: false,
                     });
-                }
+                },
             });
             menu.addItem({
                 icon: "iconOpenWindow",
                 label: "Open Doc Window(open doc first)",
                 click: () => {
                     openWindow({
-                        doc: { id: this.getEditor().protyle.block.rootID }
+                        doc: { id: this.getEditor().protyle.block.rootID },
                     });
-                }
+                },
             });
         } else {
             menu.addItem({
@@ -515,7 +521,7 @@ export default class PluginSample extends Plugin {
                 label: "Open Doc(open doc first)",
                 click: () => {
                     openMobileFileById(this.app, this.getEditor().protyle.block.rootID);
-                }
+                },
             });
         }
         menu.addItem({
@@ -523,14 +529,14 @@ export default class PluginSample extends Plugin {
             label: "Lockscreen",
             click: () => {
                 lockScreen(this.app);
-            }
+            },
         });
         menu.addItem({
             icon: "iconQuit",
             label: "Exit Application",
             click: () => {
                 exitSiYuan();
-            }
+            },
         });
         menu.addItem({
             icon: "iconDownload",
@@ -539,7 +545,7 @@ export default class PluginSample extends Plugin {
                 saveLayout(() => {
                     showMessage("Layout saved");
                 });
-            }
+            },
         });
         menu.addItem({
             icon: "iconScrollHoriz",
@@ -550,326 +556,326 @@ export default class PluginSample extends Plugin {
                 label: "On ws-main",
                 click: () => {
                     this.eventBus.on("ws-main", this.eventBusLog);
-                }
+                },
             }, {
                 icon: "iconClose",
                 label: "Off ws-main",
                 click: () => {
                     this.eventBus.off("ws-main", this.eventBusLog);
-                }
+                },
             }, {
                 icon: "iconSelect",
                 label: "On click-blockicon",
                 click: () => {
                     this.eventBus.on("click-blockicon", this.blockIconEventBindThis);
-                }
+                },
             }, {
                 icon: "iconClose",
                 label: "Off click-blockicon",
                 click: () => {
                     this.eventBus.off("click-blockicon", this.blockIconEventBindThis);
-                }
+                },
             }, {
                 icon: "iconSelect",
                 label: "On click-pdf",
                 click: () => {
                     this.eventBus.on("click-pdf", this.eventBusLog);
-                }
+                },
             }, {
                 icon: "iconClose",
                 label: "Off click-pdf",
                 click: () => {
                     this.eventBus.off("click-pdf", this.eventBusLog);
-                }
+                },
             }, {
                 icon: "iconSelect",
                 label: "On click-editorcontent",
                 click: () => {
                     this.eventBus.on("click-editorcontent", this.eventBusLog);
-                }
+                },
             }, {
                 icon: "iconClose",
                 label: "Off click-editorcontent",
                 click: () => {
                     this.eventBus.off("click-editorcontent", this.eventBusLog);
-                }
+                },
             }, {
                 icon: "iconSelect",
                 label: "On click-editortitleicon",
                 click: () => {
                     this.eventBus.on("click-editortitleicon", this.eventBusLog);
-                }
+                },
             }, {
                 icon: "iconClose",
                 label: "Off click-editortitleicon",
                 click: () => {
                     this.eventBus.off("click-editortitleicon", this.eventBusLog);
-                }
+                },
             }, {
                 icon: "iconSelect",
                 label: "On click-flashcard-action",
                 click: () => {
                     this.eventBus.on("click-flashcard-action", this.eventBusLog);
-                }
+                },
             }, {
                 icon: "iconClose",
                 label: "Off click-flashcard-action",
                 click: () => {
                     this.eventBus.off("click-flashcard-action", this.eventBusLog);
-                }
+                },
             }, {
                 icon: "iconSelect",
                 label: "On open-noneditableblock",
                 click: () => {
                     this.eventBus.on("open-noneditableblock", this.eventBusLog);
-                }
+                },
             }, {
                 icon: "iconClose",
                 label: "Off open-noneditableblock",
                 click: () => {
                     this.eventBus.off("open-noneditableblock", this.eventBusLog);
-                }
+                },
             }, {
                 icon: "iconSelect",
                 label: "On loaded-protyle-static",
                 click: () => {
                     this.eventBus.on("loaded-protyle-static", this.eventBusLog);
-                }
+                },
             }, {
                 icon: "iconClose",
                 label: "Off loaded-protyle-static",
                 click: () => {
                     this.eventBus.off("loaded-protyle-static", this.eventBusLog);
-                }
+                },
             }, {
                 icon: "iconSelect",
                 label: "On loaded-protyle-dynamic",
                 click: () => {
                     this.eventBus.on("loaded-protyle-dynamic", this.eventBusLog);
-                }
+                },
             }, {
                 icon: "iconClose",
                 label: "Off loaded-protyle-dynamic",
                 click: () => {
                     this.eventBus.off("loaded-protyle-dynamic", this.eventBusLog);
-                }
+                },
             }, {
                 icon: "iconSelect",
                 label: "On switch-protyle",
                 click: () => {
                     this.eventBus.on("switch-protyle", this.eventBusLog);
-                }
+                },
             }, {
                 icon: "iconClose",
                 label: "Off switch-protyle",
                 click: () => {
                     this.eventBus.off("switch-protyle", this.eventBusLog);
-                }
+                },
             }, {
                 icon: "iconSelect",
                 label: "On destroy-protyle",
                 click: () => {
                     this.eventBus.on("destroy-protyle", this.eventBusLog);
-                }
+                },
             }, {
                 icon: "iconClose",
                 label: "Off destroy-protyle",
                 click: () => {
                     this.eventBus.off("destroy-protyle", this.eventBusLog);
-                }
+                },
             }, {
                 icon: "iconSelect",
                 label: "On open-menu-doctree",
                 click: () => {
                     this.eventBus.on("open-menu-doctree", this.eventBusLog);
-                }
+                },
             }, {
                 icon: "iconClose",
                 label: "Off open-menu-doctree",
                 click: () => {
                     this.eventBus.off("open-menu-doctree", this.eventBusLog);
-                }
+                },
             }, {
                 icon: "iconSelect",
                 label: "On open-menu-blockref",
                 click: () => {
                     this.eventBus.on("open-menu-blockref", this.eventBusLog);
-                }
+                },
             }, {
                 icon: "iconClose",
                 label: "Off open-menu-blockref",
                 click: () => {
                     this.eventBus.off("open-menu-blockref", this.eventBusLog);
-                }
+                },
             }, {
                 icon: "iconSelect",
                 label: "On open-menu-fileannotationref",
                 click: () => {
                     this.eventBus.on("open-menu-fileannotationref", this.eventBusLog);
-                }
+                },
             }, {
                 icon: "iconClose",
                 label: "Off open-menu-fileannotationref",
                 click: () => {
                     this.eventBus.off("open-menu-fileannotationref", this.eventBusLog);
-                }
+                },
             }, {
                 icon: "iconSelect",
                 label: "On open-menu-tag",
                 click: () => {
                     this.eventBus.on("open-menu-tag", this.eventBusLog);
-                }
+                },
             }, {
                 icon: "iconClose",
                 label: "Off open-menu-tag",
                 click: () => {
                     this.eventBus.off("open-menu-tag", this.eventBusLog);
-                }
+                },
             }, {
                 icon: "iconSelect",
                 label: "On open-menu-link",
                 click: () => {
                     this.eventBus.on("open-menu-link", this.eventBusLog);
-                }
+                },
             }, {
                 icon: "iconClose",
                 label: "Off open-menu-link",
                 click: () => {
                     this.eventBus.off("open-menu-link", this.eventBusLog);
-                }
+                },
             }, {
                 icon: "iconSelect",
                 label: "On open-menu-image",
                 click: () => {
                     this.eventBus.on("open-menu-image", this.eventBusLog);
-                }
+                },
             }, {
                 icon: "iconClose",
                 label: "Off open-menu-image",
                 click: () => {
                     this.eventBus.off("open-menu-image", this.eventBusLog);
-                }
+                },
             }, {
                 icon: "iconSelect",
                 label: "On open-menu-av",
                 click: () => {
                     this.eventBus.on("open-menu-av", this.eventBusLog);
-                }
+                },
             }, {
                 icon: "iconClose",
                 label: "Off open-menu-av",
                 click: () => {
                     this.eventBus.off("open-menu-av", this.eventBusLog);
-                }
+                },
             }, {
                 icon: "iconSelect",
                 label: "On open-menu-content",
                 click: () => {
                     this.eventBus.on("open-menu-content", this.eventBusLog);
-                }
+                },
             }, {
                 icon: "iconClose",
                 label: "Off open-menu-content",
                 click: () => {
                     this.eventBus.off("open-menu-content", this.eventBusLog);
-                }
+                },
             }, {
                 icon: "iconSelect",
                 label: "On open-menu-breadcrumbmore",
                 click: () => {
                     this.eventBus.on("open-menu-breadcrumbmore", this.eventBusLog);
-                }
+                },
             }, {
                 icon: "iconClose",
                 label: "Off open-menu-breadcrumbmore",
                 click: () => {
                     this.eventBus.off("open-menu-breadcrumbmore", this.eventBusLog);
-                }
+                },
             }, {
                 icon: "iconSelect",
                 label: "On open-menu-inbox",
                 click: () => {
                     this.eventBus.on("open-menu-inbox", this.eventBusLog);
-                }
+                },
             }, {
                 icon: "iconClose",
                 label: "Off open-menu-inbox",
                 click: () => {
                     this.eventBus.off("open-menu-inbox", this.eventBusLog);
-                }
+                },
             }, {
                 icon: "iconSelect",
                 label: "On input-search",
                 click: () => {
                     this.eventBus.on("input-search", this.eventBusLog);
-                }
+                },
             }, {
                 icon: "iconClose",
                 label: "Off input-search",
                 click: () => {
                     this.eventBus.off("input-search", this.eventBusLog);
-                }
+                },
             }, {
                 icon: "iconSelect",
                 label: "On paste",
                 click: () => {
                     this.eventBus.on("paste", this.eventBusPaste);
-                }
+                },
             }, {
                 icon: "iconClose",
                 label: "Off paste",
                 click: () => {
                     this.eventBus.off("paste", this.eventBusPaste);
-                }
+                },
             }, {
                 icon: "iconSelect",
                 label: "On open-siyuan-url-plugin",
                 click: () => {
                     this.eventBus.on("open-siyuan-url-plugin", this.eventBusLog);
-                }
+                },
             }, {
                 icon: "iconClose",
                 label: "Off open-siyuan-url-plugin",
                 click: () => {
                     this.eventBus.off("open-siyuan-url-plugin", this.eventBusLog);
-                }
+                },
             }, {
                 icon: "iconSelect",
                 label: "On open-siyuan-url-block",
                 click: () => {
                     this.eventBus.on("open-siyuan-url-block", this.eventBusLog);
-                }
+                },
             }, {
                 icon: "iconClose",
                 label: "Off open-siyuan-url-block",
                 click: () => {
                     this.eventBus.off("open-siyuan-url-block", this.eventBusLog);
-                }
+                },
             }, {
                 icon: "iconSelect",
                 label: "On opened-notebook",
                 click: () => {
                     this.eventBus.on("opened-notebook", this.eventBusLog);
-                }
+                },
             }, {
                 icon: "iconClose",
                 label: "Off opened-notebook",
                 click: () => {
                     this.eventBus.off("opened-notebook", this.eventBusLog);
-                }
+                },
             }, {
                 icon: "iconSelect",
                 label: "On closed-notebook",
                 click: () => {
                     this.eventBus.on("closed-notebook", this.eventBusLog);
-                }
+                },
             }, {
                 icon: "iconClose",
                 label: "Off closed-notebook",
                 click: () => {
                     this.eventBus.off("closed-notebook", this.eventBusLog);
-                }
-            }]
+                },
+            }],
         });
         menu.addSeparator();
         menu.addItem({
