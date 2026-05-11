@@ -56,7 +56,7 @@ export default class PluginSample extends Plugin {
     }
 
     onload() {
-        this.data[STORAGE_NAME] = { readonlyText: "Readonly" };
+        this.data[STORAGE_NAME] = {readonlyText: "Readonly"};
 
         const frontEnd = getFrontend();
         this.isMobile = frontEnd === "mobile" || frontEnd === "browser-mobile";
@@ -99,7 +99,7 @@ export default class PluginSample extends Plugin {
         this.addDock({
             config: {
                 position: "LeftBottom",
-                size: { width: 200, height: 0 },
+                size: {width: 200, height: 0},
                 icon: "iconSaving",
                 title: "Custom Dock",
                 hotkey: "⌥⌘W",
@@ -149,7 +149,7 @@ export default class PluginSample extends Plugin {
         const textareaElement = document.createElement("textarea");
         this.setting = new Setting({
             confirmCallback: () => {
-                this.saveData(STORAGE_NAME, { readonlyText: textareaElement.value }).catch(e => {
+                this.saveData(STORAGE_NAME, {readonlyText: textareaElement.value}).catch(e => {
                     showMessage(`[${this.name}] save data [${STORAGE_NAME}] fail: `, e);
                 });
             },
@@ -243,7 +243,7 @@ export default class PluginSample extends Plugin {
         statusIconTemp.content.firstElementChild.addEventListener("click", () => {
             confirm("⚠️", this.i18n.confirmRemove.replace("${name}", this.name), () => {
                 this.removeData(STORAGE_NAME).then(() => {
-                    this.data[STORAGE_NAME] = { readonlyText: "Readonly" };
+                    this.data[STORAGE_NAME] = {readonlyText: "Readonly"};
                     showMessage(`[${this.name}]: ${this.i18n.removedData}`);
                 }).catch(e => {
                     showMessage(`[${this.name}] remove data [${STORAGE_NAME}] fail: `, e);
@@ -327,11 +327,11 @@ export default class PluginSample extends Plugin {
         });
     }
 
-    private eventBusLog({ detail }: any) {
+    private eventBusLog({detail}: any) {
         console.log(detail);
     }
 
-    private blockIconEvent({ detail }: any) {
+    private blockIconEvent({detail}: any) {
         detail.menu.addItem({
             id: "pluginSample_removeSpace",
             iconHTML: "",
@@ -499,7 +499,7 @@ export default class PluginSample extends Plugin {
                 label: "Open Float Layer(open doc first)",
                 click: () => {
                     this.addFloatLayer({
-                        refDefs: [{ refID: this.getEditor().protyle.block.rootID }],
+                        refDefs: [{refID: this.getEditor().protyle.block.rootID}],
                         x: window.innerWidth - 768 - 120,
                         y: 32,
                         isBacklink: false,
@@ -511,7 +511,7 @@ export default class PluginSample extends Plugin {
                 label: "Open Doc Window(open doc first)",
                 click: () => {
                     openWindow({
-                        doc: { id: this.getEditor().protyle.block.rootID },
+                        doc: {id: this.getEditor().protyle.block.rootID},
                     });
                 },
             });

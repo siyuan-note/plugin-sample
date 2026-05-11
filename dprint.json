@@ -26,6 +26,7 @@
     "trailingCommas": "onlyMultiLine",
     "operatorPosition": "sameLine",
     "nextControlFlowPosition": "sameLine",
+    "spaceSurroundingProperties": false,
     "importDeclaration.forceMultiLine": "whenMultiple",
     "importDeclaration.sortNamedImports": "maintain"
   },

@@ -42,7 +42,7 @@ export default [
             quotes: [2, "double", {
                 avoidEscape: true,
             }],
-            "@typescript-eslint/no-unused-vars": ["warn", { caughtErrors: "none" }],
+            "@typescript-eslint/no-unused-vars": ["warn", {caughtErrors: "none"}],
             "no-async-promise-executor": "off",
             "no-prototype-builtins": "off",
             "no-useless-escape": "off",

@@ -1,7 +1,7 @@
 const path = require("path");
 const fs = require("fs");
 const webpack = require("webpack");
-const { EsbuildPlugin } = require("esbuild-loader");
+const {EsbuildPlugin} = require("esbuild-loader");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CopyPlugin = require("copy-webpack-plugin");
 const ZipPlugin = require("zip-webpack-plugin");
@@ -24,11 +24,11 @@ module.exports = (env, argv) => {
         plugins.push(
             new CopyPlugin({
                 patterns: [
-                    { from: "preview.png", to: "./dist/" },
-                    { from: "icon.png", to: "./dist/" },
-                    { from: "README*.md", to: "./dist/" },
-                    { from: "plugin.json", to: "./dist/" },
-                    { from: "src/i18n/", to: "./dist/i18n/" },
+                    {from: "preview.png", to: "./dist/"},
+                    {from: "icon.png", to: "./dist/"},
+                    {from: "README*.md", to: "./dist/"},
+                    {from: "plugin.json", to: "./dist/"},
+                    {from: "src/i18n/", to: "./dist/i18n/"},
                 ],
             }),
         );
@@ -46,7 +46,7 @@ module.exports = (env, argv) => {
         plugins.push(
             new CopyPlugin({
                 patterns: [
-                    { from: "src/i18n/", to: "./i18n/" },
+                    {from: "src/i18n/", to: "./i18n/"},
                 ],
             }),
         );

@@ -1,5 +1,5 @@
 const path = require("path");
-const { EsbuildPlugin } = require("esbuild-loader");
+const {EsbuildPlugin} = require("esbuild-loader");
 
 module.exports = (env, argv) => {
     const production = argv.mode === "production";

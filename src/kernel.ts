@@ -74,7 +74,7 @@ class KernelPlugin {
      * ```
      */
     private async onload(): Promise<void> {
-        const { rpc, storage, logger, plugin } = this.siyuan;
+        const {rpc, storage, logger, plugin} = this.siyuan;
 
         // ── siyuan.logger (all five levels) ───────────────────────────────────
         // Unlike console.*, each call returns a Promise and serialises args as JSON.
@@ -149,7 +149,7 @@ class KernelPlugin {
      * ```
      */
     private async onloaded(): Promise<void> {
-        const { client, logger } = this.siyuan;
+        const {client, logger} = this.siyuan;
 
         // List all loaded plugins via the kernel REST API.
         // fetch() returns IFetchResponse; the body is a lazy IDataObject.
@@ -193,7 +193,7 @@ class KernelPlugin {
      * ```
      */
     private async onrunning(): Promise<void> {
-        const { client, logger, plugin } = this.siyuan;
+        const {client, logger, plugin} = this.siyuan;
 
         // ── HTTP RPC loopback (JS → HTTP → Go → JS → Go → HTTP → JS) ──────────
         const echoResp = await client.fetch(
@@ -204,7 +204,7 @@ class KernelPlugin {
                 body: JSON.stringify({
                     jsonrpc: "2.0",
                     method: "echo",
-                    params: ["hello from onrunning", 42, { key: true }],
+                    params: ["hello from onrunning", 42, {key: true}],
                     id: 1,
                 }),
             },
@@ -222,7 +222,7 @@ class KernelPlugin {
             await this.ws!.send(JSON.stringify({
                 jsonrpc: "2.0",
                 method: "echo",
-                params: { message: "hello via WebSocket", ts: Date.now() },
+                params: {message: "hello via WebSocket", ts: Date.now()},
                 id: 2,
             }));
             // Demonstrate ping/pong control frames
@@ -276,7 +276,7 @@ class KernelPlugin {
      * resource leaks in the kernel process.
      */
     private async onunload(): Promise<void> {
-        const { rpc, logger } = this.siyuan;
+        const {rpc, logger} = this.siyuan;
 
         // Unbind the RPC method registered in onload
         await rpc.unbind("echo");
@@ -308,7 +308,7 @@ class KernelPlugin {
      * @param event - The incoming kernel event message.
      */
     private async eventHandler(event: kernel.IEventMessage): Promise<void> {
-        const { event: eventApi, logger } = this.siyuan;
+        const {event: eventApi, logger} = this.siyuan;
 
         await logger.debug("event received:", event);
 
@@ -382,7 +382,7 @@ class KernelPlugin {
      *   WebSocket back-channel to the connected client).
      */
     private async wsHandler(request: kernel.IServerWebSocketRequest): Promise<void> {
-        const { logger } = this.siyuan;
+        const {logger} = this.siyuan;
 
         request.port.onopen = async (event) => {
             await logger.debug("ws server: port open", event);
@@ -433,13 +433,13 @@ class KernelPlugin {
      *   back-channel to the connected client).
      */
     private async esHandler(request: kernel.IServerEventSourceRequest): Promise<void> {
-        const { logger } = this.siyuan;
+        const {logger} = this.siyuan;
 
         request.port.onopen = async (event) => {
             await logger.debug("sse server: port open", event);
             // send is synchronous; eventType becomes the SSE `event:` field
             request.port.send("message", "Connected to plugin SSE!");
-            request.port.send("update", JSON.stringify({ ts: Date.now() }));
+            request.port.send("update", JSON.stringify({ts: Date.now()}));
         };
         request.port.onclose = async (event) => {
             await logger.debug("sse server: port close", event);
