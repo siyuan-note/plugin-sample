@@ -143,6 +143,4 @@ await this.ws.open();
 
 ## Out of Scope
 
-* No changes to `src/index.ts`, `plugin.json`, `webpack.config.js`, or any other file
-* No new dependencies
 * No unit tests (kernel plugin runs inside goja; tested by loading in a live SiYuan instance)

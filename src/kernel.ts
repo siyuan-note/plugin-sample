@@ -9,7 +9,6 @@ import type * as kernel from "siyuan/kernel";
 console.log(Object.getOwnPropertyNames(globalThis));
 // Object,Function,Array,String,Number,BigInt,RegExp,Date,Boolean,Proxy,Reflect,Error,AggregateError,TypeError,ReferenceError,SyntaxError,RangeError,EvalError,URIError,GoError,eval,Math,JSON,ArrayBuffer,DataView,Uint8Array,Uint8ClampedArray,Int8Array,Uint16Array,Int16Array,Uint32Array,Int32Array,Float32Array,Float64Array,BigInt64Array,BigUint64Array,Symbol,WeakSet,WeakMap,Map,Set,Promise,globalThis,NaN,undefined,Infinity,isNaN,parseInt,parseFloat,isFinite,decodeURI,decodeURIComponent,encodeURI,encodeURIComponent,escape,unescape,require,console,setTimeout,setInterval,setImmediate,clearTimeout,clearInterval,clearImmediate,URL,URLSearchParams,Buffer,siyuan
 
-
 /**
  * SiYuan 内核插件 API 的参考实现。
  *
@@ -136,7 +135,7 @@ class KernelPlugin {
      * ```
      */
     private async onload(): Promise<void> {
-        const { rpc, storage, logger, plugin } = this.siyuan;
+        const {rpc, storage, logger, plugin} = this.siyuan;
 
         // ── siyuan.logger（示例）
         // ── siyuan.logger (example)
@@ -233,7 +232,7 @@ class KernelPlugin {
      * ```
      */
     private async onloaded(): Promise<void> {
-        const { client, logger } = this.siyuan;
+        const {client, logger} = this.siyuan;
 
         // 列出通过内核 REST API 加载的所有插件。
         // List all loaded plugins via the kernel REST API.
@@ -294,7 +293,7 @@ class KernelPlugin {
      * ```
      */
     private async onrunning(): Promise<void> {
-        const { client, logger, plugin } = this.siyuan;
+        const {client, logger, plugin} = this.siyuan;
 
         // ── HTTP RPC 回环（示例）
         // ── HTTP RPC loopback (example)
@@ -306,7 +305,7 @@ class KernelPlugin {
                 body: JSON.stringify({
                     jsonrpc: "2.0",
                     method: "echo",
-                    params: ["hello from onrunning", 42, { key: true }],
+                    params: ["hello from onrunning", 42, {key: true}],
                     id: 1,
                 }),
             },
@@ -326,7 +325,7 @@ class KernelPlugin {
             await this.ws!.send(JSON.stringify({
                 jsonrpc: "2.0",
                 method: "echo",
-                params: { message: "hello via WebSocket", ts: Date.now() },
+                params: {message: "hello via WebSocket", ts: Date.now()},
                 id: 2,
             }));
             // 演示 ping/pong 控制帧。
@@ -392,7 +391,7 @@ class KernelPlugin {
      * After broadcasting, close any open client-side connections to avoid resource leaks in the kernel process.
      */
     private async onunload(): Promise<void> {
-        const { rpc, logger } = this.siyuan;
+        const {rpc, logger} = this.siyuan;
 
         // 解绑在 onload 中注册的 RPC 方法。
         // Unbind the RPC method registered in onload.
@@ -438,7 +437,7 @@ class KernelPlugin {
      * @param event - The incoming kernel event message.
      */
     private async eventHandler(event: kernel.IEventMessage): Promise<void> {
-        const { event: eventApi, logger } = this.siyuan;
+        const {event: eventApi, logger} = this.siyuan;
 
         await logger.debug("event received:", event);
 
@@ -532,7 +531,7 @@ class KernelPlugin {
      * @param request - Server request augmented with `port` (a bidirectional WebSocket back-channel to the connected client).
      */
     private async wsHandler(request: kernel.IServerWebSocketRequest): Promise<void> {
-        const { logger } = this.siyuan;
+        const {logger} = this.siyuan;
 
         request.port.onopen = async (event) => {
             await logger.debug("ws server: port open", event);
@@ -603,7 +602,7 @@ class KernelPlugin {
      * @param request - Server request augmented with `port` (an SSE back-channel to the connected client).
      */
     private async esHandler(request: kernel.IServerEventSourceRequest): Promise<void> {
-        const { logger } = this.siyuan;
+        const {logger} = this.siyuan;
 
         request.port.onopen = async (event) => {
             await logger.debug("sse server: port open", event);
@@ -612,7 +611,7 @@ class KernelPlugin {
             // send is synchronous.
             // eventType becomes the SSE `event:` field.
             request.port.send("message", "Connected to plugin SSE!");
-            request.port.send("update", JSON.stringify({ ts: Date.now() }));
+            request.port.send("update", JSON.stringify({ts: Date.now()}));
         };
         request.port.onclose = async (event) => {
             await logger.debug("sse server: port close", event);
