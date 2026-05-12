@@ -607,11 +607,16 @@ class KernelPlugin {
         request.port.onopen = async (event) => {
             await logger.debug("sse server: port open", event);
             // send 是同步的。
-            // eventType 会成为 SSE 的 `event:` 字段。
             // send is synchronous.
-            // eventType becomes the SSE `event:` field.
-            request.port.send("message", "Connected to plugin SSE!");
-            request.port.send("update", JSON.stringify({ts: Date.now()}));
+            request.port.send({
+                event: "update",
+                data: JSON.stringify({ts: Date.now()}),
+                id: Date.now().toString(),
+                retry: 5000,
+            });
+            request.port.send({
+                data: "Connected to plugin SSE!",
+            });
         };
         request.port.onclose = async (event) => {
             await logger.debug("sse server: port close", event);
