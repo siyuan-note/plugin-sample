@@ -2,6 +2,8 @@
 
 ## v0.4.8
 
+* [Upgrade devDependencies and implement kernel plugin demo](https://github.com/siyuan-note/plugin-sample/pull/42)
+
 ## v0.4.7 2026-04-14
 
 * [Improve the dock panel title and tooltips](https://github.com/siyuan-note/siyuan/issues/17366)
