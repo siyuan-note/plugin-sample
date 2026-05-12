@@ -551,7 +551,7 @@ class KernelPlugin {
             } else {
                 // 二进制帧 — 在 else 分支中 event.data 始终为 ArrayBuffer。
                 // Binary frame — event.data is always ArrayBuffer in the else branch.
-                await request.port.send(new TextDecoder().decode(event.data as ArrayBuffer));
+                await request.port.send(Buffer.from(event.data as ArrayBuffer).toString("utf-8"));
             }
         };
         request.port.onping = async (event) => {
