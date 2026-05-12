@@ -148,7 +148,7 @@
 
 ## v0.1.9
 
-* [Add `open-menu-xxx` event bus for plugins ](https://github.com/siyuan-note/siyuan/issues/8617)
+* [Add `open-menu-xxx` event bus for plugins](https://github.com/siyuan-note/siyuan/issues/8617)
 
 ## v0.1.8
 

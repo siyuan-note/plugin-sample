@@ -2,8 +2,10 @@
 node_modules
 .DS_Store
 .eslintcache
+.dprint
 dist
 package.zip
 index.css
 index.js
+kernel.js
 /i18n
