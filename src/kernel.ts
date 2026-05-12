@@ -170,6 +170,11 @@ class KernelPlugin {
         );
 
         // ── siyuan.storage 示例
+
+        // 监听插件存储目录的文件系统事件。
+        // Watch filesystem events in the plugin storage directory.
+        await storage.watcher.add("./");
+
         // put：将 UTF-8 字符串写入相对于插件数据目录的路径。
         // put: write a UTF-8 string to a path relative to the plugin data dir.
         await storage.put("demo.txt", JSON.stringify(new Date().toISOString()));
@@ -391,7 +396,11 @@ class KernelPlugin {
      * After broadcasting, close any open client-side connections to avoid resource leaks in the kernel process.
      */
     private async onunload(): Promise<void> {
-        const {rpc, logger} = this.siyuan;
+        const {rpc, logger, storage} = this.siyuan;
+
+        // 解除对插件存储目录的文件系统事件的监听。
+        // Unwatch filesystem events in the plugin storage directory.
+        await storage.watcher.remove("./");
 
         // 解绑在 onload 中注册的 RPC 方法。
         // Unbind the RPC method registered in onload.
