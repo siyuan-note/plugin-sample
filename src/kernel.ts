@@ -617,10 +617,11 @@ class KernelPlugin {
             await logger.debug("sse server: port open", event);
             // send 是同步的。
             // send is synchronous.
+            const now = Date.now();
             request.port.send({
                 event: "update",
-                data: JSON.stringify({ts: Date.now()}),
-                id: Date.now().toString(),
+                data: JSON.stringify({ts: now}),
+                id: now.toString(),
                 retry: 5000,
             });
             request.port.send({
