@@ -6,8 +6,7 @@ import type * as kernel from "siyuan/kernel";
  * 列出 globalThis 上的所有属性以查看 goja 引擎支持的全局对象和内置模块。
  * List all properties on globalThis to see the global objects and built-in modules supported by the goja engine.
  */
-console.log(Object.getOwnPropertyNames(globalThis));
-// Object,Function,Array,String,Number,BigInt,RegExp,Date,Boolean,Proxy,Reflect,Error,AggregateError,TypeError,ReferenceError,SyntaxError,RangeError,EvalError,URIError,GoError,eval,Math,JSON,ArrayBuffer,DataView,Uint8Array,Uint8ClampedArray,Int8Array,Uint16Array,Int16Array,Uint32Array,Int32Array,Float32Array,Float64Array,BigInt64Array,BigUint64Array,Symbol,WeakSet,WeakMap,Map,Set,Promise,globalThis,NaN,undefined,Infinity,isNaN,parseInt,parseFloat,isFinite,decodeURI,decodeURIComponent,encodeURI,encodeURIComponent,escape,unescape,require,console,setTimeout,setInterval,setImmediate,clearTimeout,clearInterval,clearImmediate,URL,URLSearchParams,Buffer,siyuan
+console.log("load kernel and list properties: ", Object.getOwnPropertyNames(globalThis));
 
 /**
  * SiYuan 内核插件 API 的参考实现。
