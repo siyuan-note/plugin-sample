@@ -600,9 +600,8 @@ class KernelPlugin {
      * Demonstrates the SSE server handler at `GET /plugin/private/<name>/*path` (Server-Sent Events).
      *
      * `request.port.onopen` fires once the SSE stream is ready.
-     * Call `port.send(eventType, data)` inside `onopen` or later to push events.
-     * `eventType` maps to the SSE `event:` field.
-     * `data` maps to `data:`.
+     * Call `port.send(event)` inside `onopen` or later to push events.
+     *
      * `send` is synchronous.
      *
      * The connection stays open until `port.close()` is called or the client disconnects.
