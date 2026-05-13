@@ -5,7 +5,7 @@
   "useTabs": false,
   "newLineKind": "lf",
   "includes": [
-    "**/*.{ts,tsx,js,jsx,mjs,cjs}",
+    "**/*.{ts,tsx,js,jsx,mjs,cjs,mts,cts}",
     "**/*.{json,jsonc}",
     "**/*.{css,scss}",
     "**/*.{md,markdown}",
@@ -28,6 +28,7 @@
     "nextControlFlowPosition": "sameLine",
     "spaceSurroundingProperties": false,
     "importDeclaration.forceMultiLine": "whenMultiple",
+    "importDeclaration.spaceSurroundingNamedImports": false,
     "importDeclaration.sortNamedImports": "maintain"
   },
   "json": {
