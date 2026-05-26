@@ -28,6 +28,7 @@ import {
     openAttributePanel,
     saveLayout,
     IMenuItem,
+    IKernelPluginState,
 } from "siyuan";
 import "./index.scss";
 
@@ -56,6 +57,7 @@ export default class PluginSample extends Plugin {
     }
 
     onload() {
+        this.eventBus.on("kernel-plugin-state-change", this.onKernelPluginStateChange);
         this.data[STORAGE_NAME] = {readonlyText: "Readonly"};
 
         const frontEnd = getFrontend();
@@ -257,6 +259,8 @@ export default class PluginSample extends Plugin {
             console.log(`[${this.name}] load data [${STORAGE_NAME}] fail: `, e);
         });
         console.log(`frontend: ${getFrontend()}; backend: ${getBackend()}`);
+
+        this.kernel.rpc.bind("unload", this.onKernelPluginUnload);
     }
 
     onunload() {
@@ -327,8 +331,29 @@ export default class PluginSample extends Plugin {
         });
     }
 
-    private eventBusLog({detail}: any) {
+    private eventBusLog = ({detail}: any) => {
         console.log(detail);
+    }
+
+    private onKernelPluginStateChange = async ({detail}: CustomEvent<IKernelPluginState>) => {
+        console.log("kernel-plugin-state-change", detail);
+        switch (detail.code) {
+            case 3: { // running
+                const params = ["param 1", "param 2"];
+                const result = await this.kernel.rpc.call.echo("param 1", "param 2");
+                console.group("JSON RPC client -> kernel: echo");
+                console.log("params:", params);
+                console.log("result:", result);
+                console.groupEnd();
+                break;
+            }
+        }
+    }
+
+    private onKernelPluginUnload = async (...params: any[]) => {
+        console.group("JSON RPC kernel -> client: unload");
+        console.log("params:", params);
+        console.groupEnd();
     }
 
     private blockIconEvent({detail}: any) {
@@ -874,6 +899,18 @@ export default class PluginSample extends Plugin {
                 label: "Off closed-notebook",
                 click: () => {
                     this.eventBus.off("closed-notebook", this.eventBusLog);
+                },
+            }, {
+                icon: "iconSelect",
+                label: "On kernel-plugin-state-change",
+                click: () => {
+                    this.eventBus.on("kernel-plugin-state-change", this.onKernelPluginStateChange);
+                },
+            }, {
+                icon: "iconClose",
+                label: "Off kernel-plugin-state-change",
+                click: () => {
+                    this.eventBus.off("kernel-plugin-state-change", this.onKernelPluginStateChange);
                 },
             }],
         });
