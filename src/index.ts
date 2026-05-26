@@ -62,7 +62,7 @@ export default class PluginSample extends Plugin {
         this.kernel.rpc.bind("notify", this.onKernelPluginNotify);
         this.eventBus.on("kernel-plugin-state-change", this.onKernelPluginStateChange);
 
-        this.data[STORAGE_NAME] = { readonlyText: "Readonly" };
+        this.data[STORAGE_NAME] = {readonlyText: "Readonly"};
 
         const frontEnd = getFrontend();
         this.isMobile = frontEnd === "mobile" || frontEnd === "browser-mobile";
@@ -105,7 +105,7 @@ export default class PluginSample extends Plugin {
         this.addDock({
             config: {
                 position: "LeftBottom",
-                size: { width: 200, height: 0 },
+                size: {width: 200, height: 0},
                 icon: "iconSaving",
                 title: "Custom Dock",
                 hotkey: "⌥⌘W",
@@ -137,8 +137,9 @@ export default class PluginSample extends Plugin {
             <svg class="block__logoicon"><use xlink:href="#iconEmoji"></use></svg>Custom Dock
         </div>
         <span class="fn__flex-1 fn__space"></span>
-        <span data-type="min" class="block__icon ariaLabel" data-position="north" aria-label="Min ${adaptHotkey("⌘W")
-                        }"><svg><use xlink:href="#iconMin"></use></svg></span>
+        <span data-type="min" class="block__icon ariaLabel" data-position="north" aria-label="Min ${
+                        adaptHotkey("⌘W")
+                    }"><svg><use xlink:href="#iconMin"></use></svg></span>
     </div>
     <div class="fn__flex-1 plugin-sample__custom-dock">
         ${dock.data.text}
@@ -154,7 +155,7 @@ export default class PluginSample extends Plugin {
         const textareaElement = document.createElement("textarea");
         this.setting = new Setting({
             confirmCallback: () => {
-                this.saveData(STORAGE_NAME, { readonlyText: textareaElement.value }).catch(e => {
+                this.saveData(STORAGE_NAME, {readonlyText: textareaElement.value}).catch(e => {
                     showMessage(`[${this.name}] save data [${STORAGE_NAME}] fail: `, e);
                 });
             },
@@ -248,7 +249,7 @@ export default class PluginSample extends Plugin {
         statusIconTemp.content.firstElementChild.addEventListener("click", () => {
             confirm("⚠️", this.i18n.confirmRemove.replace("${name}", this.name), () => {
                 this.removeData(STORAGE_NAME).then(() => {
-                    this.data[STORAGE_NAME] = { readonlyText: "Readonly" };
+                    this.data[STORAGE_NAME] = {readonlyText: "Readonly"};
                     showMessage(`[${this.name}]: ${this.i18n.removedData}`);
                 }).catch(e => {
                     showMessage(`[${this.name}] remove data [${STORAGE_NAME}] fail: `, e);
@@ -332,11 +333,11 @@ export default class PluginSample extends Plugin {
         });
     }
 
-    private eventBusLog = ({ detail }: any) => {
+    private eventBusLog = ({detail}: any) => {
         console.log(detail);
-    }
+    };
 
-    private onKernelPluginStateChange = async ({ detail }: CustomEvent<IKernelPluginState>) => {
+    private onKernelPluginStateChange = async ({detail}: CustomEvent<IKernelPluginState>) => {
         console.log("kernel-plugin-state-change", detail);
         switch (detail.code) {
             case 3: { // running
@@ -350,27 +351,27 @@ export default class PluginSample extends Plugin {
                 console.groupEnd();
 
                 const request: IKernelPluginRpcCall[] = [
-                    {   // call with custom id
+                    { // call with custom id
                         id: 0,
                         method: "echo",
-                        params: { key1: "value1" },
+                        params: {key1: "value1"},
                     },
-                    {   // call with auto-generated id
+                    { // call with auto-generated id
                         method: "echo",
                         params: ["key2", "value2"],
                     },
-                    {   // notify will not have response and id
+                    { // notify will not have response and id
                         method: "echo-notify",
-                        params: { key3: "value3" },
+                        params: {key3: "value3"},
                         notification: true,
                     },
-                    {   // notify will remove id even if it is set
+                    { // notify will remove id even if it is set
                         id: "3",
                         method: "echo-notify",
                         params: ["key4", "value4"],
                         notification: true,
                     },
-                ]
+                ];
                 const response = await this.kernel.rpc.batch(...request);
                 console.group("JSON RPC client -> kernel: batch call [echo] and [notify] method");
                 console.log("request:", request);
@@ -379,21 +380,21 @@ export default class PluginSample extends Plugin {
                 break;
             }
         }
-    }
+    };
 
     private onKernelPluginUnload = async (...params: any[]) => {
         console.group("JSON RPC kernel -> client: unload");
         console.log("params:", params);
         console.groupEnd();
-    }
+    };
 
     private onKernelPluginNotify = async (...params: any[]) => {
         console.group("JSON RPC kernel -> client: notify");
         console.log("params:", params);
         console.groupEnd();
-    }
+    };
 
-    private blockIconEvent({ detail }: any) {
+    private blockIconEvent({detail}: any) {
         detail.menu.addItem({
             id: "pluginSample_removeSpace",
             iconHTML: "",
@@ -561,7 +562,7 @@ export default class PluginSample extends Plugin {
                 label: "Open Float Layer(open doc first)",
                 click: () => {
                     this.addFloatLayer({
-                        refDefs: [{ refID: this.getEditor().protyle.block.rootID }],
+                        refDefs: [{refID: this.getEditor().protyle.block.rootID}],
                         x: window.innerWidth - 768 - 120,
                         y: 32,
                         isBacklink: false,
@@ -573,7 +574,7 @@ export default class PluginSample extends Plugin {
                 label: "Open Doc Window(open doc first)",
                 click: () => {
                     openWindow({
-                        doc: { id: this.getEditor().protyle.block.rootID },
+                        doc: {id: this.getEditor().protyle.block.rootID},
                     });
                 },
             });
