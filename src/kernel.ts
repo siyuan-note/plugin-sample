@@ -168,6 +168,16 @@ class KernelPlugin {
             "Returns all received arguments unchanged.",
         );
 
+        await rpc.bind(
+            "echo-notify",
+            async (...args: any[]) => {
+                await logger.debug("notify called with:", args);
+                rpc.broadcast("notify", args);
+                return args;
+            },
+            "Broadcasts the received arguments to all connected clients.",
+        );
+
         // ── siyuan.storage 示例
 
         // 监听插件存储目录的文件系统事件。
