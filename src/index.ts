@@ -324,20 +324,20 @@ export default class PluginSample extends Plugin {
     }
     */
 
-    private eventBusPaste(event: any) {
+    private readonly eventBusPaste = (event: any) => {
         // 如果需异步处理请调用 preventDefault， 否则会进行默认处理
         event.preventDefault();
         // 如果使用了 preventDefault，必须调用 resolve，否则程序会卡死
         event.detail.resolve({
             textPlain: event.detail.textPlain.trim(),
         });
-    }
+    };
 
-    private eventBusLog = ({detail}: any) => {
+    private readonly eventBusLog = ({detail}: any) => {
         console.log(detail);
     };
 
-    private onKernelPluginStateChange = async ({detail}: CustomEvent<IKernelPluginState>) => {
+    private readonly onKernelPluginStateChange = async ({detail}: CustomEvent<IKernelPluginState>) => {
         console.log("kernel-plugin-state-change", detail);
         switch (detail.code) {
             case 2: { // running
