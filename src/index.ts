@@ -340,7 +340,7 @@ export default class PluginSample extends Plugin {
     private onKernelPluginStateChange = async ({detail}: CustomEvent<IKernelPluginState>) => {
         console.log("kernel-plugin-state-change", detail);
         switch (detail.code) {
-            case 3: { // running
+            case 2: { // running
                 const params = ["param 1", "param 2"];
                 await this.kernel.rpc.notify["echo-notify"](...params);
 

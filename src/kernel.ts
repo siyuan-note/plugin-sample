@@ -84,7 +84,6 @@ class KernelPlugin {
         // 绑定生命周期钩子。
         // Wire lifecycle hooks.
         this.siyuan.plugin.lifecycle.onload = this.onload.bind(this);
-        this.siyuan.plugin.lifecycle.onloaded = this.onloaded.bind(this);
         this.siyuan.plugin.lifecycle.onrunning = this.onrunning.bind(this);
         this.siyuan.plugin.lifecycle.onunload = this.onunload.bind(this);
 
@@ -134,7 +133,7 @@ class KernelPlugin {
      * ```
      */
     private async onload(): Promise<void> {
-        const {rpc, storage, logger, plugin} = this.siyuan;
+        const {rpc, storage, logger, plugin, client} = this.siyuan;
 
         // ── siyuan.logger（示例）
         // ── siyuan.logger (example)
@@ -212,42 +211,6 @@ class KernelPlugin {
         // remove: deletes a file or directory tree.
         await storage.remove("demo.txt");
 
-        try {
-            throw new Error("This is a test error to demonstrate logger.error with stack trace");
-        } catch (error) {
-            console.error((error as Error).stack?.trim());
-        }
-    }
-
-    /**
-     * 演示通过内核自身的 REST API 使用 {@link IClient.fetch}。
-     *
-     * @remarks
-     * 在所有插件完成 `onload` 后调用。
-     * 此时已加载的插件可在插件注册表中看到。
-     *
-     * `siyuan.client.fetch` 会通过内核隧道请求并自动注入插件的 JWT token。
-     * 无需手动设置认证头。
-     *
-     * ---
-     * Demonstrates {@link IClient.fetch} against the kernel's own REST API.
-     *
-     * Called after all plugins have completed `onload`.
-     * At this point every enabled kernel plugin is visible in the plugin registry.
-     *
-     * `siyuan.client.fetch` tunnels the request through the kernel and injects
-     * the plugin's JWT token automatically.
-     * No manual auth header is needed.
-     *
-     * @example
-     * ```ts
-     * const resp = await siyuan.client.fetch("/api/system/version", { method: "POST", body: "{}" });
-     * const data = await resp.json();
-     * ```
-     */
-    private async onloaded(): Promise<void> {
-        const {client, logger} = this.siyuan;
-
         // 列出通过内核 REST API 加载的所有插件。
         // List all loaded plugins via the kernel REST API.
         // fetch() 返回 IFetchResponse；body 为懒加载的 IDataObject。
@@ -263,6 +226,12 @@ class KernelPlugin {
         await logger.debug("onloaded: resp.statusText =", resp.statusText);
         await logger.debug("onloaded: resp.headers =", resp.headers);
         await logger.debug("onloaded: listLoadedPlugins =", await resp.json());
+
+        try {
+            throw new Error("This is a test error to demonstrate logger.error with stack trace");
+        } catch (error) {
+            console.error((error as Error).stack?.trim());
+        }
     }
 
     /**
