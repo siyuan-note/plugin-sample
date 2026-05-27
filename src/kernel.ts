@@ -383,6 +383,7 @@ class KernelPlugin {
         // 解绑在 onload 中注册的 RPC 方法。
         // Unbind the RPC method registered in onload.
         await rpc.unbind("echo");
+        await rpc.unbind("echo-notify");
 
         // 向所有已连接的 RPC WebSocket 客户端推送一条通知。
         // Push a notification to all connected RPC WebSocket clients.

@@ -267,6 +267,10 @@ export default class PluginSample extends Plugin {
 
     onunload() {
         console.log(this.i18n.byePlugin);
+
+        this.kernel.rpc.unbind("unload", this.onKernelPluginUnload);
+        this.kernel.rpc.unbind("notify", this.onKernelPluginNotify);
+        this.eventBus.off("kernel-plugin-state-change", this.onKernelPluginStateChange);
     }
 
     uninstall() {
