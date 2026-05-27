@@ -171,7 +171,7 @@ class KernelPlugin {
             "echo-notify",
             async (...args: any[]) => {
                 await logger.debug("notify called with:", args);
-                rpc.broadcast("notify", args);
+                await rpc.broadcast("notify", args);
                 return args;
             },
             "Broadcasts the received arguments to all connected clients.",
