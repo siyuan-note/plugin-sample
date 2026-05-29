@@ -38,8 +38,8 @@ const TAB_TYPE = "custom_tab";
 const DOCK_TYPE = "dock_tab";
 
 export default class PluginSample extends Plugin {
-    private custom: () => Custom;
-    private isMobile: boolean;
+    private custom!: () => Custom;
+    private isMobile!: boolean;
     private blockIconEventBindThis = this.blockIconEvent.bind(this);
 
     updateProtyleToolbar(toolbar: Array<string | IMenuItem>) {
@@ -231,10 +231,10 @@ export default class PluginSample extends Plugin {
                     let rect = topBarElement.getBoundingClientRect();
                     // 如果被隐藏，则使用更多按钮
                     if (rect.width === 0) {
-                        rect = document.querySelector("#barMore").getBoundingClientRect();
+                        rect = document.querySelector<HTMLElement>("#barMore")!.getBoundingClientRect();
                     }
                     if (rect.width === 0) {
-                        rect = document.querySelector("#barPlugins").getBoundingClientRect();
+                        rect = document.querySelector<HTMLElement>("#barPlugins")!.getBoundingClientRect();
                     }
                     this.addMenu(rect);
                 }
@@ -246,7 +246,7 @@ export default class PluginSample extends Plugin {
         <use xlink:href="#iconTrashcan"></use>
     </svg>
 </div>`;
-        statusIconTemp.content.firstElementChild.addEventListener("click", () => {
+        statusIconTemp.content.firstElementChild!.addEventListener("click", () => {
             confirm("⚠️", this.i18n.confirmRemove.replace("${name}", this.name), () => {
                 this.removeData(STORAGE_NAME).then(() => {
                     this.data[STORAGE_NAME] = {readonlyText: "Readonly"};
@@ -442,11 +442,11 @@ export default class PluginSample extends Plugin {
             width: this.isMobile ? "92vw" : "560px",
             height: "540px",
         });
-        new Protyle(this.app, dialog.element.querySelector("#protyle"), {
-            blockId: this.getEditor().protyle.block.rootID,
+        new Protyle(this.app, dialog.element.querySelector<HTMLElement>("#protyle")!, {
+            blockId: this.getEditor()!.protyle.block.rootID,
         });
         fetchPost("/api/system/currentTime", {}, (response) => {
-            dialog.element.querySelector("#time").innerHTML = new Date(response.data).toString();
+            dialog.element.querySelector<HTMLElement>("#time")!.innerHTML = new Date(response.data).toString();
         });
     }
 
@@ -466,8 +466,8 @@ export default class PluginSample extends Plugin {
             label: "Open Attribute Panel",
             click: () => {
                 openAttributePanel({
-                    nodeElement: this.getEditor().protyle.wysiwyg.element.firstElementChild as HTMLElement,
-                    protyle: this.getEditor().protyle,
+                    nodeElement: this.getEditor()!.protyle!.wysiwyg!.element.firstElementChild! as HTMLElement,
+                    protyle: this.getEditor()!.protyle!,
                     focusName: "custom",
                 });
             },
@@ -485,8 +485,8 @@ export default class PluginSample extends Plugin {
             label: "Select Opened Doc(open doc first)",
             click: () => {
                 (getModelByDockType("file") as Files).selectItem(
-                    this.getEditor().protyle.notebookId,
-                    this.getEditor().protyle.path,
+                    this.getEditor()!.protyle.notebookId!,
+                    this.getEditor()!.protyle.path!,
                 );
             },
         });
@@ -529,7 +529,7 @@ export default class PluginSample extends Plugin {
                     const tab = await openTab({
                         app: this.app,
                         doc: {
-                            id: this.getEditor().protyle.block.rootID,
+                            id: this.getEditor()!.protyle.block.rootID!,
                         },
                     });
                     console.log(tab);
@@ -566,7 +566,7 @@ export default class PluginSample extends Plugin {
                 label: "Open Float Layer(open doc first)",
                 click: () => {
                     this.addFloatLayer({
-                        refDefs: [{refID: this.getEditor().protyle.block.rootID}],
+                        refDefs: [{refID: this.getEditor()!.protyle.block.rootID!}],
                         x: window.innerWidth - 768 - 120,
                         y: 32,
                         isBacklink: false,
@@ -578,7 +578,7 @@ export default class PluginSample extends Plugin {
                 label: "Open Doc Window(open doc first)",
                 click: () => {
                     openWindow({
-                        doc: {id: this.getEditor().protyle.block.rootID},
+                        doc: {id: this.getEditor()!.protyle.block.rootID!},
                     });
                 },
             });
@@ -587,7 +587,7 @@ export default class PluginSample extends Plugin {
                 icon: "iconFile",
                 label: "Open Doc(open doc first)",
                 click: () => {
-                    openMobileFileById(this.app, this.getEditor().protyle.block.rootID);
+                    openMobileFileById(this.app, this.getEditor()!.protyle.block.rootID!);
                 },
             });
         }
@@ -966,8 +966,8 @@ export default class PluginSample extends Plugin {
             menu.fullscreen();
         } else {
             menu.open({
-                x: rect.right,
-                y: rect.bottom,
+                x: rect!.right,
+                y: rect!.bottom,
                 isLeft: true,
             });
         }
