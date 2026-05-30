@@ -231,10 +231,10 @@ export default class PluginSample extends Plugin {
                     let rect = topBarElement.getBoundingClientRect();
                     // 如果被隐藏，则使用更多按钮
                     if (rect.width === 0) {
-                        rect = document.querySelector<HTMLElement>("#barMore")!.getBoundingClientRect();
+                        rect = document.querySelector<HTMLElement>("#barMore")?.getBoundingClientRect() ?? rect;
                     }
                     if (rect.width === 0) {
-                        rect = document.querySelector<HTMLElement>("#barPlugins")!.getBoundingClientRect();
+                        rect = document.querySelector<HTMLElement>("#barPlugins")?.getBoundingClientRect() ?? rect;
                     }
                     this.addMenu(rect);
                 }
