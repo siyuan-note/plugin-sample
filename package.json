@@ -17,6 +17,10 @@
   "keywords": [],
   "author": "Vanessa",
   "license": "MIT",
+  "packageManager": "pnpm@11.4.0",
+  "engines": {
+    "node": ">=24.0.0"
+  },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.5",
     "@eslint/js": "^10.0.1",
