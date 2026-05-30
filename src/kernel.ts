@@ -1,5 +1,3 @@
-/// <reference types="siyuan/kernel" />
-
 import type * as kernel from "siyuan/kernel";
 
 /**

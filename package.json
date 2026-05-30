@@ -38,7 +38,7 @@
     "sass-loader": "^17.0.0",
     "siyuan": "1.2.2-alpha.0",
     "tslib": "^2.8.1",
-    "typescript": "^5.9.3",
+    "typescript": "^6.0.3",
     "webpack": "^5.107.2",
     "webpack-cli": "^7.0.3",
     "zip-webpack-plugin": "^4.0.3"
