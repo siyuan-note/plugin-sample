@@ -442,7 +442,9 @@ export default class PluginSample extends Plugin {
             width: this.isMobile ? "92vw" : "560px",
             height: "540px",
         });
-        new Protyle(this.app, dialog.element.querySelector<HTMLElement>("#protyle")!, {
+        const protyle = dialog.element.querySelector<HTMLElement>("#protyle");
+        if (protyle == null) return;
+        new Protyle(this.app, protyle, {
             blockId: this.getEditor()?.protyle.block.rootID,
         });
         fetchPost("/api/system/currentTime", {}, (response) => {
@@ -469,7 +471,9 @@ export default class PluginSample extends Plugin {
             label: "Open Attribute Panel",
             click: () => {
                 openAttributePanel({
-                    nodeElement: this.getEditor()?.protyle?.wysiwyg?.element.firstElementChild as HTMLElement,
+                    nodeElement: this.getEditor()?.protyle?.wysiwyg?.element.firstElementChild as
+                        | HTMLElement
+                        | undefined,
                     protyle: this.getEditor()?.protyle,
                     focusName: "custom",
                 });
