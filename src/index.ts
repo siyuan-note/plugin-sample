@@ -72,8 +72,8 @@ export default class PluginSample extends Plugin {
             title: this.i18n.toggleEditorFullscreen,
             callback: (event, protyle) => {
                 event.preventDefault();
-                protyle.element.classList.toggle("fullscreen");
-                protyle.getInstance().resize();
+                const editor = protyle.getInstance();
+                editor.setFullscreen(!editor.isFullscreen());
             },
         });
         // 图标的制作参见帮助文档
