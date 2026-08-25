@@ -168,3 +168,20 @@ Developers should pay attention to the following when developing the functionali
 
 * If `/api/filetree/createDailyNote` is called to create a daily note, the attribute will be automatically added to the document, and developers do not need to handle it separately
 * If a document is created manually by developer's code (e.g., using the `createDocWithMd` API to create a daily note), please manually add this attribute to the document
+
+### 3. Frontend Plugin Lifecycle
+
+Each frontend process owns its own plugin instance. Under normal conditions, SiYuan runs `onload`, `onLayoutReady`, `onunload`, and `uninstall` for the same plugin strictly in sequence and waits for a returned Promise before entering the next phase. `onDataChanged` remains a synchronous notification and is not part of this wait contract. `onload` and `onunload` describe whether the plugin is running in the current frontend, `uninstall` runs only when the plugin is removed from the workspace, and `onLayoutReady` runs at most once after `onload` and kernel initialization complete.
+
+Disabling, reloading, or uninstalling a plugin starts one shared five-second removal budget when the first removal request is received. If `onload`, kernel initialization, or `onLayoutReady` is still pending, waiting for it consumes the same budget. The remaining time is shared by `onunload` and, only for an actual uninstall, `uninstall`; the budget is not restarted for each hook.
+
+Before the deadline, lifecycle phases remain strictly serial. Once the deadline expires, SiYuan stops waiting. JavaScript promises cannot be forcibly canceled, so a timed-out hook may continue during or after teardown. The five-second budget limits only how long SiYuan waits for Promises; it cannot interrupt synchronous JavaScript. SiYuan still invokes each remaining teardown hook exactly once on a best-effort basis without waiting for it, then removes host-managed resources and destroys the kernel connection.
+
+Closing a standalone window or exiting SiYuan does not trigger frontend plugin lifecycle hooks as part of that action.
+
+Plugin lifecycle hooks should follow these guidelines:
+
+* Keep hooks short and avoid unbounded waits
+* Make `onunload` and `uninstall` idempotent and safe when only part of the plugin state has been initialized
+* Cancel pending work with a plugin-owned mechanism such as `AbortController`, and check cancellation after each asynchronous boundary before changing the DOM or using plugin APIs
+* Persist essential data when the corresponding operation occurs instead of relying on a teardown hook to finish
