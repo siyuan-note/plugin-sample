@@ -229,7 +229,7 @@ export default class PluginSample extends Plugin {
         console.log(this.i18n.helloPlugin);
     }
 
-    onLayoutReady() {
+    async onLayoutReady() {
         const topBarElement = this.addTopBar({
             icon: "iconFace",
             title: this.i18n.addTopBarIcon,
@@ -269,24 +269,26 @@ export default class PluginSample extends Plugin {
         this.addStatusBar({
             element: statusIconTemp.content.firstElementChild as HTMLElement,
         });
-        this.loadData(STORAGE_NAME).catch(e => {
+        await this.loadData(STORAGE_NAME).catch(e => {
             console.log(`[${this.name}] load data [${STORAGE_NAME}] fail: `, e);
         });
         console.log(`frontend: ${getFrontend()}; backend: ${getBackend()}`);
     }
 
-    onunload() {
+    async onunload() {
         console.log(this.i18n.byePlugin);
 
-        this.kernel.rpc.unbind("unload", this.onKernelPluginUnload);
-        this.kernel.rpc.unbind("notify", this.onKernelPluginNotify);
         this.eventBus.off("kernel-plugin-state-change", this.onKernelPluginStateChange);
+        await Promise.all([
+            this.kernel.rpc.unbind("unload", this.onKernelPluginUnload),
+            this.kernel.rpc.unbind("notify", this.onKernelPluginNotify),
+        ]);
     }
 
-    uninstall() {
+    async uninstall() {
         // 卸载插件时删除插件数据
         // Delete plugin data when uninstalling the plugin
-        this.removeData(STORAGE_NAME).catch(e => {
+        await this.removeData(STORAGE_NAME).catch(e => {
             showMessage(`uninstall [${this.name}] remove data [${STORAGE_NAME}] fail: ${e.msg}`);
         });
     }
