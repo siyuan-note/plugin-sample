@@ -168,9 +168,11 @@ PR 被合并以后集市会通过 GitHub Actions 自动更新索引并部署。�
 
 ### 3. 前端插件生命周期
 
-每个前端进程各自持有一份插件实例。正常情况下，思源会严格串行执行同一插件的 `onload`、`onLayoutReady`、`onunload` 与 `uninstall`，并等待钩子返回的 Promise 后再进入下一阶段。`onDataChanged` 仍是同步通知，不在该等待契约内。`onload` 和 `onunload` 描述插件是否在当前前端中运行，`uninstall` 仅在从工作空间移除插件时运行，`onLayoutReady` 在 `onload` 与内核初始化完成后最多运行一次。
+每个前端进程各自持有一份插件实例。正常情况下，思源会严格串行执行同一插件的 `onload`、`onLayoutReady`、`onDataChanged`、`onunload` 与 `uninstall`，并等待钩子返回的 Promise 后再进入下一阶段。`onload` 和 `onunload` 描述插件是否在当前前端中运行，`uninstall` 仅在从工作空间移除插件时运行，`onLayoutReady` 在 `onload` 与内核初始化完成后最多运行一次。
 
-禁用、重载或卸载插件时，会从首次收到拆除请求起启动一份共享的 5 秒总预算。若 `onload`、内核初始化或 `onLayoutReady` 仍未完成，等待它们会消耗同一份预算。`onunload` 与仅在真正卸载时运行的 `uninstall` 共用剩余时间，不会为每个钩子重新开始计时。
+`onDataChanged` 仅在插件进入 Ready 状态并完成挂载后运行，尚未执行的通知会合并。若插件未覆盖基类实现，思源会重载整个插件，而不是调用空回调。插件被禁用或卸载时，尚未开始的通知会被丢弃。
+
+禁用、重载或卸载插件时，会从首次收到拆除请求起启动一份共享的 5 秒总预算。若 `onload`、内核初始化、`onLayoutReady` 或已经开始的 `onDataChanged` 仍未完成，等待它们会消耗同一份预算。`onunload` 与仅在真正卸载时运行的 `uninstall` 共用剩余时间，不会为每个钩子重新开始计时。
 
 截止时间前，各生命周期阶段保持严格串行。截止时间到达后，思源会停止等待。JavaScript Promise 无法被强制取消，因此超时的钩子可能在拆除期间或拆除后继续运行。这 5 秒只限制思源等待 Promise 的时间，无法中断同步 JavaScript。思源仍会尽力调用每个剩余的拆除钩子一次，但不再等待其完成，随后移除宿主管理的资源并销毁内核连接。
 
