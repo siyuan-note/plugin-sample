@@ -113,6 +113,91 @@ A typical example is as follows:
   * `custom`: Custom sponsorship link list
 * `keywords`: Search keyword list, used for marketplace search function, supplements search keywords beyond the values of `name`, `author`, `displayName`, and `description` fields
 
+## Startup appearances
+
+A plugin can provide one or more startup appearances without running plugin code during startup. SiYuan scans the resources declared by installed plugins, and the user makes the final selection in <kbd>Settings</kbd> - <kbd>Appearance</kbd> - <kbd>Startup appearance</kbd>. The selection applies only to the current device after restart; a plugin should not modify it proactively.
+
+Declare the appearance IDs in `plugin.json`:
+
+```json
+{
+  "bootAppearances": [
+    "sunrise",
+    "night-sky"
+  ]
+}
+```
+
+Place each appearance in its own directory:
+
+```text
+boot-appearances/
+└── sunrise/
+    ├── boot.json
+    ├── style.css
+    └── assets/
+        ├── background.mp4
+        ├── poster.webp
+        └── logo.webp
+```
+
+`boot.json` uses the following format:
+
+```json
+{
+  "schemaVersion": 1,
+  "id": "sunrise",
+  "displayName": {
+    "default": "Sunrise",
+    "zh_CN": "日出"
+  },
+  "frontends": [
+    "desktop",
+    "mobile"
+  ],
+  "backgroundColor": "#1e1e1e",
+  "style": "style.css",
+  "layers": [
+    {
+      "id": "background",
+      "type": "video",
+      "src": "assets/background.mp4",
+      "poster": "assets/poster.webp",
+      "fit": "cover",
+      "position": "center"
+    },
+    {
+      "id": "logo",
+      "type": "image",
+      "src": "assets/logo.webp",
+      "fit": "contain",
+      "position": "center"
+    }
+  ],
+  "officialUI": {
+    "showLogo": false,
+    "showDetails": true,
+    "textColor": "#ffffff",
+    "progressColor": "#d23f31",
+    "trackColor": "#ffffff33"
+  }
+}
+```
+
+The layer array order is the visual stacking order. `style.css` runs only inside a non-interactive sandboxed frame and can address generated elements with `[data-layer="<id>"]`; relative `url()` values are resolved from the stylesheet directory. CSS subresources remain limited to the selected appearance by CSP and the resource route; an unavailable indirect resource fails on its own without necessarily disabling the whole appearance. JavaScript, arbitrary HTML, audio, custom fonts, and external URLs are not supported.
+
+The format is validated before an appearance is listed:
+
+* Appearance and layer IDs contain only lowercase letters, digits, and hyphens, are at most 64 characters, and hyphens cannot be consecutive or appear at either end; layer IDs must be unique
+* `displayName.default` is required; `frontends` accepts only `desktop` and `mobile`, and when omitted it inherits the compatible native frontends from `plugin.json`
+* Colors use 3, 4, 6, or 8 digit hexadecimal notation; omitted background and official UI colors use the built-in startup page colors, while `showLogo` and `showDetails` default to `true`
+* `fit` accepts `cover`, `contain`, `fill`, `none`, or `scale-down` and defaults to `cover`; `position` accepts `center`, `top`, `right`, `bottom`, `left`, `top-left`, `top-right`, `bottom-right`, or `bottom-left` and defaults to `center`
+* Images use PNG, JPEG, or WebP and are at most 5 MB each; videos use MP4, are at most 20 MB each, require an image poster, and are forced to muted, autoplay, loop, and inline playback
+* `boot.json` and `style.css` are each at most 200 KB, an appearance has at most 8 layers, and its directory is at most 50 MB with at most 256 files and directories; relative paths are at most 512 UTF-8 bytes and 16 levels deep
+* Paths declared by `boot.json` are relative to the appearance directory; absolute paths, `..`, backslashes, and symbolic links are rejected; unsupported declared resource types or MIME mismatches make the appearance unavailable, and unsupported files are never served
+
+The appearance resources live under workspace `data` and can be synchronized. The active selection is device-local and automatically falls back to SiYuan's built-in startup page if the provider is uninstalled or any validation or loading step fails.
+
 ## Package
 
 No matter which method is used to compile and package, we finally need to generate a package.zip, which contains at
@@ -125,6 +210,7 @@ least the following files:
 * plugin.json
 * preview.png (recommended size: 1024*768, file size should not exceed 200KB)
 * README*.md
+* boot-appearances/* (optional startup appearance resources)
 
 ## List on the marketplace
 

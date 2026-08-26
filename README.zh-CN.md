@@ -112,6 +112,91 @@
   * `custom`：自定义赞助链接列表
 * `keywords`：搜索关键字列表，用于集市搜索功能，补充 `name`、`author`、`displayName`、`description` 字段值以外的搜索关键词
 
+## 启动页外观
+
+插件可以提供一个或多个启动页外观，启动过程中不会运行插件代码。思源扫描已安装插件声明的资源，最终由用户在 <kbd>设置</kbd> - <kbd>外观</kbd> - <kbd>启动页外观</kbd> 中选择。选择结果在重启后生效且仅应用于当前设备，插件不应主动修改。
+
+在 `plugin.json` 中声明外观 ID：
+
+```json
+{
+  "bootAppearances": [
+    "sunrise",
+    "night-sky"
+  ]
+}
+```
+
+每个外观使用独立目录：
+
+```text
+boot-appearances/
+└── sunrise/
+    ├── boot.json
+    ├── style.css
+    └── assets/
+        ├── background.mp4
+        ├── poster.webp
+        └── logo.webp
+```
+
+`boot.json` 使用以下格式：
+
+```json
+{
+  "schemaVersion": 1,
+  "id": "sunrise",
+  "displayName": {
+    "default": "Sunrise",
+    "zh_CN": "日出"
+  },
+  "frontends": [
+    "desktop",
+    "mobile"
+  ],
+  "backgroundColor": "#1e1e1e",
+  "style": "style.css",
+  "layers": [
+    {
+      "id": "background",
+      "type": "video",
+      "src": "assets/background.mp4",
+      "poster": "assets/poster.webp",
+      "fit": "cover",
+      "position": "center"
+    },
+    {
+      "id": "logo",
+      "type": "image",
+      "src": "assets/logo.webp",
+      "fit": "contain",
+      "position": "center"
+    }
+  ],
+  "officialUI": {
+    "showLogo": false,
+    "showDetails": true,
+    "textColor": "#ffffff",
+    "progressColor": "#d23f31",
+    "trackColor": "#ffffff33"
+  }
+}
+```
+
+图层数组顺序就是视觉堆叠顺序。`style.css` 仅在不可交互的沙箱框架内生效，可以使用 `[data-layer="<id>"]` 选择生成的元素；相对 `url()` 从样式表所在目录解析。CSS 子资源仍受 CSP 和资源路由限制，只能访问当前选中的外观；间接资源不可用时仅该资源加载失败，不一定禁用整个外观。不支持 JavaScript、任意 HTML、音频、自定义字体和外部 URL。
+
+外观进入可选列表前会进行以下校验：
+
+* 外观和图层 ID 只能包含小写字母、数字和单个连字符，最长 64 个字符，连字符不能连续，也不能出现在开头或结尾，图层 ID 必须唯一
+* 必须提供 `displayName.default`；`frontends` 仅支持 `desktop` 和 `mobile`，缺省时继承 `plugin.json` 中兼容的原生前端
+* 颜色使用 3、4、6 或 8 位十六进制格式；背景和官方界面颜色缺省时使用内置启动页颜色，`showLogo` 和 `showDetails` 默认为 `true`
+* `fit` 支持 `cover`、`contain`、`fill`、`none` 和 `scale-down`，默认为 `cover`；`position` 支持 `center`、`top`、`right`、`bottom`、`left`、`top-left`、`top-right`、`bottom-right` 和 `bottom-left`，默认为 `center`
+* 图片仅支持 PNG、JPEG 和 WebP，单文件不超过 5 MB；视频仅支持 MP4，单文件不超过 20 MB，必须提供图片 poster，并由思源强制静音、自动播放、循环和内嵌播放
+* `boot.json` 和 `style.css` 均不超过 200 KB，单个外观最多 8 个图层，目录总量不超过 50 MB，且文件与目录合计不超过 256 个；相对路径不超过 512 个 UTF-8 字节和 16 层
+* `boot.json` 声明的路径必须相对于当前外观目录，绝对路径、`..`、反斜杠和符号链接会被拒绝；声明的资源类型不受支持或 MIME 不匹配会使外观不可用，不支持的文件不会被提供给启动页
+
+外观资源保存在工作空间 `data` 下，可以同步；当前选择仅保存在本机。如果提供插件被卸载，或任一校验、加载步骤失败，思源会自动使用内置启动页。
+
 ## 打包
 
 无论使用何种方式编译打包，我们最终需要生成一个 package.zip，它至少包含如下文件：
@@ -123,6 +208,7 @@
 * plugin.json
 * preview.png (建议尺寸为 1024*768、文件大小不超过 200KB)
 * README*.md
+* boot-appearances/*（可选的启动页外观资源）
 
 ## 上架集市
 
