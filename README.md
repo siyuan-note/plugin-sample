@@ -273,3 +273,19 @@ Plugin lifecycle hooks should follow these guidelines:
 * Make `onunload` and `uninstall` idempotent and safe when only part of the plugin state has been initialized
 * Cancel pending work with a plugin-owned mechanism such as `AbortController`, and check cancellation after each asynchronous boundary before changing the DOM or using plugin APIs
 * Persist essential data when the corresponding operation occurs instead of relying on a teardown hook to finish
+
+### 4. Custom Block Renderers
+
+Plugins can register custom block renderers through `customBlockRenders`. This sample registers the `counter` type and adds an <kbd>Insert custom block</kbd> button to the editor breadcrumb bar. Clicking the button inserts a counter custom block at the current caret. See [`src/index.ts`](./src/index.ts) for the complete implementation.
+
+The corresponding Markdown is shown below. `plugin-sample` is the plugin package name and should be replaced with the `name` from `plugin.json` in another plugin. The plugin package name and block type must be encoded separately as URI components.
+
+```markdown
+;;;plugin-sample/counter
+0
+;;;
+```
+
+A renderer should modify only the provided `element` mount. `content` is the custom block's persisted raw content. To change it, call `setContent` after `render` returns. `setContent` returns `false` in read-only mode or when the content contains a standalone `;;;` closing-fence line. A renderer can return a cleanup function to remove event listeners, timers, and other external resources.
+
+SiYuan displays the raw content as a fallback when the plugin is unavailable or the block type is not registered. Rendered DOM is transient; persisted data belongs in `content`, block attributes, or plugin-owned storage. Nested Protyle editors are not supported inside the mount. See the [SiYuan `.sy` file JSON structure specification](https://github.com/siyuan-note/siyuan/blob/master/docs/SY-FORMAT.md#516-custom-block) for the underlying format.

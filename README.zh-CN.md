@@ -270,3 +270,19 @@ PR 被合并以后集市会通过 GitHub Actions 自动更新索引并部署。�
 * 确保 `onunload` 和 `uninstall` 幂等，并能安全处理仅完成部分插件状态初始化的情况
 * 使用插件自己的 `AbortController` 等机制取消未完成的任务，并在每个异步边界之后检查取消状态，再修改 DOM 或使用插件 API
 * 在对应操作发生时持久化必要数据，不要依赖拆除钩子一定能够执行完毕
+
+### 4. 自定义块渲染器
+
+插件可以通过 `customBlockRenders` 注册自定义块渲染器。本示例注册了 `counter` 类型，并在编辑器面包屑栏添加了 <kbd>插入自定义块</kbd> 按钮；点击该按钮会在当前光标处插入一个计数器自定义块。完整实现见 [`src/index.ts`](./src/index.ts)。
+
+对应的 Markdown 如下，其中 `plugin-sample` 是插件包名，实际使用时应替换为 `plugin.json` 中的 `name`。插件包名和块类型必须分别按 URI 组件编码。
+
+```markdown
+;;;plugin-sample/counter
+0
+;;;
+```
+
+渲染器只应修改传入的 `element` 挂载元素。`content` 是自定义块的持久化原始内容；需要修改时，应在 `render` 返回后调用 `setContent`。只读状态或内容包含独占一行的 `;;;` 结束标记时，`setContent` 返回 `false`。渲染器可以返回清理函数，用于移除事件监听器、定时器和其他外部资源。
+
+插件未加载或未注册对应类型时，思源会显示原始内容作为回退。渲染产生的 DOM 不会持久化，持久化数据应放在 `content`、块属性或插件自己的存储中。挂载元素内不支持嵌套 Protyle。底层格式详见 [SiYuan `.sy` 文件 JSON 结构规范](https://github.com/siyuan-note/siyuan/blob/master/docs/SY-FORMAT.zh-CN.md#516-%E8%87%AA%E5%AE%9A%E4%B9%89%E5%9D%97)。

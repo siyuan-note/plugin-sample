@@ -1,6 +1,8 @@
 {
   "addTopBarIcon": "使用插件添加一个顶栏按钮",
   "toggleEditorFullscreen": "切换编辑器全屏",
+  "insertCustomBlock": "插入自定义块",
+  "customBlockCounter": "计数：${count}",
   "cancel": "取消",
   "save": "保存",
   "byeMenu": "再见，菜单！",
