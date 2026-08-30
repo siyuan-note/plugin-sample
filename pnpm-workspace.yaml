@@ -3,4 +3,4 @@ allowBuilds:
   dprint: true
   esbuild: false
 minimumReleaseAgeExclude:
-  - siyuan@1.2.4
+  - siyuan@1.2.6

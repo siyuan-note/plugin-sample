@@ -51,8 +51,8 @@ importers:
         specifier: ^17.0.0
         version: 17.0.0(sass@1.100.0)(webpack@5.107.2)
       siyuan:
-        specifier: 1.2.4
-        version: 1.2.4
+        specifier: 1.2.6
+        version: 1.2.6
       tslib:
         specifier: ^2.8.1
         version: 2.8.1
@@ -1653,8 +1653,8 @@ packages:
     resolution: {integrity: sha512-ZX99e6tRweoUXqR+VBrslhda51Nh5MTQwou5tnUDgbtyM0dBgmhEDtWGP/xbKn6hqfPRHujUNwz5fy/wbbhnpw==}
     engines: {node: '>= 0.4'}
 
-  siyuan@1.2.4:
-    resolution: {integrity: sha512-L1QZcFp2zZxX7Qsjvmj/pqim1vBw9iEDeilEht51zxLf21csdYsuUV5U5NjUYfI/+1PUGeS/uJZGYwOwkfBHXw==}
+  siyuan@1.2.6:
+    resolution: {integrity: sha512-rgLgWcMvUwC/1pWjIoVNfWdeOivrz6QDd65JEaBzA5j/wTnZAOEQQGB9+APRshcAjeyNV+LUknWAc7FJPBJMrA==}
 
   source-map-js@1.2.1:
     resolution: {integrity: sha512-UXWMKhLOwVKb728IUtQPXxfYU+usdybtUrK/8uGE8CQMvrhOpwvzDBwj0QhSL7MQc7vIsISBG8VQ8+IDQxpfQA==}
@@ -3509,7 +3509,7 @@ snapshots:
       side-channel-map: 1.0.1
       side-channel-weakmap: 1.0.2
 
-  siyuan@1.2.4:
+  siyuan@1.2.6:
     dependencies:
       '@dop251/types-goja_nodejs-buffer': 0.0.0-20260212111938-1f56ff5bcf14
       '@dop251/types-goja_nodejs-global': 0.0.0-20260212111938-1f56ff5bcf14
