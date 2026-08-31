@@ -2,6 +2,7 @@
 
 ## v0.5.1 2026
 
+* [Document optional marketplace images and labeled funding links](https://github.com/siyuan-note/siyuan/issues/19056)
 * [Demonstrate custom block renderers](https://github.com/siyuan-note/siyuan/issues/8418)
 * [Demonstrate asynchronous frontend plugin lifecycle hooks](https://github.com/siyuan-note/siyuan/issues/18979)
 * [Use the Protyle fullscreen API in the editor breadcrumb button demo](https://github.com/siyuan-note/siyuan/issues/18909)

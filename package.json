@@ -1,6 +1,6 @@
 {
   "name": "plugin-sample",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "This is a sample plugin for SiYuan (https://b3log.org/siyuan)",
   "main": ".src/index.js",
   "scripts": {

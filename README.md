@@ -13,11 +13,11 @@
 ## Development
 
 * i18n/*
-* icon.png (160*160)
+* icon.png (optional default icon, 160*160)
 * index.css
 * index.js
 * plugin.json
-* preview.png (1024*768)
+* preview.png (optional default preview, 1024*768)
 * README*.md
 * [Fontend API](https://github.com/siyuan-note/petal)
 * [Backend API](https://github.com/siyuan-note/siyuan/blob/master/API.md)
@@ -44,7 +44,7 @@ A typical example is as follows:
   "name": "plugin-sample",
   "author": "Vanessa",
   "url": "https://github.com/siyuan-note/plugin-sample",
-  "version": "0.4.2",
+  "version": "0.5.1",
   "minAppVersion": "3.3.0",
   "kernels": ["all"],
   "backends": ["all"],
@@ -62,6 +62,8 @@ A typical example is as follows:
     "default": "README.md",
     "zh-CN": "README.zh-CN.md"
   },
+  "icon": "icon.png",
+  "preview": "preview.png",
   "funding": {
     "custom": ["https://ld246.com/sponsor"]
   },
@@ -106,11 +108,16 @@ A typical example is as follows:
 * `readme`: Readme file name, displayed in the marketplace details page
   * `default`: Default language, must exist. If the plugin supports English, English should be used here
   * `zh-CN`, `en` and other languages: optional, must be BCP 47 tags
-* `funding`: Plugin sponsorship information, only one type will be displayed in the marketplace
+  * Relative images are loaded from `package.zip` when present; otherwise the online marketplace falls back to the matching GitHub Release. Include them in `package.zip` for offline use
+* `icon`: Optional marketplace icon filename at the package root. Supports PNG, JPEG, WebP, and AVIF up to 64 KiB; the recommended size is 160*160
+* `preview`: Optional marketplace preview filename at the package root. Supports PNG, JPEG, WebP, and AVIF up to 512 KiB; the recommended size is 1024*768
+  * SVG is unsupported. To omit an image, remove its field and the legacy `icon.png` or `preview.png`; an empty field value is invalid
+* `funding`: Plugin sponsorship information
   * `openCollective`: Open Collective name
   * `patreon`: Patreon name
   * `github`: GitHub login name
   * `custom`: Custom sponsorship link list
+  * `links`: Labeled custom sponsorship links, for example `{"label": "Sponsor", "url": "https://example.com"}`
 * `keywords`: Search keyword list, used for marketplace search function, supplements search keywords beyond the values of `name`, `author`, `displayName`, and `description` fields
 
 ## Startup appearances
@@ -204,11 +211,10 @@ No matter which method is used to compile and package, we finally need to genera
 least the following files:
 
 * i18n/* (If the plugin supports multiple languages, language files need to be packaged to this directory, otherwise this directory is not needed)
-* icon.png (recommended size: 160*160, file size should not exceed 20KB)
+* Image files declared by `icon` and `preview` (optional)
 * index.css
 * index.js
 * plugin.json
-* preview.png (recommended size: 1024*768, file size should not exceed 200KB)
 * README*.md
 * boot-appearances/* (optional startup appearance resources)
 
