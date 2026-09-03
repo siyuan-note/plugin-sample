@@ -27,7 +27,6 @@ import {
     openSetting,
     openAttributePanel,
     saveLayout,
-    IMenuItem,
     IKernelPluginState,
     IKernelPluginRpcCall,
 } from "siyuan";
@@ -72,9 +71,14 @@ export default class PluginSample extends Plugin {
         return () => button.removeEventListener("click", increase);
     };
 
-    updateProtyleToolbar(toolbar: Array<string | IMenuItem>) {
-        toolbar.push("|");
-        toolbar.push({
+    onload() {
+        this.kernel.rpc.bind("unload", this.onKernelPluginUnload);
+        this.kernel.rpc.bind("notify", this.onKernelPluginNotify);
+        this.eventBus.on("kernel-plugin-state-change", this.onKernelPluginStateChange);
+        this.customBlockRenders[CUSTOM_BLOCK_TYPE] = {
+            render: this.renderCounterCustomBlock,
+        };
+        this.addToolbarItem({
             name: "insert-smail-emoji",
             icon: "iconEmoji",
             hotkey: "⇧⌘I",
@@ -84,16 +88,6 @@ export default class PluginSample extends Plugin {
                 protyle.insert("😊");
             },
         });
-        return toolbar;
-    }
-
-    onload() {
-        this.kernel.rpc.bind("unload", this.onKernelPluginUnload);
-        this.kernel.rpc.bind("notify", this.onKernelPluginNotify);
-        this.eventBus.on("kernel-plugin-state-change", this.onKernelPluginStateChange);
-        this.customBlockRenders[CUSTOM_BLOCK_TYPE] = {
-            render: this.renderCounterCustomBlock,
-        };
 
         this.data[STORAGE_NAME] = {readonlyText: "Readonly"};
 
