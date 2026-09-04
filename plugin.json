@@ -2,8 +2,8 @@
   "name": "plugin-sample",
   "author": "Vanessa",
   "url": "https://github.com/siyuan-note/plugin-sample",
-  "version": "0.5.0",
-  "minAppVersion": "3.8.0",
+  "version": "0.5.1",
+  "minAppVersion": "3.8.3",
   "kernels": [
     "windows",
     "linux",
@@ -45,6 +45,8 @@
     "default": "README.md",
     "zh-CN": "README.zh-CN.md"
   },
+  "icon": "icon.png",
+  "preview": "preview.png",
   "funding": {
     "openCollective": "",
     "patreon": "",

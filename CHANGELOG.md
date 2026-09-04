@@ -2,6 +2,11 @@
 
 ## v0.5.1 2026
 
+* [Use the dynamic editor toolbar item plugin API](https://github.com/siyuan-note/siyuan/issues/19083)
+* [Document optional marketplace images and labeled funding links](https://github.com/siyuan-note/siyuan/issues/19056)
+* [Demonstrate custom block renderers](https://github.com/siyuan-note/siyuan/issues/8418)
+* [Demonstrate asynchronous frontend plugin lifecycle hooks](https://github.com/siyuan-note/siyuan/issues/18979)
+* [Use the Protyle fullscreen API in the editor breadcrumb button demo](https://github.com/siyuan-note/siyuan/issues/18909)
 * [Add unified plugin command execution context demo](https://github.com/siyuan-note/siyuan/issues/19076)
 * [Add an editor breadcrumb button demo](https://github.com/siyuan-note/siyuan/issues/18856)
 

@@ -13,11 +13,11 @@
 ## Development
 
 * i18n/*
-* icon.png (160*160)
+* icon.png (optional default icon, 160*160)
 * index.css
 * index.js
 * plugin.json
-* preview.png (1024*768)
+* preview.png (optional default preview, 1024*768)
 * README*.md
 * [Fontend API](https://github.com/siyuan-note/petal)
 * [Backend API](https://github.com/siyuan-note/siyuan/blob/master/API.md)
@@ -44,7 +44,7 @@ A typical example is as follows:
   "name": "plugin-sample",
   "author": "Vanessa",
   "url": "https://github.com/siyuan-note/plugin-sample",
-  "version": "0.4.2",
+  "version": "0.5.1",
   "minAppVersion": "3.3.0",
   "kernels": ["all"],
   "backends": ["all"],
@@ -62,6 +62,8 @@ A typical example is as follows:
     "default": "README.md",
     "zh-CN": "README.zh-CN.md"
   },
+  "icon": "icon.png",
+  "preview": "preview.png",
   "funding": {
     "custom": ["https://ld246.com/sponsor"]
   },
@@ -106,12 +108,102 @@ A typical example is as follows:
 * `readme`: Readme file name, displayed in the marketplace details page
   * `default`: Default language, must exist. If the plugin supports English, English should be used here
   * `zh-CN`, `en` and other languages: optional, must be BCP 47 tags
-* `funding`: Plugin sponsorship information, only one type will be displayed in the marketplace
+  * Relative images are loaded from `package.zip` when present; otherwise the online marketplace falls back to the matching GitHub Release. Include them in `package.zip` for offline use
+* `icon`: Optional marketplace icon filename at the package root. Supports PNG, JPEG, WebP, and AVIF up to 64 KiB; the recommended size is 160*160
+* `preview`: Optional marketplace preview filename at the package root. Supports PNG, JPEG, WebP, and AVIF up to 512 KiB; the recommended size is 1024*768
+  * SVG is unsupported. To omit an image, remove its field and the legacy `icon.png` or `preview.png`; an empty field value is invalid
+* `funding`: Plugin sponsorship information
   * `openCollective`: Open Collective name
   * `patreon`: Patreon name
   * `github`: GitHub login name
   * `custom`: Custom sponsorship link list
+  * `links`: Labeled custom sponsorship links, for example `{"label": "Sponsor", "url": "https://example.com"}`
 * `keywords`: Search keyword list, used for marketplace search function, supplements search keywords beyond the values of `name`, `author`, `displayName`, and `description` fields
+
+## Startup appearances
+
+A plugin can provide one or more startup appearances without running plugin code during startup. SiYuan scans the resources declared by installed plugins, and the user makes the final selection in <kbd>Settings</kbd> - <kbd>Appearance</kbd> - <kbd>Startup appearance</kbd>. The selection applies only to the current device after restart; a plugin should not modify it proactively.
+
+Declare the appearance IDs in `plugin.json`:
+
+```json
+{
+  "bootAppearances": [
+    "sunrise",
+    "night-sky"
+  ]
+}
+```
+
+Place each appearance in its own directory:
+
+```text
+boot-appearances/
+└── sunrise/
+    ├── boot.json
+    ├── style.css
+    └── assets/
+        ├── background.mp4
+        ├── poster.webp
+        └── logo.webp
+```
+
+`boot.json` uses the following format:
+
+```json
+{
+  "schemaVersion": 1,
+  "id": "sunrise",
+  "displayName": {
+    "default": "Sunrise",
+    "zh_CN": "日出"
+  },
+  "frontends": [
+    "desktop",
+    "mobile"
+  ],
+  "backgroundColor": "#1e1e1e",
+  "style": "style.css",
+  "layers": [
+    {
+      "id": "background",
+      "type": "video",
+      "src": "assets/background.mp4",
+      "poster": "assets/poster.webp",
+      "fit": "cover",
+      "position": "center"
+    },
+    {
+      "id": "logo",
+      "type": "image",
+      "src": "assets/logo.webp",
+      "fit": "contain",
+      "position": "center"
+    }
+  ],
+  "officialUI": {
+    "showLogo": false,
+    "showDetails": true,
+    "textColor": "#ffffff",
+    "progressColor": "#d23f31",
+    "trackColor": "#ffffff33"
+  }
+}
+```
+
+The layer array order is the visual stacking order. `style.css` runs only inside a non-interactive sandboxed frame and can address generated elements with `[data-layer="<id>"]`; relative `url()` values are resolved from the stylesheet directory. CSS subresources remain limited to the selected appearance by CSP and the resource route; an unavailable indirect resource fails on its own without necessarily disabling the whole appearance. JavaScript, arbitrary HTML, audio, custom fonts, and external URLs are not supported.
+
+The format is validated before an appearance is listed:
+
+* Appearance and layer IDs contain only lowercase letters, digits, and hyphens, are at most 64 characters, and hyphens cannot be consecutive or appear at either end; layer IDs must be unique
+* `displayName.default` is required; `frontends` accepts only `desktop` and `mobile`, and when omitted it inherits the compatible native frontends from `plugin.json`
+* Colors use 3, 4, 6, or 8 digit hexadecimal notation; omitted background and official UI colors use the built-in startup page colors, while `showLogo` and `showDetails` default to `true`
+* `fit` accepts `cover`, `contain`, `fill`, `none`, or `scale-down` and defaults to `cover`; `position` accepts `center`, `top`, `right`, `bottom`, `left`, `top-left`, `top-right`, `bottom-right`, or `bottom-left` and defaults to `center`
+* Images use PNG, JPEG, or WebP and are at most 5 MB each; videos use MP4, are at most 20 MB each, require an image poster, and are forced to muted, autoplay, loop, and inline playback
+* `boot.json` and `style.css` are each at most 200 KB, an appearance has at most 8 layers, and its directory is at most 50 MB with at most 256 files and directories; relative paths are at most 512 UTF-8 bytes and 16 levels deep
+* Paths declared by `boot.json` are relative to the appearance directory; absolute paths, `..`, backslashes, and symbolic links are rejected; unsupported declared resource types or MIME mismatches make the appearance unavailable, and unsupported files are never served
+
+The appearance resources live under workspace `data` and can be synchronized. The active selection is device-local and automatically falls back to SiYuan's built-in startup page if the provider is uninstalled or any validation or loading step fails.
 
 ## Package
 
@@ -119,12 +211,12 @@ No matter which method is used to compile and package, we finally need to genera
 least the following files:
 
 * i18n/* (If the plugin supports multiple languages, language files need to be packaged to this directory, otherwise this directory is not needed)
-* icon.png (recommended size: 160*160, file size should not exceed 20KB)
+* Image files declared by `icon` and `preview` (optional)
 * index.css
 * index.js
 * plugin.json
-* preview.png (recommended size: 1024*768, file size should not exceed 200KB)
 * README*.md
+* boot-appearances/* (optional startup appearance resources)
 
 ## List on the marketplace
 
@@ -168,3 +260,38 @@ Developers should pay attention to the following when developing the functionali
 
 * If `/api/filetree/createDailyNote` is called to create a daily note, the attribute will be automatically added to the document, and developers do not need to handle it separately
 * If a document is created manually by developer's code (e.g., using the `createDocWithMd` API to create a daily note), please manually add this attribute to the document
+
+### 3. Frontend Plugin Lifecycle
+
+Each frontend process owns its own plugin instance. Under normal conditions, SiYuan runs `onload`, `onLayoutReady`, `onDataChanged`, `onunload`, and `uninstall` for the same plugin strictly in sequence and waits for a returned Promise before entering the next phase. `onload` and `onunload` describe whether the plugin is running in the current frontend, `uninstall` runs only when the plugin is removed from the workspace, and `onLayoutReady` runs at most once after `onload` and kernel initialization complete.
+
+`onDataChanged` runs only after the plugin reaches the Ready state and mounting completes. Pending notifications are coalesced. If the plugin leaves the base implementation unchanged, SiYuan reloads the whole plugin instead of invoking the empty callback. A pending notification that has not started is discarded when the plugin is disabled or uninstalled.
+
+Disabling, reloading, or uninstalling a plugin starts one shared five-second removal budget when the first removal request is received. If `onload`, kernel initialization, `onLayoutReady`, or an active `onDataChanged` is still pending, waiting for it consumes the same budget. The remaining time is shared by `onunload` and, only for an actual uninstall, `uninstall`; the budget is not restarted for each hook.
+
+Before the deadline, lifecycle phases remain strictly serial. Once the deadline expires, SiYuan stops waiting. JavaScript promises cannot be forcibly canceled, so a timed-out hook may continue during or after teardown. The five-second budget limits only how long SiYuan waits for Promises; it cannot interrupt synchronous JavaScript. SiYuan still invokes each remaining teardown hook exactly once on a best-effort basis without waiting for it, then removes host-managed resources and destroys the kernel connection.
+
+Closing a standalone window or exiting SiYuan does not trigger frontend plugin lifecycle hooks as part of that action.
+
+Plugin lifecycle hooks should follow these guidelines:
+
+* Keep hooks short and avoid unbounded waits
+* Make `onunload` and `uninstall` idempotent and safe when only part of the plugin state has been initialized
+* Cancel pending work with a plugin-owned mechanism such as `AbortController`, and check cancellation after each asynchronous boundary before changing the DOM or using plugin APIs
+* Persist essential data when the corresponding operation occurs instead of relying on a teardown hook to finish
+
+### 4. Custom Block Renderers
+
+Plugins can register custom block renderers through `customBlockRenders`. This sample registers the `counter` type and adds an <kbd>Insert custom block</kbd> button to the editor breadcrumb bar. Clicking the button inserts a counter custom block at the current caret. See [`src/index.ts`](./src/index.ts) for the complete implementation.
+
+The corresponding Markdown is shown below. `plugin-sample` is the plugin package name and should be replaced with the `name` from `plugin.json` in another plugin. The plugin package name and block type must be encoded separately as URI components.
+
+```markdown
+;;;plugin-sample/counter
+0
+;;;
+```
+
+A renderer should modify only the provided `element` mount. `content` is the custom block's persisted raw content. To change it, call `setContent` after `render` returns. `setContent` returns `false` in read-only mode or when the content contains a standalone `;;;` closing-fence line. A renderer can return a cleanup function to remove event listeners, timers, and other external resources.
+
+SiYuan displays the raw content as a fallback when the plugin is unavailable or the block type is not registered. Rendered DOM is transient; persisted data belongs in `content`, block attributes, or plugin-owned storage. Nested Protyle editors are not supported inside the mount. See the [SiYuan `.sy` file JSON structure specification](https://github.com/siyuan-note/siyuan/blob/master/docs/SY-FORMAT.md#516-custom-block) for the underlying format.

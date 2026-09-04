@@ -13,11 +13,11 @@
 ## 开发
 
 * i18n/*
-* icon.png (160*160)
+* icon.png（可选默认图标，160*160）
 * index.css
 * index.js
 * plugin.json
-* preview.png (1024*768)
+* preview.png（可选默认预览图，1024*768）
 * README*.md
 * [前端 API](https://github.com/siyuan-note/petal)
 * [后端 API](https://github.com/siyuan-note/siyuan/blob/master/API_zh_CN.md)
@@ -43,7 +43,7 @@
   "name": "plugin-sample",
   "author": "Vanessa",
   "url": "https://github.com/siyuan-note/plugin-sample",
-  "version": "0.4.2",
+  "version": "0.5.1",
   "minAppVersion": "3.3.0",
   "kernels": ["all"],
   "backends": ["all"],
@@ -61,6 +61,8 @@
     "default": "README.md",
     "zh-CN": "README.zh-CN.md"
   },
+  "icon": "icon.png",
+  "preview": "preview.png",
   "funding": {
     "custom": ["https://ld246.com/sponsor"]
   },
@@ -105,24 +107,114 @@
 * `readme`：自述文件名，在插件集市详情页中显示
   * `default`：默认语言，必须存在。如果插件支持英文，此处应使用英文
   * `zh-CN`、`en` 等其他语言：可选，须为 BCP 47 标签
-* `funding`：插件赞助信息，集市仅显示其中一种
+  * 相对图片存在于 `package.zip` 时从本地加载，否则在线集市会回退到对应的 GitHub Release；如需离线显示，请将图片打入 `package.zip`
+* `icon`：可选的集市图标文件名，图片必须位于包根目录；支持 PNG、JPEG、WebP 和 AVIF，最大 64 KiB，建议尺寸为 160*160
+* `preview`：可选的集市预览图文件名，图片必须位于包根目录；支持 PNG、JPEG、WebP 和 AVIF，最大 512 KiB，建议尺寸为 1024*768
+  * 不支持 SVG。不需要图片时，请删除对应字段及传统文件 `icon.png` 或 `preview.png`，字段值不能为空字符串
+* `funding`：插件赞助信息
   * `openCollective`：Open Collective 名称
   * `patreon`：Patreon 名称
   * `github`：GitHub 登录名
   * `custom`：自定义赞助链接列表
+  * `links`：带标签的自定义赞助链接列表，例如 `{"label": "赞助", "url": "https://example.com"}`
 * `keywords`：搜索关键字列表，用于集市搜索功能，补充 `name`、`author`、`displayName`、`description` 字段值以外的搜索关键词
+
+## 启动页外观
+
+插件可以提供一个或多个启动页外观，启动过程中不会运行插件代码。思源扫描已安装插件声明的资源，最终由用户在 <kbd>设置</kbd> - <kbd>外观</kbd> - <kbd>启动页外观</kbd> 中选择。选择结果在重启后生效且仅应用于当前设备，插件不应主动修改。
+
+在 `plugin.json` 中声明外观 ID：
+
+```json
+{
+  "bootAppearances": [
+    "sunrise",
+    "night-sky"
+  ]
+}
+```
+
+每个外观使用独立目录：
+
+```text
+boot-appearances/
+└── sunrise/
+    ├── boot.json
+    ├── style.css
+    └── assets/
+        ├── background.mp4
+        ├── poster.webp
+        └── logo.webp
+```
+
+`boot.json` 使用以下格式：
+
+```json
+{
+  "schemaVersion": 1,
+  "id": "sunrise",
+  "displayName": {
+    "default": "Sunrise",
+    "zh_CN": "日出"
+  },
+  "frontends": [
+    "desktop",
+    "mobile"
+  ],
+  "backgroundColor": "#1e1e1e",
+  "style": "style.css",
+  "layers": [
+    {
+      "id": "background",
+      "type": "video",
+      "src": "assets/background.mp4",
+      "poster": "assets/poster.webp",
+      "fit": "cover",
+      "position": "center"
+    },
+    {
+      "id": "logo",
+      "type": "image",
+      "src": "assets/logo.webp",
+      "fit": "contain",
+      "position": "center"
+    }
+  ],
+  "officialUI": {
+    "showLogo": false,
+    "showDetails": true,
+    "textColor": "#ffffff",
+    "progressColor": "#d23f31",
+    "trackColor": "#ffffff33"
+  }
+}
+```
+
+图层数组顺序就是视觉堆叠顺序。`style.css` 仅在不可交互的沙箱框架内生效，可以使用 `[data-layer="<id>"]` 选择生成的元素；相对 `url()` 从样式表所在目录解析。CSS 子资源仍受 CSP 和资源路由限制，只能访问当前选中的外观；间接资源不可用时仅该资源加载失败，不一定禁用整个外观。不支持 JavaScript、任意 HTML、音频、自定义字体和外部 URL。
+
+外观进入可选列表前会进行以下校验：
+
+* 外观和图层 ID 只能包含小写字母、数字和单个连字符，最长 64 个字符，连字符不能连续，也不能出现在开头或结尾，图层 ID 必须唯一
+* 必须提供 `displayName.default`；`frontends` 仅支持 `desktop` 和 `mobile`，缺省时继承 `plugin.json` 中兼容的原生前端
+* 颜色使用 3、4、6 或 8 位十六进制格式；背景和官方界面颜色缺省时使用内置启动页颜色，`showLogo` 和 `showDetails` 默认为 `true`
+* `fit` 支持 `cover`、`contain`、`fill`、`none` 和 `scale-down`，默认为 `cover`；`position` 支持 `center`、`top`、`right`、`bottom`、`left`、`top-left`、`top-right`、`bottom-right` 和 `bottom-left`，默认为 `center`
+* 图片仅支持 PNG、JPEG 和 WebP，单文件不超过 5 MB；视频仅支持 MP4，单文件不超过 20 MB，必须提供图片 poster，并由思源强制静音、自动播放、循环和内嵌播放
+* `boot.json` 和 `style.css` 均不超过 200 KB，单个外观最多 8 个图层，目录总量不超过 50 MB，且文件与目录合计不超过 256 个；相对路径不超过 512 个 UTF-8 字节和 16 层
+* `boot.json` 声明的路径必须相对于当前外观目录，绝对路径、`..`、反斜杠和符号链接会被拒绝；声明的资源类型不受支持或 MIME 不匹配会使外观不可用，不支持的文件不会被提供给启动页
+
+外观资源保存在工作空间 `data` 下，可以同步；当前选择仅保存在本机。如果提供插件被卸载，或任一校验、加载步骤失败，思源会自动使用内置启动页。
 
 ## 打包
 
 无论使用何种方式编译打包，我们最终需要生成一个 package.zip，它至少包含如下文件：
 
 * i18n/* (如果插件支持多语言，则需要将语言文件打包到该目录下，否则不需要该目录)
-* icon.png (建议尺寸为 160*160、文件大小不超过 20KB)
+* `icon` 和 `preview` 字段声明的图片文件（可选）
 * index.css
 * index.js
 * plugin.json
-* preview.png (建议尺寸为 1024*768、文件大小不超过 200KB)
 * README*.md
+* boot-appearances/*（可选的启动页外观资源）
 
 ## 上架集市
 
@@ -165,3 +257,38 @@ PR 被合并以后集市会通过 GitHub Actions 自动更新索引并部署。�
 
 * 如果调用了 `/api/filetree/createDailyNote` 创建日记，那么文档会自动添加这个属性，无需开发者特别处理
 * 如果是开发者代码手动创建文档（例如使用 `createDocWithMd` API 创建日记），请手动为文档添加该属性
+
+### 3. 前端插件生命周期
+
+每个前端进程各自持有一份插件实例。正常情况下，思源会严格串行执行同一插件的 `onload`、`onLayoutReady`、`onDataChanged`、`onunload` 与 `uninstall`，并等待钩子返回的 Promise 后再进入下一阶段。`onload` 和 `onunload` 描述插件是否在当前前端中运行，`uninstall` 仅在从工作空间移除插件时运行，`onLayoutReady` 在 `onload` 与内核初始化完成后最多运行一次。
+
+`onDataChanged` 仅在插件进入 Ready 状态并完成挂载后运行，尚未执行的通知会合并。若插件未覆盖基类实现，思源会重载整个插件，而不是调用空回调。插件被禁用或卸载时，尚未开始的通知会被丢弃。
+
+禁用、重载或卸载插件时，会从首次收到拆除请求起启动一份共享的 5 秒总预算。若 `onload`、内核初始化、`onLayoutReady` 或已经开始的 `onDataChanged` 仍未完成，等待它们会消耗同一份预算。`onunload` 与仅在真正卸载时运行的 `uninstall` 共用剩余时间，不会为每个钩子重新开始计时。
+
+截止时间前，各生命周期阶段保持严格串行。截止时间到达后，思源会停止等待。JavaScript Promise 无法被强制取消，因此超时的钩子可能在拆除期间或拆除后继续运行。这 5 秒只限制思源等待 Promise 的时间，无法中断同步 JavaScript。思源仍会尽力调用每个剩余的拆除钩子一次，但不再等待其完成，随后移除宿主管理的资源并销毁内核连接。
+
+关闭独立窗口或退出思源时，该操作不会触发前端插件生命周期钩子。
+
+插件生命周期钩子应遵循以下准则：
+
+* 保持钩子简短，避免无期限等待
+* 确保 `onunload` 和 `uninstall` 幂等，并能安全处理仅完成部分插件状态初始化的情况
+* 使用插件自己的 `AbortController` 等机制取消未完成的任务，并在每个异步边界之后检查取消状态，再修改 DOM 或使用插件 API
+* 在对应操作发生时持久化必要数据，不要依赖拆除钩子一定能够执行完毕
+
+### 4. 自定义块渲染器
+
+插件可以通过 `customBlockRenders` 注册自定义块渲染器。本示例注册了 `counter` 类型，并在编辑器面包屑栏添加了 <kbd>插入自定义块</kbd> 按钮；点击该按钮会在当前光标处插入一个计数器自定义块。完整实现见 [`src/index.ts`](./src/index.ts)。
+
+对应的 Markdown 如下，其中 `plugin-sample` 是插件包名，实际使用时应替换为 `plugin.json` 中的 `name`。插件包名和块类型必须分别按 URI 组件编码。
+
+```markdown
+;;;plugin-sample/counter
+0
+;;;
+```
+
+渲染器只应修改传入的 `element` 挂载元素。`content` 是自定义块的持久化原始内容；需要修改时，应在 `render` 返回后调用 `setContent`。只读状态或内容包含独占一行的 `;;;` 结束标记时，`setContent` 返回 `false`。渲染器可以返回清理函数，用于移除事件监听器、定时器和其他外部资源。
+
+插件未加载或未注册对应类型时，思源会显示原始内容作为回退。渲染产生的 DOM 不会持久化，持久化数据应放在 `content`、块属性或插件自己的存储中。挂载元素内不支持嵌套 Protyle。底层格式详见 [SiYuan `.sy` 文件 JSON 结构规范](https://github.com/siyuan-note/siyuan/blob/master/docs/SY-FORMAT.zh-CN.md#516-%E8%87%AA%E5%AE%9A%E4%B9%89%E5%9D%97)。

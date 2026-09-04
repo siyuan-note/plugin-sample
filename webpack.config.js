@@ -5,6 +5,15 @@ const {EsbuildPlugin} = require("esbuild-loader");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CopyPlugin = require("copy-webpack-plugin");
 const ZipPlugin = require("zip-webpack-plugin");
+const pluginManifest = require("./plugin.json");
+
+const packageImagePatterns = [
+    ["icon", "icon.png"],
+    ["preview", "preview.png"],
+].flatMap(([field, legacyName]) => {
+    const fileName = pluginManifest[field] || (fs.existsSync(legacyName) ? legacyName : "");
+    return fileName ? [{from: fileName, to: "./dist/"}] : [];
+});
 
 module.exports = (env, argv) => {
     const production = argv.mode === "production";
@@ -24,10 +33,10 @@ module.exports = (env, argv) => {
         plugins.push(
             new CopyPlugin({
                 patterns: [
-                    {from: "preview.png", to: "./dist/"},
-                    {from: "icon.png", to: "./dist/"},
+                    ...packageImagePatterns,
                     {from: "README*.md", to: "./dist/"},
                     {from: "plugin.json", to: "./dist/"},
+                    {from: "boot-appearances/", to: "./dist/boot-appearances/", noErrorOnMissing: true},
                     {from: "src/i18n/", to: "./dist/i18n/"},
                     {from: "dist/kernel.js", to: "./dist/"},
                 ],

@@ -27,7 +27,6 @@ import {
     openSetting,
     openAttributePanel,
     saveLayout,
-    IMenuItem,
     IKernelPluginState,
     IKernelPluginRpcCall,
 } from "siyuan";
@@ -37,15 +36,50 @@ import "./index.scss";
 const STORAGE_NAME = "menu-config";
 const TAB_TYPE = "custom_tab";
 const DOCK_TYPE = "dock_tab";
+const CUSTOM_BLOCK_TYPE = "counter";
 
 export default class PluginSample extends Plugin {
     private custom: () => Custom;
     private isMobile: boolean;
     private blockIconEventBindThis = this.blockIconEvent.bind(this);
+    private readonly renderCounterCustomBlock = ({element, content, setContent}: {
+        element: HTMLElement;
+        content: string;
+        setContent: (content: string) => boolean;
+    }) => {
+        let count = Number(content);
+        if (!Number.isSafeInteger(count)) {
+            count = 0;
+        }
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "b3-button b3-button--outline";
+        const updateLabel = () => {
+            const label = this.i18n.customBlockCounter.replace("${count}", count.toString());
+            button.textContent = label;
+            button.setAttribute("aria-label", label);
+        };
+        const increase = () => {
+            const nextCount = count + 1;
+            if (setContent(nextCount.toString())) {
+                count = nextCount;
+                updateLabel();
+            }
+        };
+        updateLabel();
+        button.addEventListener("click", increase);
+        element.append(button);
+        return () => button.removeEventListener("click", increase);
+    };
 
-    updateProtyleToolbar(toolbar: Array<string | IMenuItem>) {
-        toolbar.push("|");
-        toolbar.push({
+    onload() {
+        this.kernel.rpc.bind("unload", this.onKernelPluginUnload);
+        this.kernel.rpc.bind("notify", this.onKernelPluginNotify);
+        this.eventBus.on("kernel-plugin-state-change", this.onKernelPluginStateChange);
+        this.customBlockRenders[CUSTOM_BLOCK_TYPE] = {
+            render: this.renderCounterCustomBlock,
+        };
+        this.addToolbarItem({
             name: "insert-smail-emoji",
             icon: "iconEmoji",
             hotkey: "⇧⌘I",
@@ -55,13 +89,6 @@ export default class PluginSample extends Plugin {
                 protyle.insert("😊");
             },
         });
-        return toolbar;
-    }
-
-    onload() {
-        this.kernel.rpc.bind("unload", this.onKernelPluginUnload);
-        this.kernel.rpc.bind("notify", this.onKernelPluginNotify);
-        this.eventBus.on("kernel-plugin-state-change", this.onKernelPluginStateChange);
 
         this.data[STORAGE_NAME] = {readonlyText: "Readonly"};
 
@@ -73,8 +100,22 @@ export default class PluginSample extends Plugin {
             title: this.i18n.toggleEditorFullscreen,
             callback: (event, protyle) => {
                 event.preventDefault();
-                protyle.element.classList.toggle("fullscreen");
-                protyle.getInstance().resize();
+                const editor = protyle.getInstance();
+                editor.setFullscreen(!editor.isFullscreen());
+            },
+        });
+        this.addBreadcrumbButton({
+            id: "insert-custom-block",
+            icon: "iconAdd",
+            title: this.i18n.insertCustomBlock,
+            callback: (event, protyle) => {
+                event.preventDefault();
+                if (protyle.disabled) {
+                    return;
+                }
+                const info = `${encodeURIComponent(this.name)}/${encodeURIComponent(CUSTOM_BLOCK_TYPE)}`;
+                const markdown = `;;;${info}\n0\n;;;`;
+                protyle.getInstance().insert(protyle.lute.Md2BlockDOM(markdown), true);
             },
         });
         // 图标的制作参见帮助文档
@@ -245,7 +286,7 @@ export default class PluginSample extends Plugin {
         console.log(this.i18n.helloPlugin);
     }
 
-    onLayoutReady() {
+    async onLayoutReady() {
         const topBarElement = this.addTopBar({
             icon: "iconFace",
             title: this.i18n.addTopBarIcon,
@@ -285,24 +326,26 @@ export default class PluginSample extends Plugin {
         this.addStatusBar({
             element: statusIconTemp.content.firstElementChild as HTMLElement,
         });
-        this.loadData(STORAGE_NAME).catch(e => {
+        await this.loadData(STORAGE_NAME).catch(e => {
             console.log(`[${this.name}] load data [${STORAGE_NAME}] fail: `, e);
         });
         console.log(`frontend: ${getFrontend()}; backend: ${getBackend()}`);
     }
 
-    onunload() {
+    async onunload() {
         console.log(this.i18n.byePlugin);
 
-        this.kernel.rpc.unbind("unload", this.onKernelPluginUnload);
-        this.kernel.rpc.unbind("notify", this.onKernelPluginNotify);
         this.eventBus.off("kernel-plugin-state-change", this.onKernelPluginStateChange);
+        await Promise.all([
+            this.kernel.rpc.unbind("unload", this.onKernelPluginUnload),
+            this.kernel.rpc.unbind("notify", this.onKernelPluginNotify),
+        ]);
     }
 
-    uninstall() {
+    async uninstall() {
         // 卸载插件时删除插件数据
         // Delete plugin data when uninstalling the plugin
-        this.removeData(STORAGE_NAME).catch(e => {
+        await this.removeData(STORAGE_NAME).catch(e => {
             showMessage(`uninstall [${this.name}] remove data [${STORAGE_NAME}] fail: ${e.msg}`);
         });
     }

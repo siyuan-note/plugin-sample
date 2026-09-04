@@ -1,6 +1,8 @@
 {
   "addTopBarIcon": "Add a top bar icon by plugin",
   "toggleEditorFullscreen": "Toggle editor fullscreen",
+  "insertCustomBlock": "Insert custom block",
+  "customBlockCounter": "Count: ${count}",
   "cancel": "Cancel",
   "save": "Save",
   "byeMenu": "Bye, Menu!",
