@@ -2,6 +2,7 @@
 
 ## v0.5.1 2026
 
+* [Add unified plugin command execution context demo](https://github.com/siyuan-note/siyuan/issues/19076)
 * [Add an editor breadcrumb button demo](https://github.com/siyuan-note/siyuan/issues/18856)
 
 ## v0.5.0 2026-08-13

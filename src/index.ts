@@ -31,6 +31,7 @@ import {
     IKernelPluginState,
     IKernelPluginRpcCall,
 } from "siyuan";
+import type {ICommandContext} from "siyuan";
 import "./index.scss";
 
 const STORAGE_NAME = "menu-config";
@@ -100,7 +101,22 @@ export default class PluginSample extends Plugin {
         this.addCommand({
             langKey: "showDialog",
             hotkey: "⇧⌘O",
+            execute: (context: ICommandContext) => {
+                console.log("showDialog command context:", {
+                    source: context.source,
+                    focus: context.focus,
+                    protyle: context.protyle,
+                    range: context.range,
+                    rangeConnected: Boolean(context.range?.startContainer.isConnected),
+                    fileTree: context.fileTree,
+                    dock: context.dock,
+                });
+                this.showDialog();
+            },
             callback: () => {
+                this.showDialog();
+            },
+            editorCallback: () => {
                 this.showDialog();
             },
         });
