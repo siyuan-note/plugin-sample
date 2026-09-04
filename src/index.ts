@@ -18,7 +18,6 @@ import {
     lockScreen,
     ICard,
     ICardData,
-    Custom,
     exitSiYuan,
     getModelByDockType,
     getAllEditor,
@@ -39,7 +38,7 @@ const DOCK_TYPE = "dock_tab";
 const CUSTOM_BLOCK_TYPE = "counter";
 
 export default class PluginSample extends Plugin {
-    private custom: () => Custom;
+    private custom: ReturnType<Plugin["addTab"]>;
     private isMobile: boolean;
     private blockIconEventBindThis = this.blockIconEvent.bind(this);
     private readonly renderCounterCustomBlock = ({element, content, setContent}: {

@@ -2,6 +2,7 @@
 
 ## v0.5.1 2026
 
+* [Align the custom tab factory type with the plugin API](https://github.com/siyuan-note/petal/issues/59)
 * [Use the dynamic editor toolbar item plugin API](https://github.com/siyuan-note/siyuan/issues/19083)
 * [Document optional marketplace images and labeled funding links](https://github.com/siyuan-note/siyuan/issues/19056)
 * [Demonstrate custom block renderers](https://github.com/siyuan-note/siyuan/issues/8418)
