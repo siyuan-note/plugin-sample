@@ -1,6 +1,6 @@
 # Changelog
 
-## v0.5.1 2026
+## v0.5.1 2026-08
 
 * [Align the custom tab factory type with the plugin API](https://github.com/siyuan-note/petal/issues/59)
 * [Use the dynamic editor toolbar item plugin API](https://github.com/siyuan-note/siyuan/issues/19083)
