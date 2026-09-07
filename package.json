@@ -29,7 +29,7 @@
     "copy-webpack-plugin": "^14.0.0",
     "css-loader": "^7.1.4",
     "dprint": "latest",
-    "esbuild-loader": "^4.4.3",
+    "esbuild-loader": "^4.5.0",
     "eslint": "^10.4.1",
     "globals": "^17.6.0",
     "mini-css-extract-plugin": "^2.10.2",
