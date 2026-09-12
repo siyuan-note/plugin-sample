@@ -20,7 +20,7 @@
 * preview.png（可选默认预览图，1024*768）
 * README*.md
 * [前端 API](https://github.com/siyuan-note/petal)
-* [后端 API](https://github.com/siyuan-note/siyuan/blob/master/API_zh_CN.md)
+* [后端 API](https://github.com/siyuan-note/siyuan/blob/master/docs/API.zh-CN.md)
 
 ## 国际化
 
@@ -30,7 +30,7 @@
   * plugin.json 中的 `displayName`、`description` 和 `readme` 字段，以及对应的 README*.md 文件
 * 插件中使用的文本，比如按钮文字和提示信息
   * src/i18n/*.json 语言配置文件
-  * 代码中使用 `this.i18.key` 获取文本
+  * 代码中使用 `this.i18n.key` 获取文本
 
 建议插件至少支持英文和简体中文，这样可以方便更多人使用。不支持的语种不需要在 plugin.json 中的 `displayName`、`description` 和 `readme` 字段中声明。
 
@@ -44,7 +44,7 @@
   "author": "Vanessa",
   "url": "https://github.com/siyuan-note/plugin-sample",
   "version": "0.5.1",
-  "minAppVersion": "3.3.0",
+  "minAppVersion": "3.8.3",
   "kernels": ["all"],
   "backends": ["all"],
   "frontends": ["all"],
@@ -223,19 +223,9 @@ boot-appearances/
 * 上传 package.zip 作为二进制附件
 * 提交发布
 
-如果是第一次发布版本，还需要创建一个 PR 到 [Community Bazaar](https://github.com/siyuan-note/bazaar) 社区集市仓库，修改该库的 plugins.json。该文件是所有社区插件库的索引，格式为：
+首次发布时，请 Fork [社区集市仓库](https://github.com/siyuan-note/bazaar)，在根目录的 `plugins.txt` 中新增一行 `owner/repo`，然后向 `main` 分支提交 PR。每行一个仓库，不添加逗号或空行；每个新增包 PR 只添加一个包。完整流程和审核规则请参阅[提交集市包](https://github.com/siyuan-note/bazaar/blob/main/README.zh-CN.md#提交集市包)。
 
-```json
-{
-  "repos": [
-    "username/reponame"
-  ]
-}
-```
-
-PR 被合并以后集市会通过 GitHub Actions 自动更新索引并部署。后续发布新版本插件时只需要按照上述步骤创建新的发布即可，不需要再 PR 社区集市仓库。
-
-正常情况下，社区集市仓库每隔 1 小时会自动更新索引并部署，可在 https://github.com/siyuan-note/bazaar/actions 查看部署状态。
+PR 合并后，集市会自动更新索引。后续更新只需提升清单中的 `version` 并发布包含 `package.zip` 的正式 GitHub Release，无需再次提交上架 PR。更新时效和排错方法请参阅[更新集市包](https://github.com/siyuan-note/bazaar/blob/main/README.zh-CN.md#更新集市包)，部署状态可在 [Stage 工作流](https://github.com/siyuan-note/bazaar/actions/workflows/stage.yml) 查看。
 
 ## 开发者须知
 

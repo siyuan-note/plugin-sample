@@ -19,8 +19,8 @@
 * plugin.json
 * preview.png (optional default preview, 1024*768)
 * README*.md
-* [Fontend API](https://github.com/siyuan-note/petal)
-* [Backend API](https://github.com/siyuan-note/siyuan/blob/master/API.md)
+* [Frontend API](https://github.com/siyuan-note/petal)
+* [Backend API](https://github.com/siyuan-note/siyuan/blob/master/docs/API.md)
 
 ## I18n
 
@@ -31,7 +31,7 @@ complete the following tasks:
   * `displayName`, `description` and `readme` fields in plugin.json, and the corresponding README*.md file
 * Text used in the plugin, such as button text and tooltips
   * src/i18n/*.json language configuration files
-  * Use `this.i18.key` to get the text in the code
+  * Use `this.i18n.key` to get the text in the code
 
 It is recommended that the plugin supports at least English and Simplified Chinese, so that more people can use it more conveniently. Unsupported languages do not need to be declared in the `displayName`, `description` and `readme` fields in plugin.json.
 
@@ -45,7 +45,7 @@ A typical example is as follows:
   "author": "Vanessa",
   "url": "https://github.com/siyuan-note/plugin-sample",
   "version": "0.5.1",
-  "minAppVersion": "3.3.0",
+  "minAppVersion": "3.8.3",
   "kernels": ["all"],
   "backends": ["all"],
   "frontends": ["all"],
@@ -226,19 +226,9 @@ least the following files:
 * Upload the file package.zip as binary attachments
 * Publish the release
 
-If this is the first release, you also need to create a PR to the [Community Bazaar](https://github.com/siyuan-note/bazaar) repository and modify the plugins.json file in it. This file is the index of all community plugin repositories, the format is:
+For the first release, fork the [community bazaar repository](https://github.com/siyuan-note/bazaar), add one `owner/repo` line to `plugins.txt` in its root, and open a PR against `main`. Use one repository per line without commas or empty lines, and add only one new package per PR. See [Submitting a bazaar package](https://github.com/siyuan-note/bazaar#submitting-a-bazaar-package) for the full process and review rules.
 
-```json
-{
-  "repos": [
-    "username/reponame"
-  ]
-}
-```
-
-After the PR is merged, the bazaar will automatically update the index and deploy through GitHub Actions. For subsequent plugin releases, you only need to follow the above steps to create a new release, and you don't need to PR the community bazaar repository.
-
-Under normal circumstances, the community bazaar repository will automatically update the index and deploy every hour, and you can check the deployment status at https://github.com/siyuan-note/bazaar/actions.
+After the PR is merged, the bazaar updates its index automatically. For subsequent updates, increase `version` in the package manifest and publish a regular GitHub Release containing `package.zip`; no additional listing PR is needed. See [Updating a bazaar package](https://github.com/siyuan-note/bazaar#updating-a-bazaar-package) for update timing and troubleshooting, and check deployment status in the [Stage workflow](https://github.com/siyuan-note/bazaar/actions/workflows/stage.yml).
 
 ## Developer's Guide
 
