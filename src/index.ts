@@ -29,7 +29,7 @@ import {
     IKernelPluginState,
     IKernelPluginRpcCall,
 } from "siyuan";
-import type {ICommandContext, IEventBusMap} from "siyuan";
+import type {ICommandContext} from "siyuan";
 import type {FlashcardReviewOptions} from "./siyuan-review";
 import "./index.scss";
 
@@ -42,19 +42,6 @@ export default class PluginSample extends Plugin {
     private custom: ReturnType<Plugin["addTab"]>;
     private isMobile: boolean;
     private isReadonly: boolean;
-    private topBarElement: HTMLElement;
-    private readonly onTopBarMenu = ({detail}: CustomEvent<IEventBusMap["open-menu-topbar"]>) => {
-        // 所有订阅者都会收到事件，仅为本插件按钮同步添加菜单项，空白处的 element 和 entryPath 为 null。
-        if (detail.element !== this.topBarElement) {
-            return;
-        }
-        detail.menu.addItem({
-            id: "plugin-sample-settings",
-            icon: "iconSettings",
-            label: this.i18n.openPluginSettings,
-            click: () => this.openSetting(),
-        });
-    };
     private publishDataStatus = "";
     private blockIconEventBindThis = this.blockIconEvent.bind(this);
     private readonly renderCounterCustomBlock = ({element, content, setContent}: {
@@ -326,6 +313,18 @@ export default class PluginSample extends Plugin {
             icon: this.isReadonly ? "iconEmoji" : "iconFace",
             title: this.i18n.addTopBarIcon,
             position: "right",
+            contextMenu: (menu) => {
+                if (this.isReadonly || this.isMobile) {
+                    return;
+                }
+                // 同步添加当前按钮的操作，宿主负责与显隐菜单之间的分隔线。
+                menu.addItem({
+                    id: "plugin-sample-settings",
+                    icon: "iconSettings",
+                    label: this.i18n.openPluginSettings,
+                    click: () => this.openSetting(),
+                });
+            },
             callback: () => {
                 if (this.isMobile) {
                     this.addMenu();
@@ -345,11 +344,6 @@ export default class PluginSample extends Plugin {
         if (this.isReadonly) {
             await this.loadPublishedSettings();
             return;
-        }
-        this.topBarElement = topBarElement;
-        // 顶栏事件由宿主合并菜单和分隔线，不另行注册拦截传播的 contextmenu 监听器。
-        if (!this.isMobile) {
-            this.eventBus.on("open-menu-topbar", this.onTopBarMenu);
         }
         const statusIconTemp = document.createElement("template");
         statusIconTemp.innerHTML = `<div class="toolbar__item ariaLabel" aria-label="Remove plugin-sample Data">
@@ -383,7 +377,6 @@ export default class PluginSample extends Plugin {
             return;
         }
         this.eventBus.off("kernel-plugin-state-change", this.onKernelPluginStateChange);
-        this.eventBus.off("open-menu-topbar", this.onTopBarMenu);
         await Promise.all([
             this.kernel.rpc.unbind("unload", this.onKernelPluginUnload),
             this.kernel.rpc.unbind("notify", this.onKernelPluginNotify),
