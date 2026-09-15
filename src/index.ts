@@ -29,7 +29,8 @@ import {
     IKernelPluginState,
     IKernelPluginRpcCall,
 } from "siyuan";
-import type {ICommandContext} from "siyuan";
+import type {ICommandContext, IEventBusMap} from "siyuan";
+import type {FlashcardReviewOptions} from "./siyuan-review";
 import "./index.scss";
 
 const STORAGE_NAME = "menu-config";
@@ -41,6 +42,19 @@ export default class PluginSample extends Plugin {
     private custom: ReturnType<Plugin["addTab"]>;
     private isMobile: boolean;
     private isReadonly: boolean;
+    private topBarElement: HTMLElement;
+    private readonly onTopBarMenu = ({detail}: CustomEvent<IEventBusMap["open-menu-topbar"]>) => {
+        // 所有订阅者都会收到事件，仅为本插件按钮同步添加菜单项，空白处的 element 和 entryPath 为 null。
+        if (detail.element !== this.topBarElement) {
+            return;
+        }
+        detail.menu.addItem({
+            id: "plugin-sample-settings",
+            icon: "iconSettings",
+            label: this.i18n.openPluginSettings,
+            click: () => this.openSetting(),
+        });
+    };
     private publishDataStatus = "";
     private blockIconEventBindThis = this.blockIconEvent.bind(this);
     private readonly renderCounterCustomBlock = ({element, content, setContent}: {
@@ -332,6 +346,11 @@ export default class PluginSample extends Plugin {
             await this.loadPublishedSettings();
             return;
         }
+        this.topBarElement = topBarElement;
+        // 顶栏事件由宿主合并菜单和分隔线，不另行注册拦截传播的 contextmenu 监听器。
+        if (!this.isMobile) {
+            this.eventBus.on("open-menu-topbar", this.onTopBarMenu);
+        }
         const statusIconTemp = document.createElement("template");
         statusIconTemp.innerHTML = `<div class="toolbar__item ariaLabel" aria-label="Remove plugin-sample Data">
     <svg>
@@ -364,6 +383,7 @@ export default class PluginSample extends Plugin {
             return;
         }
         this.eventBus.off("kernel-plugin-state-change", this.onKernelPluginStateChange);
+        this.eventBus.off("open-menu-topbar", this.onTopBarMenu);
         await Promise.all([
             this.kernel.rpc.unbind("unload", this.onKernelPluginUnload),
             this.kernel.rpc.unbind("notify", this.onKernelPluginNotify),
@@ -583,6 +603,58 @@ export default class PluginSample extends Plugin {
         });
     }
 
+    private showFlashcardReview() {
+        const dialog = new Dialog({
+            title: this.i18n.openSelectedCardTab,
+            content: '<div class="b3-dialog__content"></div>',
+            width: "520px",
+        });
+        const container = dialog.element.querySelector(".b3-dialog__content");
+        const addInput = (title: string) => {
+            const label = document.createElement("label");
+            label.textContent = title;
+            const input = document.createElement("textarea");
+            input.className = "b3-text-field fn__block";
+            label.append(input);
+            container.append(label);
+            return input;
+        };
+        const decks = addInput(this.i18n.reviewSetIDs);
+        const documents = addInput(this.i18n.reviewDocumentIDs);
+        const button = document.createElement("button");
+        button.className = "b3-button";
+        button.textContent = this.i18n.openSelectedCardTab;
+        button.addEventListener("click", () => {
+            const parseIDs = (value: string) => Array.from(new Set(value.split(/[\s,]+/).filter(Boolean)));
+            const reviewSetIDs = parseIDs(decks.value);
+            if (reviewSetIDs.length === 0) {
+                showMessage(this.i18n.reviewSetIDsRequired);
+                return;
+            }
+            const rootIDs = parseIDs(documents.value);
+            // 多个卡包取并集并去重；每张卡保留自身调度预设和每日额度，会话采用工作空间队列限制及默认排序。
+            const options: FlashcardReviewOptions = {
+                app: this.app,
+                card: {
+                    type: "all",
+                    reviewSetIDs,
+                    reviewMode: "normal",
+                },
+            };
+            // 版本 1 查询 AST 与卡包及 type/id 范围取交集，此处可选地限制到多个文档。
+            if (rootIDs.length > 0) {
+                options.card.query = {
+                    version: 1,
+                    root: {operator: "predicate", field: "rootID", comparator: "in", value: rootIDs},
+                };
+            }
+            // 关闭页签结束会话，恢复布局时根据保存的选择重新创建会话。
+            openTab(options);
+            dialog.destroy();
+        });
+        container.append(button);
+    }
+
     private addMenu(rect?: DOMRect) {
         const menu = new Menu("topBarSample", () => {
             console.log(this.i18n.byeMenu);
@@ -709,6 +781,11 @@ export default class PluginSample extends Plugin {
                     });
                     console.log(tab);
                 },
+            });
+            menu.addItem({
+                icon: "iconRiffCard",
+                label: this.i18n.openSelectedCardTab,
+                click: () => this.showFlashcardReview(),
             });
             menu.addItem({
                 icon: "iconLayout",

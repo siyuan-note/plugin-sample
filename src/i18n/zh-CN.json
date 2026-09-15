@@ -1,4 +1,9 @@
 {
+  "openPluginSettings": "打开插件设置",
+  "openSelectedCardTab": "复习指定卡包",
+  "reviewSetIDs": "卡包 ID（以英文逗号或空白分隔）",
+  "reviewDocumentIDs": "文档 ID（可选，以英文逗号或空白分隔）",
+  "reviewSetIDsRequired": "请至少输入一个卡包 ID",
   "readonlyText": "只读文本",
   "readonlyTextTip": "在插件菜单中显示的文本",
   "publishData": "生成公开快照",

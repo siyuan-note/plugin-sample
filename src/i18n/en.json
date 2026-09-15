@@ -1,4 +1,9 @@
 {
+  "openPluginSettings": "Open plugin settings",
+  "openSelectedCardTab": "Review selected decks",
+  "reviewSetIDs": "Deck IDs (separate with commas or whitespace)",
+  "reviewDocumentIDs": "Document IDs (optional, separate with commas or whitespace)",
+  "reviewSetIDsRequired": "Enter at least one deck ID",
   "readonlyText": "Readonly text",
   "readonlyTextTip": "Text displayed in the plugin menu",
   "publishData": "Generate published snapshot",
