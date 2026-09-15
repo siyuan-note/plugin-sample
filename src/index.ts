@@ -30,7 +30,6 @@ import {
     IKernelPluginRpcCall,
 } from "siyuan";
 import type {ICommandContext} from "siyuan";
-import type {FlashcardReviewOptions} from "./siyuan-review";
 import "./index.scss";
 
 const STORAGE_NAME = "menu-config";
@@ -446,6 +445,14 @@ export default class PluginSample extends Plugin {
         return options;
     }
 
+    openSetting() {
+        if (this.isReadonly || !this.setting) {
+            return;
+        }
+        // 打开 onload 中注册的设置项，保存时执行 Setting 的 confirmCallback。
+        this.setting.open(this.displayName || this.name);
+    }
+
     /* 自定义设置
     openSetting() {
         const dialog = new Dialog({
@@ -626,7 +633,7 @@ export default class PluginSample extends Plugin {
             }
             const rootIDs = parseIDs(documents.value);
             // 多个卡包取并集并去重；每张卡保留自身调度预设和每日额度，会话采用工作空间队列限制及默认排序。
-            const options: FlashcardReviewOptions = {
+            const options: Parameters<typeof openTab>[0] = {
                 app: this.app,
                 card: {
                     type: "all",
