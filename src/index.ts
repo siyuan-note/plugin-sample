@@ -40,6 +40,8 @@ const CUSTOM_BLOCK_TYPE = "counter";
 export default class PluginSample extends Plugin {
     private custom: ReturnType<Plugin["addTab"]>;
     private isMobile: boolean;
+    private isReadonly: boolean;
+    private publishDataStatus = "";
     private blockIconEventBindThis = this.blockIconEvent.bind(this);
     private readonly renderCounterCustomBlock = ({element, content, setContent}: {
         element: HTMLElement;
@@ -72,12 +74,20 @@ export default class PluginSample extends Plugin {
     };
 
     onload() {
-        this.kernel.rpc.bind("unload", this.onKernelPluginUnload);
-        this.kernel.rpc.bind("notify", this.onKernelPluginNotify);
-        this.eventBus.on("kernel-plugin-state-change", this.onKernelPluginStateChange);
+        this.isReadonly = Boolean(window.siyuan.config.readonly || window.siyuan.isPublish);
+        this.data[STORAGE_NAME] = {readonlyText: this.i18n.readonlyText};
+        const frontEnd = getFrontend();
+        this.isMobile = frontEnd === "mobile" || frontEnd === "browser-mobile";
         this.customBlockRenders[CUSTOM_BLOCK_TYPE] = {
             render: this.renderCounterCustomBlock,
         };
+        // 发布端保留内容渲染，管理操作和内核通信仅在可写的管理端注册。
+        if (this.isReadonly) {
+            return;
+        }
+        this.kernel.rpc.bind("unload", this.onKernelPluginUnload);
+        this.kernel.rpc.bind("notify", this.onKernelPluginNotify);
+        this.eventBus.on("kernel-plugin-state-change", this.onKernelPluginStateChange);
         this.addToolbarItem({
             name: "insert-smail-emoji",
             icon: "iconEmoji",
@@ -89,10 +99,6 @@ export default class PluginSample extends Plugin {
             },
         });
 
-        this.data[STORAGE_NAME] = {readonlyText: "Readonly"};
-
-        const frontEnd = getFrontend();
-        this.isMobile = frontEnd === "mobile" || frontEnd === "browser-mobile";
         this.addBreadcrumbButton({
             id: "fullscreen",
             icon: "iconFullscreen",
@@ -227,15 +233,31 @@ export default class PluginSample extends Plugin {
             },
         });
         this.setting.addItem({
-            title: "Readonly text",
+            title: this.i18n.readonlyText,
             direction: "row",
-            description: "Open plugin url in browser",
+            description: this.i18n.readonlyTextTip,
             createActionElement: () => {
                 textareaElement.className = "b3-text-field fn__block";
-                textareaElement.placeholder = "Readonly text in the menu";
+                textareaElement.placeholder = this.i18n.readonlyText;
                 textareaElement.value = this.data[STORAGE_NAME].readonlyText;
                 return textareaElement;
             },
+        });
+        const publishButton = document.createElement("button");
+        publishButton.className = "b3-button b3-button--outline";
+        publishButton.textContent = this.i18n.publishData;
+        publishButton.addEventListener("click", async () => {
+            publishButton.disabled = true;
+            try {
+                await this.publishSettings(textareaElement.value);
+            } finally {
+                publishButton.disabled = false;
+            }
+        });
+        this.setting.addItem({
+            title: this.i18n.publishData,
+            description: this.i18n.publishDataTip,
+            actionElement: publishButton,
         });
         const btnaElement = document.createElement("button");
         btnaElement.className = "b3-button b3-button--outline fn__flex-center fn__size200";
@@ -287,7 +309,7 @@ export default class PluginSample extends Plugin {
 
     async onLayoutReady() {
         const topBarElement = this.addTopBar({
-            icon: "iconFace",
+            icon: this.isReadonly ? "iconEmoji" : "iconFace",
             title: this.i18n.addTopBarIcon,
             position: "right",
             callback: () => {
@@ -306,6 +328,10 @@ export default class PluginSample extends Plugin {
                 }
             },
         });
+        if (this.isReadonly) {
+            await this.loadPublishedSettings();
+            return;
+        }
         const statusIconTemp = document.createElement("template");
         statusIconTemp.innerHTML = `<div class="toolbar__item ariaLabel" aria-label="Remove plugin-sample Data">
     <svg>
@@ -315,7 +341,7 @@ export default class PluginSample extends Plugin {
         statusIconTemp.content.firstElementChild.addEventListener("click", () => {
             confirm("⚠️", this.i18n.confirmRemove.replace("${name}", this.name), () => {
                 this.removeData(STORAGE_NAME).then(() => {
-                    this.data[STORAGE_NAME] = {readonlyText: "Readonly"};
+                    this.data[STORAGE_NAME] = {readonlyText: this.i18n.readonlyText};
                     showMessage(`[${this.name}]: ${this.i18n.removedData}`);
                 }).catch(e => {
                     showMessage(`[${this.name}] remove data [${STORAGE_NAME}] fail: `, e);
@@ -334,6 +360,9 @@ export default class PluginSample extends Plugin {
     async onunload() {
         console.log(this.i18n.byePlugin);
 
+        if (this.isReadonly) {
+            return;
+        }
         this.eventBus.off("kernel-plugin-state-change", this.onKernelPluginStateChange);
         await Promise.all([
             this.kernel.rpc.unbind("unload", this.onKernelPluginUnload),
@@ -342,11 +371,47 @@ export default class PluginSample extends Plugin {
     }
 
     async uninstall() {
+        if (this.isReadonly) {
+            return;
+        }
         // 卸载插件时删除插件数据
         // Delete plugin data when uninstalling the plugin
         await this.removeData(STORAGE_NAME).catch(e => {
             showMessage(`uninstall [${this.name}] remove data [${STORAGE_NAME}] fail: ${e.msg}`);
         });
+    }
+
+    private async loadPublishedSettings() {
+        // 每次读取先清除旧快照，未授权、未生成及请求失败时都使用默认值，不读取私有存储。
+        this.data[STORAGE_NAME] = {readonlyText: this.i18n.readonlyText};
+        this.publishDataStatus = "";
+        try {
+            const data = await this.loadPublishData();
+            if (typeof data.readonlyText === "string") {
+                this.data[STORAGE_NAME] = {readonlyText: data.readonlyText};
+            }
+        } catch (error) {
+            const code = (error as {code?: number;} | null)?.code;
+            this.publishDataStatus = code === 403 ?
+                this.i18n.publishDataUnavailable :
+                code === 404 ?
+                this.i18n.publishDataMissing :
+                this.i18n.publishDataLoadFailed;
+        }
+    }
+
+    private async publishSettings(readonlyText: string) {
+        if (this.isReadonly) {
+            return;
+        }
+        try {
+            // 仅选择声明过的公开字段，完整替换快照，避免将私有配置对象直接传入。
+            await this.savePublishData({readonlyText});
+            showMessage(this.i18n.publishDataSaved);
+        } catch (error) {
+            const code = (error as {code?: number;} | null)?.code;
+            showMessage(code === 403 ? this.i18n.publishDataGrantRequired : this.i18n.publishDataSaveFailed);
+        }
     }
 
     // 使用 saveData() 存储的数据发生变更时触发，注释掉则自动禁用插件再重新启用
@@ -522,6 +587,22 @@ export default class PluginSample extends Plugin {
         const menu = new Menu("topBarSample", () => {
             console.log(this.i18n.byeMenu);
         });
+        if (this.isReadonly) {
+            this.addReadonlyText(menu);
+            if (this.publishDataStatus) {
+                menu.addItem({label: this.publishDataStatus, type: "readonly"});
+            }
+            menu.addItem({
+                icon: "iconRefresh",
+                label: this.i18n.publishDataRefresh,
+                click: async () => {
+                    await this.loadPublishedSettings();
+                    showMessage(this.publishDataStatus || this.i18n.publishDataLoaded);
+                },
+            });
+            this.openMenu(menu, rect);
+            return;
+        }
         menu.addItem({
             icon: "iconSettings",
             label: "Open Setting",
@@ -1025,11 +1106,22 @@ export default class PluginSample extends Plugin {
             }],
         });
         menu.addSeparator();
+        this.addReadonlyText(menu);
+        this.openMenu(menu, rect);
+    }
+
+    private addReadonlyText(menu: Menu) {
+        // 菜单标签支持 HTML，使用文本节点转义配置和快照中的内容。
+        const label = document.createElement("span");
+        label.textContent = this.data[STORAGE_NAME].readonlyText || this.i18n.readonlyText;
         menu.addItem({
             icon: "iconSparkles",
-            label: this.data[STORAGE_NAME].readonlyText || "Readonly",
+            label: label.innerHTML,
             type: "readonly",
         });
+    }
+
+    private openMenu(menu: Menu, rect?: DOMRect) {
         if (this.isMobile) {
             menu.fullscreen();
         } else {

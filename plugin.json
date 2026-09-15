@@ -3,7 +3,7 @@
   "author": "Vanessa",
   "url": "https://github.com/siyuan-note/plugin-sample",
   "version": "0.5.1",
-  "minAppVersion": "3.8.3",
+  "minAppVersion": "3.8.4",
   "kernels": [
     "windows",
     "linux",
@@ -33,6 +33,10 @@
     "all"
   ],
   "disabledInPublish": false,
+  "publish": {
+    "resources": [],
+    "data": ["readonlyText"]
+  },
   "displayName": {
     "default": "Plugin Sample",
     "zh-CN": "插件示例"

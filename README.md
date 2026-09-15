@@ -45,11 +45,15 @@ A typical example is as follows:
   "author": "Vanessa",
   "url": "https://github.com/siyuan-note/plugin-sample",
   "version": "0.5.1",
-  "minAppVersion": "3.8.3",
+  "minAppVersion": "3.8.4",
   "kernels": ["all"],
   "backends": ["all"],
   "frontends": ["all"],
   "disabledInPublish": false,
+  "publish": {
+    "resources": [],
+    "data": ["readonlyText"]
+  },
   "displayName": {
     "default": "Plugin Sample",
     "zh-CN": "插件示例"
@@ -81,6 +85,8 @@ A typical example is as follows:
 * `version`: Plugin version number, needs to follow the [semver](https://semver.org/) specification
 * `minAppVersion`: Minimum SiYuan version required to use this plugin
 * `disabledInPublish`: Whether to disable the plugin when using the publish service, defaults to false, i.e., not disabled
+* `publish.resources`: Extra frontend files available to publishing-service visitors, using exact paths relative to the plugin directory, such as `images/logo.png`; directories and wildcards are not supported
+* `publish.data`: Public snapshot field names; each value must be a string, number, boolean or `null`, and access requires a separate administrator grant
 * `backends`: Backend environment required by the plugin, optional values are `windows`, `linux`, `darwin`, `docker`, `android`, `ios`, `harmony` and `all`
   * `windows`: Windows desktop
   * `linux`: Linux desktop
@@ -119,6 +125,47 @@ A typical example is as follows:
   * `custom`: Custom sponsorship link list
   * `links`: Labeled custom sponsorship links, for example `{"label": "Sponsor", "url": "https://example.com"}`
 * `keywords`: Search keyword list, used for marketplace search function, supplements search keywords beyond the values of `name`, `author`, `displayName`, and `description` fields
+
+## Publishing service
+
+This sample requires SiYuan 3.8.4 or later. It keeps private settings accessed through `loadData` / `saveData` separate from public snapshots accessed through `loadPublishData` / `savePublishData`. Visitors and other code on the published page can read the public snapshot, so publish only content suitable for disclosure.
+
+1. In the administrator interface, enable the plugin and allow it in the publishing service, then open **Plugin published data** on its downloaded-plugin card and grant access to `readonlyText`
+2. Open this plugin's settings, edit **Readonly text**, and click **Generate published snapshot** to publish the current text
+3. Open the published page and use the plugin's top bar menu to view the snapshot; use **Refresh published snapshot** to load updates
+
+The administrator selects the public field explicitly:
+
+```typescript
+await this.savePublishData({readonlyText: textareaElement.value});
+```
+
+The published frontend reads only the public snapshot:
+
+```typescript
+const label = document.createElement("span");
+try {
+    const data = await this.loadPublishData();
+    label.textContent = typeof data.readonlyText === "string" ? data.readonlyText : this.i18n.readonlyText;
+} catch {
+    label.textContent = this.i18n.readonlyText;
+}
+```
+
+See `src/index.ts` for the complete example. The published frontend also handles read-only mode, skips private storage and kernel RPC, and clears its previous snapshot before each read. Unavailable data (403), a missing snapshot (404), and other failures use defaults and never fall back to private settings. Configuration and snapshot text are escaped before being used as HTML menu labels.
+
+* Saving or deleting private settings does not update the public snapshot; use **Generate published snapshot** again to publish changes
+* `savePublishData` replaces the entire snapshot; omitted fields are removed, and `{}` publishes an empty snapshot
+* Data access is off by default; adding declared fields requires a new grant, and granting or revoking access clears the previous snapshot
+* After a grant, generate a new snapshot; to stop sharing, revoke data access on the downloaded-plugin card
+* Select public scalar values individually; never pass the whole private settings object or serialize it into a string
+* `index.js`, `index.css`, and JSON files directly under `i18n/` are available as standard entry resources; this sample uses no extra resources, so `publish.resources` is empty
+* List each additional script, image, font or HTML file in `publish.resources` and include it in the package; `plugin.json`, `kernel.js`, links, and directory traversal are prohibited
+* `data/storage/petal` remains private, and `/api/file/readDir` remains administrator-only
+
+The published `siyuan` 1.2.7 SDK does not yet declare the snapshot methods. `src/siyuan-publish.d.ts` supplies temporary declarations matching `petal`; remove this file after upgrading to an SDK that includes them. The declarations provide types only; the runtime methods require SiYuan 3.8.4 or later. Run `pnpm test` to check the publishing example and `pnpm exec tsc --noEmit` to check types.
+
+For the complete permission model and HTTP APIs, see [Plugin publishing](https://github.com/siyuan-note/siyuan/blob/master/docs/PLUGIN-PUBLISH.md).
 
 ## Startup appearances
 

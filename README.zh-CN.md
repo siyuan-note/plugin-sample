@@ -44,11 +44,15 @@
   "author": "Vanessa",
   "url": "https://github.com/siyuan-note/plugin-sample",
   "version": "0.5.1",
-  "minAppVersion": "3.8.3",
+  "minAppVersion": "3.8.4",
   "kernels": ["all"],
   "backends": ["all"],
   "frontends": ["all"],
   "disabledInPublish": false,
+  "publish": {
+    "resources": [],
+    "data": ["readonlyText"]
+  },
   "displayName": {
     "default": "Plugin Sample",
     "zh-CN": "插件示例"
@@ -80,6 +84,8 @@
 * `version`：插件版本号，需要遵循 [semver](https://semver.org/lang/zh-CN/) 规范
 * `minAppVersion`：插件支持的最低思源笔记版本号
 * `disabledInPublish`：使用发布服务时是否禁用该插件，默认为 false，即不禁用
+* `publish.resources`：允许发布服务访问者读取的额外前端文件，使用相对于插件目录的完整路径，例如 `images/logo.png`，不支持目录和通配符
+* `publish.data`：公开快照的字段名，值只能是字符串、数字、布尔值或 `null`，需要管理员单独授权
 * `backends`：插件需要的后端环境，可选值为 `windows`, `linux`, `darwin`, `docker`, `android`, `ios`, `harmony` 和 `all`
   * `windows`：Windows 桌面端
   * `linux`：Linux 桌面端
@@ -118,6 +124,47 @@
   * `custom`：自定义赞助链接列表
   * `links`：带标签的自定义赞助链接列表，例如 `{"label": "赞助", "url": "https://example.com"}`
 * `keywords`：搜索关键字列表，用于集市搜索功能，补充 `name`、`author`、`displayName`、`description` 字段值以外的搜索关键词
+
+## 发布服务
+
+本示例要求思源 3.8.4 或更新版本。通过 `loadData` / `saveData` 访问的私有设置与通过 `loadPublishData` / `savePublishData` 访问的公开快照分别管理。访问者和发布页面中的其他代码都能读取公开快照，请仅公开适合披露的内容。
+
+1. 在管理员界面启用插件并允许其用于发布服务，然后在已下载插件卡片的「插件发布数据」中授权公开 `readonlyText`
+2. 打开本插件设置，编辑「只读文本」，点击「生成公开快照」公开当前文本
+3. 打开发布页面，通过插件顶栏菜单查看快照，使用「刷新公开快照」读取更新
+
+管理员明确选择要公开的字段：
+
+```typescript
+await this.savePublishData({readonlyText: textareaElement.value});
+```
+
+发布端只读取公开快照：
+
+```typescript
+const label = document.createElement("span");
+try {
+    const data = await this.loadPublishData();
+    label.textContent = typeof data.readonlyText === "string" ? data.readonlyText : this.i18n.readonlyText;
+} catch {
+    label.textContent = this.i18n.readonlyText;
+}
+```
+
+完整示例见 `src/index.ts`。发布端兼顾只读模式，跳过私有存储和内核通信，每次读取前先清除旧快照。数据不可用（403）、尚未生成（404）或其他读取失败时使用默认值，不回退到私有设置。配置和快照中的文本在用作 HTML 菜单标签前都会转义。
+
+* 保存或删除私有设置不会更新公开快照，公开变更时需再次点击「生成公开快照」
+* `savePublishData` 完整替换快照，省略的字段会被移除，传入 `{}` 表示发布空快照
+* 数据权限默认关闭，新增声明字段需要重新授权，授权或撤销都会清空旧快照
+* 授权后需重新生成快照，停止公开时可在已下载插件卡片中撤销数据授权
+* 逐一选择公开的标量值，不要直接传入整个私有配置对象，也不要将其序列化成字符串
+* 标准前端入口 `index.js`、`index.css` 和直接位于 `i18n/` 下的 JSON 文件默认可用，本示例没有额外资源，因此 `publish.resources` 为空
+* 额外脚本、图片、字体或 HTML 需逐个列入 `publish.resources` 并打入插件包，不得声明 `plugin.json`、`kernel.js`、链接或上级目录路径
+* `data/storage/petal` 仍为私有存储，`/api/file/readDir` 仍仅允许管理员调用
+
+已发布的 `siyuan` 1.2.7 尚未声明快照方法，`src/siyuan-publish.d.ts` 临时补充了与 `petal` 一致的声明，升级到包含这些方法的 SDK 后可删除此文件。声明仅提供类型，运行时方法要求思源 3.8.4 或更新版本。使用 `pnpm test` 检查发布示例，使用 `pnpm exec tsc --noEmit` 检查类型。
+
+完整权限模型和 HTTP 接口见[插件发布](https://github.com/siyuan-note/siyuan/blob/master/docs/PLUGIN-PUBLISH.zh-CN.md)。
 
 ## 启动页外观
 
