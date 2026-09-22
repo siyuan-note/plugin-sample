@@ -1,6 +1,13 @@
 # Changelog
 
-## v0.5.2 2026
+## v0.5.3 2026
+
+## v0.5.2 2026-09-22
+
+* [Demonstrate top bar context menus with a plugin settings entry](https://github.com/siyuan-note/siyuan/issues/19305)
+* [Demonstrate flashcard review across multiple decks with optional document filters](https://github.com/siyuan-note/siyuan/issues/19305)
+* [Demonstrate public snapshot publishing and read-only access, requiring SiYuan 3.8.4 or later](https://github.com/siyuan-note/siyuan/issues/18354)
+* [Update marketplace submission and release instructions](https://github.com/siyuan-note/siyuan/issues/19333)
 
 ## v0.5.1 2026-09-07
 
