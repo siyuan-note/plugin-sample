@@ -84,7 +84,7 @@
 * `version`：插件版本号，需要遵循 [semver](https://semver.org/lang/zh-CN/) 规范
 * `minAppVersion`：插件支持的最低思源笔记版本号
 * `disabledInPublish`：使用发布服务时是否禁用该插件，默认为 false，即不禁用
-* `publish.resources`：允许发布服务访问者读取的额外前端文件，使用相对于插件目录的完整路径，例如 `images/logo.png`，不支持目录和通配符
+* `publish.resources`：允许发布服务访问者读取的额外前端资源，使用相对于插件目录的完整文件路径，例如 `images/logo.png`，或以 `/` 结尾的目录路径，例如 `fonts/`，不支持通配符
 * `publish.data`：公开快照的字段名，值只能是字符串、数字、布尔值或 `null`，需要管理员单独授权
 * `backends`：插件需要的后端环境，可选值为 `windows`, `linux`, `darwin`, `docker`, `android`, `ios`, `harmony` 和 `all`
   * `windows`：Windows 桌面端
@@ -159,7 +159,8 @@ try {
 * 授权后需重新生成快照，停止公开时可在已下载插件卡片中撤销数据授权
 * 逐一选择公开的标量值，不要直接传入整个私有配置对象，也不要将其序列化成字符串
 * 标准前端入口 `index.js`、`index.css` 和直接位于 `i18n/` 下的 JSON 文件默认可用，本示例没有额外资源，因此 `publish.resources` 为空
-* 额外脚本、图片、字体或 HTML 需逐个列入 `publish.resources` 并打入插件包，不得声明 `plugin.json`、`kernel.js`、链接或上级目录路径
+* 额外脚本、图片、字体或 HTML 需以完整文件路径或以 `/` 结尾的目录路径列入 `publish.resources` 并打入插件包，不得声明 `plugin.json`、`kernel.js`、链接或上级目录路径
+* 目录声明要求思源 3.8.6 或更新版本，使用此特性的插件必须将 `minAppVersion` 设为 `3.8.6` 或更高版本。例如，`fonts/` 发布该目录及其子目录中的所有文件，`fonts` 仍表示精确文件名。目录声明也包含后续新增文件，因此请将私有文件放在公开目录之外
 * `data/storage/petal` 仍为私有存储，`/api/file/readDir` 仍仅允许管理员调用
 
 已发布的 `siyuan` 1.2.7 尚未声明快照方法，`src/siyuan-publish.d.ts` 临时补充了与 `petal` 一致的声明，升级到包含这些方法的 SDK 后可删除此文件。声明仅提供类型，运行时方法要求思源 3.8.4 或更新版本。使用 `pnpm test` 检查发布示例，使用 `pnpm exec tsc --noEmit` 检查类型。

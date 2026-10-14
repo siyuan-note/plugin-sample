@@ -85,7 +85,7 @@ A typical example is as follows:
 * `version`: Plugin version number, needs to follow the [semver](https://semver.org/) specification
 * `minAppVersion`: Minimum SiYuan version required to use this plugin
 * `disabledInPublish`: Whether to disable the plugin when using the publish service, defaults to false, i.e., not disabled
-* `publish.resources`: Extra frontend files available to publishing-service visitors, using exact paths relative to the plugin directory, such as `images/logo.png`; directories and wildcards are not supported
+* `publish.resources`: Extra frontend resources available to publishing-service visitors, using exact file paths relative to the plugin directory, such as `images/logo.png`, or directory paths ending in `/`, such as `fonts/`; wildcards are not supported
 * `publish.data`: Public snapshot field names; each value must be a string, number, boolean or `null`, and access requires a separate administrator grant
 * `backends`: Backend environment required by the plugin, optional values are `windows`, `linux`, `darwin`, `docker`, `android`, `ios`, `harmony` and `all`
   * `windows`: Windows desktop
@@ -160,7 +160,8 @@ See `src/index.ts` for the complete example. The published frontend also handles
 * After a grant, generate a new snapshot; to stop sharing, revoke data access on the downloaded-plugin card
 * Select public scalar values individually; never pass the whole private settings object or serialize it into a string
 * `index.js`, `index.css`, and JSON files directly under `i18n/` are available as standard entry resources; this sample uses no extra resources, so `publish.resources` is empty
-* List each additional script, image, font or HTML file in `publish.resources` and include it in the package; `plugin.json`, `kernel.js`, links, and directory traversal are prohibited
+* Declare additional scripts, images, fonts or HTML in `publish.resources` using exact file paths or directory paths ending in `/`, and include them in the package; `plugin.json`, `kernel.js`, links, and directory traversal are prohibited
+* Directory declarations require SiYuan 3.8.6 or later; plugins using them must set `minAppVersion` to `3.8.6` or later. For example, `fonts/` publishes all files in that directory and its subdirectories, while `fonts` remains an exact filename. Directory declarations also include files added later, so keep private files outside published directories
 * `data/storage/petal` remains private, and `/api/file/readDir` remains administrator-only
 
 The published `siyuan` 1.2.7 SDK does not yet declare the snapshot methods. `src/siyuan-publish.d.ts` supplies temporary declarations matching `petal`; remove this file after upgrading to an SDK that includes them. The declarations provide types only; the runtime methods require SiYuan 3.8.4 or later. Run `pnpm test` to check the publishing example and `pnpm exec tsc --noEmit` to check types.
