@@ -133,6 +133,8 @@
 
 这个标志不会强制用新窗口打开设置。内置设置的打开方式由用户在 <kbd>设置</kbd> - <kbd>应用</kbd> - <kbd>在独立窗口中打开设置界面</kbd> 中选择；插件自己的 `Setting` 则通过 `new Setting({openInWindow: true})` 选择独立窗口，默认使用对话框，本示例也保留这个默认行为。这两项选择与 `settingsWindow` 声明相互独立。普通设置对话框使用所在前端中已有的插件实例。
 
+`src/index.ts` 的 `new Setting({...})` 中提供了注释掉的 `openInWindow: true` 及其作用说明。取消注释即可在桌面客户端体验独立的插件设置窗口（思源 3.8.7+）；浏览器、移动端及设置窗口内的调用仍使用对话框。已发布的 `siyuan` 1.2.9 仍缺少这个构造选项，`pnpm install` 会应用 `patches/siyuan@1.2.9.patch`，按 [Petal 的正式声明](https://github.com/siyuan-note/petal/tree/f169619be446fbe53640e0c2d43ee5251d31baa1) 补齐选项、注释及缺失的阅读位置类型导出和导入，无需额外定义 `SettingOptions` 或添加类型断言。升级到包含这些声明的 SDK 后，应移除补丁及其 `patchedDependencies` 配置，并重新生成锁文件。
+
 每个设置窗口创建自己的插件实例，拥有独立的内存和 DOM，沿用 `onload`、`onLayoutReady`、`onDataChanged` 和 `onunload` 生命周期，但没有主窗口的文档布局。`addTopBar`、`addStatusBar`、`addDock`、`addCommand`（含全局快捷键）、`addToolbarItem`、`addBreadcrumbButton`、`addTab`、`addFloatLayer` 和 `addAgentCapability` 不会在这里注册入口，不要依赖其返回值访问已挂载的界面。消息仍可在当前窗口显示。
 
 设置窗口实例调用基类 `Plugin.openSetting()` 时，若 `this.setting` 存在，会转交设置窗口宿主打开。覆盖该方法时，应通过 `super.openSetting()` 保留这个行为；直接调用 `this.setting.open()` 会绕过宿主转发。自定义设置对话框仍由插件自行管理。
@@ -183,7 +185,7 @@ try {
 * 目录声明要求思源 3.8.6 或更新版本，使用此特性的插件必须将 `minAppVersion` 设为 `3.8.6` 或更高版本。例如，`fonts/` 发布该目录及其子目录中的所有文件，`fonts` 仍表示精确文件名。目录声明也包含后续新增文件，因此请将私有文件放在公开目录之外
 * `data/storage/petal` 仍为私有存储，`/api/file/readDir` 仍仅允许管理员调用
 
-已发布的 `siyuan` 1.2.7 尚未声明快照方法，`src/siyuan-publish.d.ts` 临时补充了与 `petal` 一致的声明，升级到包含这些方法的 SDK 后可删除此文件。声明仅提供类型，运行时方法要求思源 3.8.4 或更新版本。使用 `pnpm test` 检查发布示例，使用 `pnpm exec tsc --noEmit` 检查类型。
+`siyuan` 1.2.9 已直接声明快照方法。声明仅提供类型，运行时方法要求思源 3.8.4 或更新版本。使用 `pnpm test` 检查发布示例，使用 `pnpm exec tsc --noEmit` 检查类型。
 
 完整权限模型和 HTTP 接口见[插件发布](https://github.com/siyuan-note/siyuan/blob/master/docs/PLUGIN-PUBLISH.zh-CN.md)。
 

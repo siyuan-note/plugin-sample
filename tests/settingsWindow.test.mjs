@@ -1,6 +1,11 @@
 import assert from "node:assert/strict";
 import {readFileSync} from "node:fs";
+import {
+    dirname,
+    resolve,
+} from "node:path";
 import test from "node:test";
+import {fileURLToPath} from "node:url";
 import {runInNewContext} from "node:vm";
 import ts from "typescript";
 
@@ -9,6 +14,28 @@ const i18n = JSON.parse(readFileSync(new URL("../src/i18n/en.json", import.meta.
 const code = ts.transpileModule(source, {
     compilerOptions: {module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022},
 }).outputText;
+
+test("uncommented independent settings option type-checks against the installed SDK", () => {
+    const enabledSource = source.replace("// openInWindow: true,", "openInWindow: true,");
+    assert.notEqual(enabledSource, source, "The sample must include the commented option");
+    const configPath = fileURLToPath(new URL("../tsconfig.json", import.meta.url));
+    const sourcePath = fileURLToPath(new URL("../src/index.ts", import.meta.url));
+    const config = ts.readConfigFile(configPath, ts.sys.readFile);
+    assert.equal(config.error, undefined);
+    const parsed = ts.parseJsonConfigFileContent(config.config, ts.sys, dirname(configPath));
+    assert.deepEqual(parsed.errors, []);
+    const host = ts.createCompilerHost(parsed.options);
+    const getSourceFile = host.getSourceFile.bind(host);
+    host.getSourceFile = (filename, languageVersion, onError, shouldCreateNewSourceFile) => {
+        if (resolve(filename) === resolve(sourcePath)) {
+            return ts.createSourceFile(filename, enabledSource, languageVersion);
+        }
+        return getSourceFile(filename, languageVersion, onError, shouldCreateNewSourceFile);
+    };
+    const program = ts.createProgram(parsed.fileNames, parsed.options, host);
+    const diagnostics = ts.getPreEmitDiagnostics(program);
+    assert.equal(diagnostics.length, 0, ts.formatDiagnostics(diagnostics, host));
+});
 
 function createSample({settingsWindow = true, readonly = false, frontend = "desktop"} = {}) {
     const classes = new Set(settingsWindow ? ["body--settings"] : []);

@@ -273,6 +273,8 @@ export default class PluginSample extends Plugin {
     private initSetting() {
         const textareaElement = document.createElement("textarea");
         this.setting = new Setting({
+            // 取消注释后，桌面端用独立窗口打开插件设置（思源 3.8.7+）；浏览器、移动端和设置窗口内仍使用对话框。
+            // openInWindow: true,
             confirmCallback: () => {
                 this.saveData(STORAGE_NAME, {readonlyText: textareaElement.value}).catch(e => {
                     showMessage(`[${this.name}] save data [${STORAGE_NAME}] fail: `, e);

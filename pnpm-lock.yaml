@@ -4,6 +4,9 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+patchedDependencies:
+  siyuan@1.2.9: ed2ac88dda4709a53fa4c29bf3d7095b232603527d66c25388fe68ecc9cad6e8
+
 importers:
 
   .:
@@ -51,8 +54,8 @@ importers:
         specifier: ^17.0.0
         version: 17.0.0(sass@1.100.0)(webpack@5.107.2)
       siyuan:
-        specifier: 1.2.8
-        version: 1.2.8
+        specifier: 1.2.9
+        version: 1.2.9(patch_hash=ed2ac88dda4709a53fa4c29bf3d7095b232603527d66c25388fe68ecc9cad6e8)
       tslib:
         specifier: ^2.8.1
         version: 2.8.1
@@ -1653,8 +1656,8 @@ packages:
     resolution: {integrity: sha512-ZX99e6tRweoUXqR+VBrslhda51Nh5MTQwou5tnUDgbtyM0dBgmhEDtWGP/xbKn6hqfPRHujUNwz5fy/wbbhnpw==}
     engines: {node: '>= 0.4'}
 
-  siyuan@1.2.8:
-    resolution: {integrity: sha512-44tTh1leDkrgj8wQChLjkkbBvDk2lDF0QiAfs1GXmAlAEkber4kx5TLNIGzgsDnTR+Hw3L5kPz5m6s0YckpKew==}
+  siyuan@1.2.9:
+    resolution: {integrity: sha512-2bZTzTZocnOxPqY4liGtY2ZDhnhkYgySrlVLCCKWHjmGZ4kJYru0T1hFz5Hro0bz7cvecIEAx7XRV4plIvW1jQ==}
 
   source-map-js@1.2.1:
     resolution: {integrity: sha512-UXWMKhLOwVKb728IUtQPXxfYU+usdybtUrK/8uGE8CQMvrhOpwvzDBwj0QhSL7MQc7vIsISBG8VQ8+IDQxpfQA==}
@@ -3509,7 +3512,7 @@ snapshots:
       side-channel-map: 1.0.1
       side-channel-weakmap: 1.0.2
 
-  siyuan@1.2.8:
+  siyuan@1.2.9(patch_hash=ed2ac88dda4709a53fa4c29bf3d7095b232603527d66c25388fe68ecc9cad6e8):
     dependencies:
       '@dop251/types-goja_nodejs-buffer': 0.0.0-20260918183711-b481721df8a2
       '@dop251/types-goja_nodejs-global': 0.0.0-20260918183711-b481721df8a2

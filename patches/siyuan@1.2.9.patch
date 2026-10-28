@@ -1,0 +1,45 @@
+diff --git a/siyuan.d.ts b/siyuan.d.ts
+index 0b24b23487d9261f05caba12380da39fca6f1e36..3273ed72bc83591ab427386a2c4bff31f63cf727 100644
+--- a/siyuan.d.ts
++++ b/siyuan.d.ts
+@@ -918,6 +918,14 @@ export class Setting {
+         width?: string,
+         destroyCallback?: () => void,
+         confirmCallback?: () => void,
++        /**
++         * 桌面客户端使用独立原生窗口，默认 false，浏览器和移动端仍使用原有设置界面。
++         * 原插件实例保持在所属窗口；声明 settingsWindow: true 的插件可在原生设置窗口另建独立实例。
++         * 控件回调在原插件所属窗口执行，原生窗口关闭或原插件卸载时触发一次销毁回调。
++         * 控件会迁入独立窗口，应使用元素引用操作控件，避免依赖所属窗口的 document 查询或样式。
++         * 在设置窗口中再次打开 Setting 使用普通对话框，关闭该对话框不会关闭整个设置窗口。
++         */
++        openInWindow?: boolean,
+     });
+ 
+     addItem(options: {
+diff --git a/types/config.d.ts b/types/config.d.ts
+index c06c08ab94bbbf36c34b6324cb35a50a969e81b9..2725a9f9c3d87251db7b35887e77bc59a9890a61 100644
+--- a/types/config.d.ts
++++ b/types/config.d.ts
+@@ -15,7 +15,7 @@
+  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  */
+ 
+-import {TEditorMode, TProtyleAction} from "./protyle";
++import {IScrollAttr, TEditorMode, TProtyleAction} from "./protyle";
+ import {TDock} from "../siyuan";
+ 
+ export namespace Config {
+diff --git a/types/protyle.d.ts b/types/protyle.d.ts
+index f540f1346703abf70ee353c2bf24d8cf693beccf..ffb09058c93a81a10e7eb19a5da65167f781537b 100644
+--- a/types/protyle.d.ts
++++ b/types/protyle.d.ts
+@@ -835,7 +835,7 @@ interface IUpload {
+     linkToImgCallback?(responseText: string): void;
+ }
+ 
+-interface IScrollAttr {
++export interface IScrollAttr {
+     rootId: string,
+     startId?: string,
+     endId?: string

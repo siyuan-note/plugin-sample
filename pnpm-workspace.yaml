@@ -4,3 +4,5 @@ allowBuilds:
   esbuild: false
 minimumReleaseAgeExclude:
   - siyuan
+patchedDependencies:
+  siyuan@1.2.9: patches/siyuan@1.2.9.patch

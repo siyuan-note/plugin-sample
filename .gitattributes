@@ -1,0 +1,2 @@
+# 依赖补丁的空白上下文行包含一个空格，固定 LF 可保持校验值稳定。
+patches/*.patch text eol=lf whitespace=-blank-at-eol
