@@ -48,6 +48,7 @@
   "kernels": ["all"],
   "backends": ["all"],
   "frontends": ["all"],
+  "settingsWindow": true,
   "disabledInPublish": false,
   "publish": {
     "resources": [],
@@ -83,6 +84,7 @@
 * `url`：插件仓库地址
 * `version`：插件版本号，需要遵循 [semver](https://semver.org/lang/zh-CN/) 规范
 * `minAppVersion`：插件支持的最低思源笔记版本号
+* `settingsWindow`：主动声明支持在桌面端独立设置窗口中创建插件实例（思源 3.8.7+）；省略或为 false 时不在该窗口加载插件，不决定设置界面的打开方式，详见[独立设置窗口](#独立设置窗口)
 * `disabledInPublish`：使用发布服务时是否禁用该插件，默认为 false，即不禁用
 * `publish.resources`：允许发布服务访问者读取的额外前端资源，使用相对于插件目录的完整文件路径，例如 `images/logo.png`，或以 `/` 结尾的目录路径，例如 `fonts/`，不支持通配符
 * `publish.data`：公开快照的字段名，值只能是字符串、数字、布尔值或 `null`，需要管理员单独授权
@@ -124,6 +126,24 @@
   * `custom`：自定义赞助链接列表
   * `links`：带标签的自定义赞助链接列表，例如 `{"label": "赞助", "url": "https://example.com"}`
 * `keywords`：搜索关键字列表，用于集市搜索功能，补充 `name`、`author`、`displayName`、`description` 字段值以外的搜索关键词
+
+## 独立设置窗口
+
+从思源 3.8.7 起，已启用且兼容的插件在 `plugin.json` 中声明 `"settingsWindow": true` 后，可以在内置设置和插件专属的桌面端独立设置窗口中运行。浏览器端和移动端不使用这一机制。省略该字段或设为 false 仅阻止插件在这些窗口加载，不影响普通前端实例。
+
+这个标志不会强制用新窗口打开设置。内置设置的打开方式由用户在 <kbd>设置</kbd> - <kbd>应用</kbd> - <kbd>在独立窗口中打开设置界面</kbd> 中选择；插件自己的 `Setting` 则通过 `new Setting({openInWindow: true})` 选择独立窗口，默认使用对话框，本示例也保留这个默认行为。这两项选择与 `settingsWindow` 声明相互独立。普通设置对话框使用所在前端中已有的插件实例。
+
+每个设置窗口创建自己的插件实例，拥有独立的内存和 DOM，沿用 `onload`、`onLayoutReady`、`onDataChanged` 和 `onunload` 生命周期，但没有主窗口的文档布局。`addTopBar`、`addStatusBar`、`addDock`、`addCommand`（含全局快捷键）、`addToolbarItem`、`addBreadcrumbButton`、`addTab`、`addFloatLayer` 和 `addAgentCapability` 不会在这里注册入口，不要依赖其返回值访问已挂载的界面。消息仍可在当前窗口显示。
+
+设置窗口实例调用基类 `Plugin.openSetting()` 时，若 `this.setting` 存在，会转交设置窗口宿主打开。覆盖该方法时，应通过 `super.openSetting()` 保留这个行为；直接调用 `this.setting.open()` 会绕过宿主转发。自定义设置对话框仍由插件自行管理。
+
+完整示例见 [src/index.ts](src/index.ts) 中的 `onload`、`initSetting`、`onLayoutReady`、`onDataChanged`、`onunload` 和 `openSetting`。示例通过 `document.body.classList.contains("body--settings")` 判断设置窗口，初始化设置项并跳过主窗口示例，再给 body 添加插件专属的 `plugin-sample--settings` 类作为样式钩子，卸载时移除。设置窗口中的 `getFrontend()` 返回 `"desktop"`；`"desktop-window"` 表示文档页签转换的独立窗口，不能用于这个判断。`body--settings` 是当前 DOM 标识，不是单独的前端 API 枚举值。
+
+思源会在设置窗口实例中加载插件的 `index.css`。插件代码创建的动态样式和监听器需要由各实例分别应用和清理，主窗口的 DOM 变更不会被复制过去。需要时可在 `src/index.scss` 中扩展示例的样式钩子，并在 `onunload` 中释放定时器、监听器及生成的样式元素。
+
+`onDataChanged` 处理插件存储数据变更，包括同步和其他前端实例的写入，不代表所有应用配置变化。示例会重新读取私有设置，并先重置缓存，避免文件删除后回退到旧值；依赖数据的动态样式应在读取后重新应用。写入方前端不会收到这次跨窗口写入通知，因此保存代码也应更新自身界面。没有覆盖 `onDataChanged` 时，思源会重载插件。需要观察应用配置消息时，可使用 `ws-main` 事件。
+
+移除 `settingsWindow` 或设为 false 后重新打开设置窗口，即可停止在该窗口运行插件。由于额外实例属于可选能力，示例保留现有的最低应用版本；设置窗口行为本身要求思源 3.8.7 或更新版本。使用 `pnpm test` 检查设置窗口及发布示例，使用 `pnpm exec tsc --noEmit` 检查类型。
 
 ## 发布服务
 

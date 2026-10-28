@@ -38,9 +38,11 @@ const DOCK_TYPE = "dock_tab";
 const CUSTOM_BLOCK_TYPE = "counter";
 
 export default class PluginSample extends Plugin {
+    declare i18n: Record<string, string>;
     private custom: ReturnType<Plugin["addTab"]>;
     private isMobile: boolean;
     private isReadonly: boolean;
+    private isSettingsWindow: boolean;
     private publishDataStatus = "";
     private blockIconEventBindThis = this.blockIconEvent.bind(this);
     private readonly renderCounterCustomBlock = ({element, content, setContent}: {
@@ -74,6 +76,7 @@ export default class PluginSample extends Plugin {
     };
 
     onload() {
+        this.isSettingsWindow = document.body.classList.contains("body--settings");
         this.isReadonly = Boolean(window.siyuan.config.readonly || window.siyuan.isPublish);
         this.data[STORAGE_NAME] = {readonlyText: this.i18n.readonlyText};
         const frontEnd = getFrontend();
@@ -83,6 +86,11 @@ export default class PluginSample extends Plugin {
         };
         // 发布端保留内容渲染，管理操作和内核通信仅在可写的管理端注册。
         if (this.isReadonly) {
+            return;
+        }
+        // 设置窗口使用自己的配置与样式，文档入口和内核通信示例仅在普通前端注册。
+        if (this.isSettingsWindow) {
+            this.initSetting();
             return;
         }
         this.kernel.rpc.bind("unload", this.onKernelPluginUnload);
@@ -224,6 +232,45 @@ export default class PluginSample extends Plugin {
             },
         });
 
+        this.initSetting();
+
+        this.protyleSlash = [{
+            filter: ["insert emoji 😊", "插入表情 😊", "crbqwx"],
+            html:
+                `<div class="b3-list-item__first"><span class="b3-list-item__text">${this.i18n.insertEmoji}</span><span class="b3-list-item__meta">😊</span></div>`,
+            id: "insertEmoji",
+            callback(protyle: Protyle) {
+                protyle.insert("😊");
+            },
+        }];
+
+        this.protyleOptions = {
+            toolbar: [
+                "block-ref",
+                "a",
+                "|",
+                "text",
+                "strong",
+                "em",
+                "u",
+                "s",
+                "mark",
+                "sup",
+                "sub",
+                "clear",
+                "|",
+                "code",
+                "kbd",
+                "tag",
+                "inline-math",
+                "inline-memo",
+            ],
+        };
+
+        console.log(this.i18n.helloPlugin);
+    }
+
+    private initSetting() {
         const textareaElement = document.createElement("textarea");
         this.setting = new Setting({
             confirmCallback: () => {
@@ -270,44 +317,15 @@ export default class PluginSample extends Plugin {
             description: "Open plugin url in browser",
             actionElement: btnaElement,
         });
-
-        this.protyleSlash = [{
-            filter: ["insert emoji 😊", "插入表情 😊", "crbqwx"],
-            html:
-                `<div class="b3-list-item__first"><span class="b3-list-item__text">${this.i18n.insertEmoji}</span><span class="b3-list-item__meta">😊</span></div>`,
-            id: "insertEmoji",
-            callback(protyle: Protyle) {
-                protyle.insert("😊");
-            },
-        }];
-
-        this.protyleOptions = {
-            toolbar: [
-                "block-ref",
-                "a",
-                "|",
-                "text",
-                "strong",
-                "em",
-                "u",
-                "s",
-                "mark",
-                "sup",
-                "sub",
-                "clear",
-                "|",
-                "code",
-                "kbd",
-                "tag",
-                "inline-math",
-                "inline-memo",
-            ],
-        };
-
-        console.log(this.i18n.helloPlugin);
     }
 
     async onLayoutReady() {
+        if (this.isSettingsWindow) {
+            // 插件专属类名可作为设置窗口的样式钩子，卸载时由当前实例清理。
+            document.body.classList.add("plugin-sample--settings");
+            await this.onDataChanged();
+            return;
+        }
         const topBarElement = this.addTopBar({
             icon: this.isReadonly ? "iconEmoji" : "iconFace",
             title: this.i18n.addTopBarIcon,
@@ -363,14 +381,16 @@ export default class PluginSample extends Plugin {
         this.addStatusBar({
             element: statusIconTemp.content.firstElementChild as HTMLElement,
         });
-        await this.loadData(STORAGE_NAME).catch(e => {
-            console.log(`[${this.name}] load data [${STORAGE_NAME}] fail: `, e);
-        });
+        await this.onDataChanged();
         console.log(`frontend: ${getFrontend()}; backend: ${getBackend()}`);
     }
 
     async onunload() {
         console.log(this.i18n.byePlugin);
+        if (this.isSettingsWindow) {
+            document.body.classList.remove("plugin-sample--settings");
+            return;
+        }
 
         if (this.isReadonly) {
             return;
@@ -426,11 +446,17 @@ export default class PluginSample extends Plugin {
         }
     }
 
-    // 使用 saveData() 存储的数据发生变更时触发，注释掉则自动禁用插件再重新启用
-    // Triggered when data stored using saveData() changes. If commented out, the plugin will be automatically disabled and then re-enabled.
-    // onDataChanged() {
-    //     console.log("onDataChanged");
-    // }
+    // 各前端实例独立读取插件存储；数据被删除时清除缓存，避免 loadData 回退到旧值。
+    async onDataChanged() {
+        if (this.isReadonly) {
+            await this.loadPublishedSettings();
+            return;
+        }
+        this.data[STORAGE_NAME] = {readonlyText: this.i18n.readonlyText};
+        await this.loadData(STORAGE_NAME).catch(e => {
+            console.log(`[${this.name}] load data [${STORAGE_NAME}] fail: `, e);
+        });
+    }
 
     async updateCards(options: ICardData) {
         options.cards.sort((a: ICard, b: ICard) => {
@@ -449,8 +475,8 @@ export default class PluginSample extends Plugin {
         if (this.isReadonly || !this.setting) {
             return;
         }
-        // 打开 onload 中注册的设置项，保存时执行 Setting 的 confirmCallback。
-        this.setting.open(this.displayName || this.name);
+        // 基类在设置窗口中通过宿主打开设置，在普通前端中打开当前实例的设置项。
+        super.openSetting();
     }
 
     /* 自定义设置

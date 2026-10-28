@@ -49,6 +49,7 @@ A typical example is as follows:
   "kernels": ["all"],
   "backends": ["all"],
   "frontends": ["all"],
+  "settingsWindow": true,
   "disabledInPublish": false,
   "publish": {
     "resources": [],
@@ -84,6 +85,7 @@ A typical example is as follows:
 * `url`: Plugin repo URL
 * `version`: Plugin version number, needs to follow the [semver](https://semver.org/) specification
 * `minAppVersion`: Minimum SiYuan version required to use this plugin
+* `settingsWindow`: Opt in to an independent plugin instance in native desktop settings windows (SiYuan 3.8.7+); omitted or false means the plugin is not loaded there. This does not select how settings are opened; see [Independent settings windows](#independent-settings-windows)
 * `disabledInPublish`: Whether to disable the plugin when using the publish service, defaults to false, i.e., not disabled
 * `publish.resources`: Extra frontend resources available to publishing-service visitors, using exact file paths relative to the plugin directory, such as `images/logo.png`, or directory paths ending in `/`, such as `fonts/`; wildcards are not supported
 * `publish.data`: Public snapshot field names; each value must be a string, number, boolean or `null`, and access requires a separate administrator grant
@@ -125,6 +127,24 @@ A typical example is as follows:
   * `custom`: Custom sponsorship link list
   * `links`: Labeled custom sponsorship links, for example `{"label": "Sponsor", "url": "https://example.com"}`
 * `keywords`: Search keyword list, used for marketplace search function, supplements search keywords beyond the values of `name`, `author`, `displayName`, and `description` fields
+
+## Independent settings windows
+
+Since SiYuan 3.8.7, an enabled, compatible plugin with `"settingsWindow": true` in `plugin.json` can run in both built-in and plugin-specific native desktop settings windows. Browser and mobile frontends do not use this mechanism. Omitting the field or setting it to false only prevents loading in these windows; ordinary frontend instances are unaffected.
+
+The flag does not force settings to open in a new window. The user selects the built-in settings mode in <kbd>Settings</kbd> - <kbd>App</kbd> - <kbd>Open settings in a separate window</kbd>. A plugin selects its own `Setting` opening mode with `new Setting({openInWindow: true})`; the default is a dialog, as used by this sample. These choices are independent of `settingsWindow`. An ordinary settings dialog uses the plugin instance already running in its frontend.
+
+Each settings window creates its own plugin instance, with its own memory and DOM. It follows the existing `onload`, `onLayoutReady`, `onDataChanged`, and `onunload` lifecycle, but has no main-window document layout. `addTopBar`, `addStatusBar`, `addDock`, `addCommand` (including global shortcuts), `addToolbarItem`, `addBreadcrumbButton`, `addTab`, `addFloatLayer`, and `addAgentCapability` do not register entries there. Do not rely on their return values to access mounted UI. Messages can still be displayed in the current window.
+
+The base `Plugin.openSetting()` delegates to the settings window host when called from a settings instance, provided `this.setting` exists. If you override it, retain that behavior with `super.openSetting()`; directly calling `this.setting.open()` bypasses this routing. Custom settings dialogs remain the plugin's responsibility.
+
+See `onload`, `initSetting`, `onLayoutReady`, `onDataChanged`, `onunload`, and `openSetting` in [src/index.ts](src/index.ts). The sample checks `document.body.classList.contains("body--settings")`, initializes its settings without registering main-window examples, and adds the plugin-owned `plugin-sample--settings` body class as a style hook. The class is removed on unload. `getFrontend()` returns `"desktop"` in a settings window; `"desktop-window"` identifies a detached document window and cannot be used for this check. `body--settings` is the current DOM marker, not a separate frontend API value.
+
+SiYuan loads the plugin's `index.css` in each settings instance. Dynamic styles and listeners created by plugin code must be applied and cleaned up by that instance; DOM changes in the main window are not copied. Extend the sample's style hook in `src/index.scss` when needed, and release timers, listeners, and generated style elements in `onunload`.
+
+`onDataChanged` handles plugin storage changes, including sync and writes from other frontend instances; it is not a notification for every application configuration change. The sample re-reads its private settings and resets the cache first so a deleted file cannot restore stale values. Reapply any data-dependent styles after reading. Saving code should also update its own UI because the originating frontend is excluded from the cross-window write notification. Without an `onDataChanged` override, SiYuan reloads the plugin instead. Application configuration messages can be observed through `ws-main` as needed.
+
+To opt out of settings-window execution, remove `settingsWindow` or set it to false and reopen the settings window. The sample keeps its existing minimum application version because the extra instance is optional; the settings-window behavior itself requires SiYuan 3.8.7 or later. Run `pnpm test` for the sample's settings and publishing regressions, and `pnpm exec tsc --noEmit` for type checks.
 
 ## Publishing service
 

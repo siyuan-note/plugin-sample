@@ -57,6 +57,7 @@ function createSample({readonly = true, isPublish = false} = {}) {
         },
         window: {siyuan: {config: {readonly}, isPublish}},
         document: {
+            body: {classList: {contains: () => false}},
             createElement: (tag) => {
                 assert.equal(tag, "span");
                 return {
