@@ -37,12 +37,13 @@ test("uncommented independent settings option type-checks against the installed 
     assert.equal(diagnostics.length, 0, ts.formatDiagnostics(diagnostics, host));
 });
 
-function createSample({settingsWindow = true, readonly = false, frontend = "desktop"} = {}) {
+function createSample({settingsWindow = true, readonly = false, frontend = "desktop", colorPicker} = {}) {
     const classes = new Set(settingsWindow ? ["body--settings"] : []);
     const registrations = [];
     const delegated = [];
     const loads = [];
     const writes = [];
+    const messages = [];
     let stored = {readonlyText: "Saved settings"};
     const register = (name) => () => {
         registrations.push(name);
@@ -96,7 +97,14 @@ function createSample({settingsWindow = true, readonly = false, frontend = "desk
         }
     }
     const createElement = () => ({
-        addEventListener() {},
+        children: [],
+        listeners: {},
+        append(...children) {
+            this.children.push(...children);
+        },
+        addEventListener(name, callback) {
+            this.listeners[name] = callback;
+        },
         content: {firstElementChild: {addEventListener() {}}},
     });
     const exports = {};
@@ -107,7 +115,14 @@ function createSample({settingsWindow = true, readonly = false, frontend = "desk
                 return {};
             }
             assert.equal(name, "siyuan");
-            return {Plugin, Setting, getFrontend: () => frontend, getBackend: () => "windows"};
+            return {
+                Plugin,
+                Setting,
+                getFrontend: () => frontend,
+                getBackend: () => "windows",
+                openColorPicker: colorPicker,
+                showMessage: message => messages.push(message),
+            };
         },
         window: {siyuan: {config: {readonly}}},
         document: {
@@ -129,6 +144,7 @@ function createSample({settingsWindow = true, readonly = false, frontend = "desk
         delegated,
         loads,
         writes,
+        messages,
         setStored: (value) => stored = value,
     };
 }
@@ -136,7 +152,7 @@ function createSample({settingsWindow = true, readonly = false, frontend = "desk
 test("settings lifecycle initializes settings without main-window entries or RPC", async () => {
     const f = createSample();
     f.plugin.onload();
-    assert.equal(f.plugin.setting.items.length, 3);
+    assert.equal(f.plugin.setting.items.length, 4);
     await f.plugin.onLayoutReady();
     assert.deepEqual(f.loads, ["menu-config"]);
     assert.equal(f.plugin.data["menu-config"].readonlyText, "Saved settings");
@@ -186,6 +202,57 @@ test("settings item reads refreshed data and saves through the existing confirma
     assert.equal(writes.length, 1);
     assert.equal(writes[0].name, "menu-config");
     assert.equal(writes[0].data.readonlyText, "Edited settings");
+});
+
+test("the color sample previews without saving, cleans up to current data and persists only confirmation", async () => {
+    let options;
+    let finish;
+    const f = createSample({
+        colorPicker: value => {
+            options = value;
+            return {
+                result: new Promise(resolve => {
+                    finish = resolve;
+                }),
+            };
+        },
+    });
+    f.plugin.onload();
+    await f.plugin.onLayoutReady();
+    const action = f.plugin.setting.items.find(item => item.title === i18n.colorPicker).actionElement;
+    const [button, , preview] = action.children;
+    const cancelled = button.listeners.click();
+    assert.equal(options.ownerPlugin, f.plugin);
+    assert.equal(options.ownerElement, button);
+    options.onPreview({hex: "#123456"});
+    assert.equal(preview.textContent, "#123456");
+    assert.equal(f.writes.length, 0);
+    f.plugin.data["menu-config"].color = "#abcdef";
+    options.onPreviewEnd();
+    assert.equal(preview.textContent, "#abcdef");
+    finish({type: "cancel"});
+    await cancelled;
+    assert.equal(f.writes.length, 0);
+    const accepted = button.listeners.click();
+    finish({type: "confirm", value: {hex: "#112233"}, changed: true});
+    await accepted;
+    assert.equal(f.writes.length, 1);
+    assert.equal(f.writes[0].data.color, "#112233");
+    assert.equal(f.writes[0].data.readonlyText, "Saved settings");
+    const input = f.plugin.setting.items[0].createActionElement();
+    input.value = "Edited";
+    f.plugin.setting.options.confirmCallback();
+    assert.equal(f.writes[1].data.color, "#112233");
+});
+
+test("the color sample provides an older-version fallback", async () => {
+    const f = createSample();
+    f.plugin.onload();
+    await f.plugin.onLayoutReady();
+    const action = f.plugin.setting.items.find(item => item.title === i18n.colorPicker).actionElement;
+    await action.children[0].listeners.click();
+    assert.deepEqual(f.messages, [i18n.colorPickerUnavailable]);
+    assert.deepEqual(f.writes, []);
 });
 
 for (

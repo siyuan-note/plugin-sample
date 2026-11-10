@@ -30,6 +30,7 @@ import {
     IKernelPluginRpcCall,
 } from "siyuan";
 import type {ICommandContext} from "siyuan";
+import * as siyuan from "siyuan";
 import "./index.scss";
 
 const STORAGE_NAME = "menu-config";
@@ -276,9 +277,11 @@ export default class PluginSample extends Plugin {
             // 取消注释后，桌面端用独立窗口打开插件设置（思源 3.8.7+）；浏览器、移动端和设置窗口内仍使用对话框。
             // openInWindow: true,
             confirmCallback: () => {
-                this.saveData(STORAGE_NAME, {readonlyText: textareaElement.value}).catch(e => {
-                    showMessage(`[${this.name}] save data [${STORAGE_NAME}] fail: `, e);
-                });
+                this.saveData(STORAGE_NAME, {...this.data[STORAGE_NAME], readonlyText: textareaElement.value}).catch(
+                    e => {
+                        showMessage(`[${this.name}] save data [${STORAGE_NAME}] fail: `, e);
+                    },
+                );
             },
         });
         this.setting.addItem({
@@ -309,6 +312,54 @@ export default class PluginSample extends Plugin {
             actionElement: publishButton,
         });
         const btnaElement = document.createElement("button");
+        const colorAction = document.createElement("div");
+        colorAction.className = "fn__flex";
+        const colorButton = document.createElement("button");
+        colorButton.className = "b3-button b3-button--outline";
+        colorButton.textContent = this.i18n.colorPicker;
+        colorButton.disabled = this.isReadonly;
+        const colorPreview = document.createElement("span");
+        colorPreview.className = "fn__flex-center";
+        const confirmedColor = () => this.data[STORAGE_NAME]?.color || "#d23f31";
+        colorPreview.textContent = confirmedColor();
+        let colorSequence = 0;
+        colorButton.addEventListener("click", async () => {
+            if (!("openColorPicker" in siyuan) || typeof siyuan.openColorPicker !== "function") {
+                showMessage(this.i18n.colorPickerUnavailable);
+                return;
+            }
+            const sequence = ++colorSequence;
+            const picker = siyuan.openColorPicker({
+                value: confirmedColor(),
+                ownerPlugin: this,
+                ownerElement: colorButton,
+                title: this.i18n.colorPicker,
+                onPreview: (value: {hex: string;}) => {
+                    if (sequence === colorSequence) colorPreview.textContent = value.hex;
+                },
+                onPreviewEnd: () => {
+                    if (sequence === colorSequence) colorPreview.textContent = confirmedColor();
+                },
+            });
+            const result: {type: "confirm"; value: {hex: string;}; changed: boolean;} | {type: "cancel";} = await picker
+                .result;
+            if (result.type === "confirm" && result.changed && sequence === colorSequence) {
+                try {
+                    await this.saveData(STORAGE_NAME, {...this.data[STORAGE_NAME], color: result.value.hex});
+                    if (sequence === colorSequence) colorPreview.textContent = confirmedColor();
+                } catch (error) {
+                    showMessage(String(error));
+                }
+            }
+        });
+        const colorSpace = document.createElement("span");
+        colorSpace.className = "fn__space";
+        colorAction.append(colorButton, colorSpace, colorPreview);
+        this.setting.addItem({
+            title: this.i18n.colorPicker,
+            description: this.i18n.colorPickerTip,
+            actionElement: colorAction,
+        });
         btnaElement.className = "b3-button b3-button--outline fn__flex-center fn__size200";
         btnaElement.textContent = "Open";
         btnaElement.addEventListener("click", () => {

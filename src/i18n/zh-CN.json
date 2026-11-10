@@ -1,4 +1,7 @@
 {
+  "colorPicker": "选择颜色",
+  "colorPickerTip": "预览颜色后确认保存；此设置控件移到独立窗口时，颜色编辑器也在对应窗口打开",
+  "colorPickerUnavailable": "当前思源版本不提供共享颜色编辑器",
   "openPluginSettings": "打开插件设置",
   "openSelectedCardTab": "复习指定卡包",
   "reviewSetIDs": "卡包 ID（以英文逗号或空白分隔）",

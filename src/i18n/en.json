@@ -1,4 +1,7 @@
 {
+  "colorPicker": "Choose color",
+  "colorPickerTip": "Preview a color and confirm to save; the editor follows this settings control when it moves to a separate window",
+  "colorPickerUnavailable": "This SiYuan version does not provide the shared color picker",
   "openPluginSettings": "Open plugin settings",
   "openSelectedCardTab": "Review selected decks",
   "reviewSetIDs": "Deck IDs (separate with commas or whitespace)",
