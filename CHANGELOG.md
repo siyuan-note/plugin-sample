@@ -2,6 +2,8 @@
 
 ## v0.5.3 2026
 
+* [Demonstrate the shared date picker with explicit confirmation, clearing, cancellation and plugin ownership](https://github.com/siyuan-note/siyuan/issues/21127)
+
 ## v0.5.2 2026-09-22
 
 * [Demonstrate top bar context menus with a plugin settings entry](https://github.com/siyuan-note/siyuan/issues/19305)

@@ -34,6 +34,7 @@ import * as siyuan from "siyuan";
 import "./index.scss";
 
 const STORAGE_NAME = "menu-config";
+const DATE_STORAGE_NAME = "date-picker-config";
 const TAB_TYPE = "custom_tab";
 const DOCK_TYPE = "dock_tab";
 const CUSTOM_BLOCK_TYPE = "counter";
@@ -45,6 +46,11 @@ export default class PluginSample extends Plugin {
     private isReadonly: boolean;
     private isSettingsWindow: boolean;
     private publishDataStatus = "";
+    private refreshDateSetting?: () => void;
+    private dateSettingsRevision = 0;
+    private dateSavePending = false;
+    private dateSettingsSnapshot = {date: ""};
+    private dateSettingDisposed = false;
     private blockIconEventBindThis = this.blockIconEvent.bind(this);
     private readonly renderCounterCustomBlock = ({element, content, setContent}: {
         element: HTMLElement;
@@ -80,6 +86,7 @@ export default class PluginSample extends Plugin {
         this.isSettingsWindow = document.body.classList.contains("body--settings");
         this.isReadonly = Boolean(window.siyuan.config.readonly || window.siyuan.isPublish);
         this.data[STORAGE_NAME] = {readonlyText: this.i18n.readonlyText};
+        this.dateSettingDisposed = false;
         const frontEnd = getFrontend();
         this.isMobile = frontEnd === "mobile" || frontEnd === "browser-mobile";
         this.customBlockRenders[CUSTOM_BLOCK_TYPE] = {
@@ -360,6 +367,11 @@ export default class PluginSample extends Plugin {
             description: this.i18n.colorPickerTip,
             actionElement: colorAction,
         });
+        this.setting.addItem({
+            title: this.i18n.datePicker,
+            description: this.i18n.datePickerTip,
+            createActionElement: () => this.createDateSetting(),
+        });
         btnaElement.className = "b3-button b3-button--outline fn__flex-center fn__size200";
         btnaElement.textContent = "Open";
         btnaElement.addEventListener("click", () => {
@@ -370,6 +382,117 @@ export default class PluginSample extends Plugin {
             description: "Open plugin url in browser",
             actionElement: btnaElement,
         });
+    }
+
+    private createDateSetting() {
+        const dateAction = document.createElement("div");
+        dateAction.className = "fn__flex";
+        const dateButton = document.createElement("button");
+        dateButton.className = "b3-button b3-button--outline";
+        dateButton.textContent = this.i18n.datePicker;
+        const dateValue = document.createElement("span");
+        dateValue.className = "fn__flex-center";
+        const refresh = () => {
+            dateValue.textContent = this.dateSettingsSnapshot.date;
+        };
+        this.refreshDateSetting = refresh;
+        this.refreshDateSetting();
+        let datePending = false;
+        dateButton.addEventListener("click", async () => {
+            if (datePending || this.refreshDateSetting !== refresh) return;
+            if (!("openDatePicker" in siyuan) || typeof siyuan.openDatePicker !== "function") {
+                showMessage(this.i18n.datePickerUnavailable);
+                return;
+            }
+            datePending = true;
+            try {
+                const picker = siyuan.openDatePicker({
+                    type: "date",
+                    value: this.dateSettingsSnapshot.date,
+                    ownerPlugin: this,
+                    ownerElement: dateButton,
+                    title: this.i18n.datePicker,
+                });
+                const result: {type: "confirm"; value: string; changed: boolean;} | {type: "cancel";} = await picker
+                    .result;
+                if (
+                    result.type === "confirm" && result.changed && dateButton.isConnected &&
+                    this.refreshDateSetting === refresh
+                ) {
+                    await this.saveDate(result.value);
+                }
+            } catch (error) {
+                showMessage(String(error));
+            } finally {
+                datePending = false;
+            }
+        });
+        const dateSpace = document.createElement("span");
+        dateSpace.className = "fn__space";
+        dateAction.append(dateButton, dateSpace, dateValue);
+        return dateAction;
+    }
+
+    private refreshDateData(revision: number, data: {date?: string;}) {
+        if (revision === this.dateSettingsRevision) {
+            this.dateSettingsSnapshot = {date: typeof data?.date === "string" ? data.date : ""};
+        }
+        this.data[DATE_STORAGE_NAME] = {...this.dateSettingsSnapshot};
+        this.refreshDateSetting?.();
+    }
+
+    private async loadDateSetting(revision = ++this.dateSettingsRevision) {
+        this.data[DATE_STORAGE_NAME] = {date: ""};
+        const data = await this.loadData(DATE_STORAGE_NAME).catch(e => {
+            console.log(`[${this.name}] load data [${DATE_STORAGE_NAME}] fail: `, e);
+            return this.dateSettingsSnapshot;
+        });
+        this.refreshDateData(revision, data);
+    }
+
+    private async saveDate(value: string) {
+        if (this.dateSavePending) {
+            showMessage(this.i18n.datePickerSaveUncertain);
+            return;
+        }
+        const revision = ++this.dateSettingsRevision;
+        const data = {date: value};
+        this.dateSavePending = true;
+        const settle = (response: {code?: number; msg?: string;}, rejected = false) => {
+            const succeeded = !rejected && response?.code === 0;
+            // saveData 的回调会先覆写缓存；失败或过期的回调只能恢复最近一次已知的设置。
+            this.refreshDateData(succeeded ? revision : -1, data);
+            this.dateSavePending = false;
+            // 过期的成功响应不代表当前存储值，重新读取以反映其他窗口与本次写入的实际落盘顺序。
+            if (succeeded && revision !== this.dateSettingsRevision && !this.dateSettingDisposed) {
+                void this.loadDateSetting();
+            }
+            if (!succeeded && this.refreshDateSetting) {
+                showMessage(`${this.i18n.datePickerSaveFailed}${response?.msg ? `: ${response.msg}` : ""}`);
+            }
+        };
+        const saved = Promise.resolve().then(() => this.saveData(DATE_STORAGE_NAME, data)).then(
+            response => settle(response),
+            error => settle(error, true),
+        );
+        let timer: ReturnType<typeof setTimeout>;
+        await Promise.race([
+            saved,
+            new Promise<void>(resolve => {
+                timer = setTimeout(() => {
+                    // 超时不能证明写入失败；允许重新查看日期，但结果未确认前不重试或并发写入。
+                    if (this.refreshDateSetting) showMessage(this.i18n.datePickerSaveUncertain);
+                    resolve();
+                }, 10000);
+            }),
+        ]);
+        clearTimeout(timer);
+    }
+
+    private endDateSetting() {
+        this.dateSettingsRevision++;
+        this.dateSettingDisposed = true;
+        this.refreshDateSetting = undefined;
     }
 
     async onLayoutReady() {
@@ -423,8 +546,13 @@ export default class PluginSample extends Plugin {
 </div>`;
         statusIconTemp.content.firstElementChild.addEventListener("click", () => {
             confirm("⚠️", this.i18n.confirmRemove.replace("${name}", this.name), () => {
-                this.removeData(STORAGE_NAME).then(() => {
+                if (this.dateSavePending) {
+                    showMessage(this.i18n.datePickerSaveUncertain);
+                    return;
+                }
+                Promise.all([STORAGE_NAME, DATE_STORAGE_NAME].map(name => this.removeData(name))).then(() => {
                     this.data[STORAGE_NAME] = {readonlyText: this.i18n.readonlyText};
+                    this.refreshDateData(++this.dateSettingsRevision, {date: ""});
                     showMessage(`[${this.name}]: ${this.i18n.removedData}`);
                 }).catch(e => {
                     showMessage(`[${this.name}] remove data [${STORAGE_NAME}] fail: `, e);
@@ -439,6 +567,7 @@ export default class PluginSample extends Plugin {
     }
 
     async onunload() {
+        this.endDateSetting();
         console.log(this.i18n.byePlugin);
         if (this.isSettingsWindow) {
             document.body.classList.remove("plugin-sample--settings");
@@ -461,9 +590,11 @@ export default class PluginSample extends Plugin {
         }
         // 卸载插件时删除插件数据
         // Delete plugin data when uninstalling the plugin
-        await this.removeData(STORAGE_NAME).catch(e => {
-            showMessage(`uninstall [${this.name}] remove data [${STORAGE_NAME}] fail: ${e.msg}`);
-        });
+        await Promise.all([STORAGE_NAME, DATE_STORAGE_NAME].map(name =>
+            this.removeData(name).catch(e => {
+                showMessage(`uninstall [${this.name}] remove data [${name}] fail: ${e.msg}`);
+            })
+        ));
     }
 
     private async loadPublishedSettings() {
@@ -505,10 +636,12 @@ export default class PluginSample extends Plugin {
             await this.loadPublishedSettings();
             return;
         }
+        const revision = ++this.dateSettingsRevision;
         this.data[STORAGE_NAME] = {readonlyText: this.i18n.readonlyText};
         await this.loadData(STORAGE_NAME).catch(e => {
             console.log(`[${this.name}] load data [${STORAGE_NAME}] fail: `, e);
         });
+        await this.loadDateSetting(revision);
     }
 
     async updateCards(options: ICardData) {

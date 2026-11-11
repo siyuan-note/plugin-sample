@@ -1,4 +1,9 @@
 {
+  "datePickerSaveFailed": "Unable to save the date",
+  "datePickerSaveUncertain": "The date save result is unknown. No write was retried. You can view the date, but wait for the result to be confirmed before saving again",
+  "datePicker": "Choose date",
+  "datePickerTip": "Choose or clear a local calendar date, then confirm to save; cancel leaves the saved value unchanged",
+  "datePickerUnavailable": "This SiYuan version does not provide the shared date picker",
   "colorPicker": "Choose color",
   "colorPickerTip": "Preview a color and confirm to save; the editor follows this settings control when it moves to a separate window",
   "colorPickerUnavailable": "This SiYuan version does not provide the shared color picker",

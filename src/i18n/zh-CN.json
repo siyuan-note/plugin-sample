@@ -1,4 +1,9 @@
 {
+  "datePickerSaveFailed": "无法保存日期",
+  "datePickerSaveUncertain": "日期保存结果尚未确认，未重试写入。可以查看日期，请等待结果确认后再保存",
+  "datePicker": "选择日期",
+  "datePickerTip": "选择或清空本地日历日期，确认后保存，取消不改变已保存的值",
+  "datePickerUnavailable": "当前思源版本尚未提供共用日期选择器",
   "colorPicker": "选择颜色",
   "colorPickerTip": "预览颜色后确认保存；此设置控件移到独立窗口时，颜色编辑器也在对应窗口打开",
   "colorPickerUnavailable": "当前思源版本不提供共享颜色编辑器",
